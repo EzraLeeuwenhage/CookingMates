@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Recipe</string>
+
+    <string name="edit_message">Enter a title</string>
+    <string name="edit_description">Enter a description</string>
+    <string name="ingredients">Ingredients:</string>
+    <string name="edit_ingredient">Ingredient</string>
+    <string name="button_add_ingredient">Add Ingredient</string>
+    <string name="steps">Steps:</string>
+    <string name="edit_step">Step</string>
+    <string name="button_send">Search Recipe</string>
+
+    <string-array name="units">
+        <item>g</item>
+        <item>mL</item>
+        <item>-</item>
+    </string-array>
+</resources>
