@@ -13,12 +13,19 @@
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.CookingMatesApp.NoActionBar">
+        </activity>
+
+        <activity
+            android:name="com.LoginActivity"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.CookingMatesApp.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
