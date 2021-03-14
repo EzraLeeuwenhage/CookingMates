@@ -1,4 +1,4 @@
-package com;
-
-public class CookinParty {
-}
+//package com;
+//
+//public class CookinParty {
+//}
