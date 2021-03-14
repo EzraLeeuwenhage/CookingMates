@@ -42,7 +42,7 @@
 //        if(b_date == null){
 //            new NullPointerException("No date added, please enter a date");
 //        }// end if
-//        if(b_date.getYear() < 1920){
+//        if(b_date.getYear() < 1900){
 //            new IllegalArgumentException("the inserted date is not accurate");
 //        }//end if
 //        this.b_date = b_date;

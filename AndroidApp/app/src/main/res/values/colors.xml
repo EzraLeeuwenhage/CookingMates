@@ -9,5 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="greenLight">#aad97b</color>
     <color name="greenDark">#407928</color>
+    <color name="linkBlue">#0072ff</color>
 
 </resources>
