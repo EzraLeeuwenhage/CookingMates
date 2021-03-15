@@ -7,8 +7,8 @@ const pool = new Pool({
   port: 5432,
 })
 
-const getRecipes = (request, response) => {
-  pool.query("SELECT * FROM recipes ORDER BY id ASC", (error, results) => {
+const getUsers = (request, response) => {
+  pool.query("SELECT * FROM users ORDER BY UserId ASC", (error, results) => {
     if (error) {
       throw error
     }
@@ -16,10 +16,10 @@ const getRecipes = (request, response) => {
   })
 }
 
-const getRecipeById = (request, response) => {
+const getUserById = (request, response) => {
   const id = parseInt(request.params.id)
 
-  pool.query('SELECT * FROM recipes WHERE id = $1', [id], (error, results) => {
+  pool.query('SELECT * FROM users WHERE UserId = $1', [id], (error, results) => {
     if (error) {
       throw error
     }
@@ -27,10 +27,10 @@ const getRecipeById = (request, response) => {
   })
 }
 
-const getRecipeByTitle = (request, response) => {
-  const title = request.params.title;
+const getUserByName = (request, response) => {
+  const user_name = request.params.username;
 
-  pool.query('SELECT * FROM recipes WHERE title = $1', [title], (error, results) => {
+  pool.query('SELECT * FROM users WHERE UserName = $1', [user_name], (error, results) => {
     if (error) {
       throw error
     }
@@ -38,10 +38,10 @@ const getRecipeByTitle = (request, response) => {
   })
 }
 
-const createRecipe = (request, response) => {
-  const { title, description } = request.body
+const createUser = (request, response) => {
+  const { user_name, email, user_password } = request.body
 
-  pool.query('INSERT INTO recipes (title, description) VALUES ($1, $2)', [title, description], (error, results) => {
+  pool.query('INSERT INTO users (UserName, Email, Password) VALUES ($1, $2, $3)', [user_name, email, user_password], (error, results) => {
     if (error) {
       throw error
     }
@@ -49,38 +49,38 @@ const createRecipe = (request, response) => {
   })
 }
 
-const updateRecipe = (request, response) => {
+const updateUser = (request, response) => {
   const id = parseInt(request.params.id)
-  const { title, description } = request.body
+  const { user_name, user_password } = request.body
 
   pool.query(
-    'UPDATE recipes SET title = $1, description = $2 WHERE id = $3',
-    [title, description, id],
+    'UPDATE users SET UserName = $1, Password = $2 WHERE UserId = $3',
+    [user_name, user_password, id],
     (error, results) => {
       if (error) {
         throw error
       }
-      response.status(200).send(`Recipe modified with ID: ${id}`)
+      response.status(200).send(`User modified with ID: ${id}`)
     }
   )
 }
 
-const deleteRecipe = (request, response) => {
+const deleteUser = (request, response) => {
   const id = parseInt(request.params.id)
 
-  pool.query('DELETE FROM recipes WHERE id = $1', [id], (error, results) => {
+  pool.query('DELETE FROM users WHERE UserId = $1', [id], (error, results) => {
     if (error) {
       throw error
     }
-    response.status(200).send(`Recipe deleted with ID: ${id}`)
+    response.status(200).send(`User deleted with ID: ${id}`)
   })
 }
 
 module.exports = {
-  getRecipes,
-  getRecipeById,
-  getRecipeByTitle,
-  createRecipe,
-  updateRecipe,
-  deleteRecipe,
+  getUsers,
+  getUserById,
+  getUserByName,
+  createUser,
+  updateUser,
+  deleteUser,
 }
