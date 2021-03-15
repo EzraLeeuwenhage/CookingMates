@@ -8,7 +8,6 @@ import android.widget.Button;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.cookingmatesapp.MainActivity;
 import com.example.cookingmatesapp.R;
 
 public class LoginActivity extends AppCompatActivity {

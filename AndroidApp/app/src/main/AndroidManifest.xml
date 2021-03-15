@@ -9,19 +9,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CookingMatesApp">
-
+        <activity android:name="com.RecipeActivity"></activity>
         <activity
             android:name="com.HomeActivity"
             android:label="CookingMates"
-            android:theme="@style/Theme.CookingMatesApp.NoActionBar">
-        </activity>
-
+            android:theme="@style/Theme.CookingMatesApp.NoActionBar"></activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.CookingMatesApp.NoActionBar">
-        </activity>
-
+            android:theme="@style/Theme.CookingMatesApp.NoActionBar"></activity>
         <activity
             android:name="com.LoginActivity"
             android:label="@string/app_name"
@@ -32,7 +28,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>
