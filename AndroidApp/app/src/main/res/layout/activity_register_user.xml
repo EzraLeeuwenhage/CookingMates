@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.RegisterUser">
 
+<!--    TODO check error warning for horizontal displacement-->
     <View
         android:id="@+id/view"
         style="@style/ViewStyle"
@@ -29,14 +30,13 @@
         app:layout_constraintVertical_bias="0.16000003" />
 
     <EditText
-        android:id="@+id/editTextTextPassword"
+        android:id="@+id/editTextFullName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="228dp"
         android:ems="10"
         android:hint="@string/full_name"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/editTextTextPassword2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,20 +44,20 @@
         app:layout_constraintVertical_bias="0.25" />
 
     <EditText
-        android:id="@+id/editTextTextPassword2"
+        android:id="@+id/editTextAge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         android:ems="10"
         android:hint="@string/age"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/editTextTextPersonName"
+        app:layout_constraintTop_toBottomOf="@+id/editTextFullName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/signInBtn"
+        android:id="@+id/signUpBtn"
         style="@style/ButtonStyle"
         android:layout_width="230dp"
         android:layout_height="50dp"
@@ -71,25 +71,26 @@
         app:layout_constraintVertical_bias="0.707" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/editTextEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:ems="10"
         android:hint="@string/email"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/editTextTextPersonName2"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextAge"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName2"
+        android:id="@+id/editTextPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPersonName"
+        app:layout_constraintTop_toBottomOf="@+id/editTextEmail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
