@@ -6,11 +6,10 @@
     android:layout_height="match_parent"
     tools:context="com.RegisterUser">
 
-<!--    TODO check error warning for horizontal displacement-->
     <View
         android:id="@+id/view"
         style="@style/ViewStyle"
-        android:layout_width="413dp"
+        android:layout_width="match_parent"
         android:layout_height="291dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
