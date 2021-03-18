@@ -40,7 +40,7 @@ public class UpdateDeleteRecipeActivity extends AppCompatActivity {
     public void updateRecipe(View view){
         int id = Integer.parseInt(editTextId.getText().toString());
         String title = editTextTitle.getText().toString();
-        Call<RecipePost> call = api.putRecipe(id, new RecipePost(title, "default description"));
+        Call<RecipePost> call = api.putRecipe(id, new RecipePost(title, "default description", "a9e982fd5dd113212f5b5792a90a6a92.png", "uploads/"));
         call.enqueue(new Callback<RecipePost>() {
             @Override
             public void onResponse(Call<RecipePost> call, Response<RecipePost> response) {
