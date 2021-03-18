@@ -1,4 +1,8 @@
 const express = require('express')
+const multer = require('multer')
+const fs = require('fs')
+const crypto = require('crypto')
+const path = require('path')
 const bodyParser = require('body-parser')
 const app = express()
 const db = require('./queries')
@@ -11,6 +15,18 @@ app.use(
   })
 )
 
+storage = multer.diskStorage({
+    destination: './uploads/',
+    filename: function(req, file, cb) {
+      return crypto.pseudoRandomBytes(16, function(err, raw) {
+        if (err) {
+          return cb(err)
+        }
+        return cb(null, "" + (raw.toString('hex')) + (path.extname(file.originalname)));
+      })
+    }
+  })
+
 app.get('/', (request, response) => {
   response.json({ info: 'Node.js, Express, and Postgres API' })
 })
@@ -21,6 +37,31 @@ app.get('/users/:id/:username', db.getUserByName)
 app.post('/users', db.createUser)
 app.put('/users/:id', db.updateUser)
 app.delete('/users/:id', db.deleteUser)
+
+app.get('/recipes', db.getRecipes)
+app.get('/recipes/:id', db.getRecipeById)
+app.get('/recipes/:id/:title', db.getRecipeByTitle)
+app.post('/recipes', db.createRecipe)
+app.put('/recipes/:id', db.updateRecipe)
+app.delete('/recipes/:id', db.deleteRecipe)
+
+// Post images
+app.post("/upload", multer({storage: storage}).single('upload'), function(req, res) {
+    console.log(req.file)
+    console.log(req.body)
+	res.send("" + req.file.filename)
+    res.redirect("/uploads/" + req.file.filename)
+    console.log(req.file.filename)
+    return res.status(200).end()
+  })
+
+app.get('/uploads/:upload', function (req, res){
+  file = req.params.upload
+  console.log(req.params.upload)
+  var img = fs.readFileSync(__dirname + "/uploads/" + file)
+  res.writeHead(200, {'Content-Type': 'image/png' })
+  res.end(img, 'binary')
+})
 
 app.listen(port, () => {
   console.log(`App running on port ${port}.`)
