@@ -56,24 +56,24 @@ public interface ServerCallsApi {
     Call<Void> deleteUser(@Path("id") int id);
 */
     @POST("recipes")
-    Call<RecipePost> createRecipe(@Body RecipePost recipe);
+    Call<Recipe> createRecipe(@Body Recipe recipe);
 
     @GET("recipes")
-    Call<List<RecipePost>> getPosts();
+    Call<List<Recipe>> getRecipes();
 
     @GET("recipes/{id}")
-    Call<List<RecipePost>> getRecipe(@Path("id") int id);
+    Call<List<Recipe>> getRecipe(@Path("id") int id);
 
     @GET("recipes/0/{title}")
-    Call<List<RecipePost>> getRecipeByTitle(@Path("title") String title);
+    Call<List<Recipe>> getRecipeByTitle(@Path("title") String title);
 
     //Completely replaces object
     @PUT("recipes/{id}")
-    Call<RecipePost> putRecipe(@Path("id") int id, @Body RecipePost recipe);
+    Call<Recipe> putRecipe(@Path("id") int id, @Body Recipe recipe);
 
     //Only changes specified fields
     @PATCH("recipes/{id}")
-    Call<RecipePost> patchRecipe(@Path("id") int id, @Body RecipePost recipe);
+    Call<Recipe> patchRecipe(@Path("id") int id, @Body Recipe recipe);
 
     @DELETE("recipes/{id}")
     Call<Void> deleteRecipe(@Path("id") int id);

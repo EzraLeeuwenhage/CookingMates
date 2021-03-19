@@ -16,8 +16,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.RecipePost;
-import com.ServerCallsApi;
 import com.example.cookingmatesapp.R;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -34,7 +32,7 @@ public class SearchRecipe extends AppCompatActivity {
     private ImageView imageView;
 
     private Bitmap bitmapImage;
-    private RecipePost recipe;
+    private Recipe recipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,24 +53,24 @@ public class SearchRecipe extends AppCompatActivity {
     }
 
     public void getRecipes(View view){
-        Call<List<RecipePost>> call = api.getPosts();
-        call.enqueue(new Callback<List<RecipePost>>() {
+        Call<List<Recipe>> call = api.getRecipes();
+        call.enqueue(new Callback<List<Recipe>>() {
             @Override
-            public void onResponse(Call<List<RecipePost>> call, Response<List<RecipePost>> response) {
+            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
                 if(!response.isSuccessful()){
                     textViewTitle.setText("Code: " + response.code());
                     return;
                 }
-                List<RecipePost> posts = response.body();
+                List<Recipe> posts = response.body();
                 recipe = posts.get(0);
                 getImage(imageView);
 
-                textViewTitle.setText(recipe.getTitle());
+                textViewTitle.setText(recipe.getName());
                 textViewDescription.setText(recipe.getDescription());
             }
 
             @Override
-            public void onFailure(Call<List<RecipePost>> call, Throwable t) {
+            public void onFailure(Call<List<Recipe>> call, Throwable t) {
                 textViewTitle.setText(t.getMessage());
             }
         });
@@ -80,22 +78,22 @@ public class SearchRecipe extends AppCompatActivity {
 
     public void getRecipeById(View view){
         int id = Integer.parseInt(editTextId.getText().toString());
-        Call<List<RecipePost>> call = api.getRecipe(id);
-        call.enqueue(new Callback<List<RecipePost>>() {
+        Call<List<Recipe>> call = api.getRecipe(id);
+        call.enqueue(new Callback<List<Recipe>>() {
             @Override
-            public void onResponse(Call<List<RecipePost>> call, Response<List<RecipePost>> response) {
+            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
                 if(!response.isSuccessful()){
                     textViewTitle.setText("Code: " + response.code());
                     return;
                 }
-                List<RecipePost> posts = response.body();
-                RecipePost first = posts.get(0);
-                textViewTitle.setText(first.getTitle());
+                List<Recipe> posts = response.body();
+                Recipe first = posts.get(0);
+                textViewTitle.setText(first.getName());
                 textViewDescription.setText(first.getDescription());
             }
 
             @Override
-            public void onFailure(Call<List<RecipePost>> call, Throwable t) {
+            public void onFailure(Call<List<Recipe>> call, Throwable t) {
                 textViewTitle.setText(t.getMessage());
             }
         });
@@ -103,31 +101,31 @@ public class SearchRecipe extends AppCompatActivity {
 
     public void getRecipeByTitle(View view){
         String title = editTextTitle.getText().toString();
-        Call<List<RecipePost>> call = api.getRecipeByTitle(title);
-        call.enqueue(new Callback<List<RecipePost>>() {
+        Call<List<Recipe>> call = api.getRecipeByTitle(title);
+        call.enqueue(new Callback<List<Recipe>>() {
             @Override
-            public void onResponse(Call<List<RecipePost>> call, Response<List<RecipePost>> response) {
+            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
                 if(!response.isSuccessful()){
                     textViewTitle.setText("Code: " + response.code());
                     return;
                 }
-                List<RecipePost> posts = response.body();
+                List<Recipe> posts = response.body();
                 if(posts.size() > 0) {
-                    RecipePost first = posts.get(0);
-                    textViewTitle.setText(first.getTitle());
+                    Recipe first = posts.get(0);
+                    textViewTitle.setText(first.getName());
                     textViewDescription.setText(first.getDescription());
                 }
             }
 
             @Override
-            public void onFailure(Call<List<RecipePost>> call, Throwable t) {
+            public void onFailure(Call<List<Recipe>> call, Throwable t) {
                 textViewTitle.setText(t.getMessage());
             }
         });
     }
 
     public void getImage(ImageView view){
-        String path = "http://localhost:3000/"+ recipe.getFilepath() + recipe.getFilename();
+        String path = "http://134.209.92.24:3000/uploads" + recipe.getFilename();
         Picasso.get().load(path).into(new Target() {
 
             @Override

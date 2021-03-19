@@ -14,6 +14,9 @@ import android.widget.TextView;
 
 import com.example.cookingmatesapp.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UpdateDeleteRecipeActivity extends AppCompatActivity {
 
     private ServerCallsApi api;
@@ -40,20 +43,22 @@ public class UpdateDeleteRecipeActivity extends AppCompatActivity {
     public void updateRecipe(View view){
         int id = Integer.parseInt(editTextId.getText().toString());
         String title = editTextTitle.getText().toString();
-        Call<RecipePost> call = api.putRecipe(id, new RecipePost(title, "default description", "a9e982fd5dd113212f5b5792a90a6a92.png", "uploads/"));
-        call.enqueue(new Callback<RecipePost>() {
+        //TODO update only required fields
+        Recipe updatedRecipe = new Recipe(0, "name", "description", new ArrayList<>(),  new ArrayList<>(), 0, false);
+        Call<Recipe> call = api.putRecipe(id, updatedRecipe);
+        call.enqueue(new Callback<Recipe>() {
             @Override
-            public void onResponse(Call<RecipePost> call, Response<RecipePost> response) {
+            public void onResponse(Call<Recipe> call, Response<Recipe> response) {
                 if(!response.isSuccessful()){
                     textViewResult.setText("Code: " + response.code());
                     return;
                 }
-                RecipePost recipe = response.body();
-                textViewResult.setText(recipe.getTitle() + " updated!");
+                Recipe recipe = response.body();
+                textViewResult.setText(recipe.getName() + " updated!");
             }
 
             @Override
-            public void onFailure(Call<RecipePost> call, Throwable t) {
+            public void onFailure(Call<Recipe> call, Throwable t) {
                 textViewResult.setText(t.getMessage());
             }
         });

@@ -39,6 +39,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 public class CreateRecipeActivity extends AppCompatActivity {
 
@@ -192,22 +193,22 @@ public class CreateRecipeActivity extends AppCompatActivity {
         String description = editDescription.getText().toString();
 
         TextView textViewCreated = (TextView) findViewById(R.id.textViewResult);
-
-        RecipePost recipe = new RecipePost(title, description, filename, filepath);
-        Call<RecipePost> call = api.createRecipe(recipe);
-        call.enqueue(new Callback<RecipePost>() {
+        //TODO get fields from gui and enter in the new recipe, like title and description
+        Recipe recipe = new Recipe(0, title, description, new ArrayList<>(), new ArrayList<>(), 0, false);
+        Call<Recipe> call = api.createRecipe(recipe);
+        call.enqueue(new Callback<Recipe>() {
             @Override
-            public void onResponse(Call<RecipePost> call, Response<RecipePost> response) {
+            public void onResponse(Call<Recipe> call, Response<Recipe> response) {
                 if(!response.isSuccessful()){
                     textViewCreated.setText("Code: " + response.code());
                     return;
                 }
-                RecipePost recipe = response.body();
-                textViewCreated.setText(recipe.getTitle() + " created!");
+                Recipe recipe = response.body();
+                textViewCreated.setText(recipe.getName() + " created!");
             }
 
             @Override
-            public void onFailure(Call<RecipePost> call, Throwable t) {
+            public void onFailure(Call<Recipe> call, Throwable t) {
                 textViewCreated.setText(t.getMessage());
             }
         });
