@@ -15,7 +15,7 @@
             android:id="@+id/nav_about"
             android:title="About" />
         <item
-            android:id="@+id/nav_Help"
+            android:id="@+id/nav_help"
             android:title="Help" />
         <item
             android:id="@+id/nav_logout"
@@ -31,15 +31,17 @@
     </group>
     <item android:title="Communicate">
         <menu>
-            <item
-                android:id="@+id/nav_contact"
-                android:title="Email" />
-            <item
-                android:id="@+id/nav_instagram"
-                android:title="Instagram" />
-            <item
-                android:id="@+id/nav_facebook"
-                android:title="Facebook" />
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_contact"
+                    android:title="Email" />
+                <item
+                    android:id="@+id/nav_instagram"
+                    android:title="Instagram" />
+                <item
+                    android:id="@+id/nav_facebook"
+                    android:title="Facebook" />
+            </group>
         </menu>
     </item>
 
