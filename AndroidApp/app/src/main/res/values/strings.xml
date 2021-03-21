@@ -30,6 +30,9 @@
     <string name="button_create">Create Recipe</string>
     <string name="button_image">Import Image</string>
 
+    <string name="navigation_drawer_open">Open Navigation Drawer</string>
+    <string name="navigation_drawer_close">Close Navigation Drawer</string>
+
     <string-array name="units">
         <item>g</item>
         <item>mL</item>
