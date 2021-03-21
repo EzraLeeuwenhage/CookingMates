@@ -29,7 +29,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick (View v){
-        Intent myIntent = new Intent(SettingsActivity.this, MainActivity.class);
+        Intent myIntent = new Intent(SettingsActivity.this, LoginActivity.class);
         startActivity(myIntent);
         //optional
         finish();
