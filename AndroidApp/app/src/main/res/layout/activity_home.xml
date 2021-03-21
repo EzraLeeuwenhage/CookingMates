@@ -7,6 +7,14 @@
     android:background="@color/greenLight"
     tools:context="com.HomeActivity">
 
+    <com.google.android.material.navigation.NavigationView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/nav_view"
+        app:headerLayout="@layout/header"
+        app:menu="@menu/navigation_menu"
+        />
+
     <View
         android:id="@+id/searchBarBg"
         android:layout_width="match_parent"
