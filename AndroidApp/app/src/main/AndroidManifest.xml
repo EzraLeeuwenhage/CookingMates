@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CookingMatesApp">
-        <activity android:name="com.SettingsActivity"></activity>
+        <activity android:name="com.HelpActivity"></activity>
+        <activity android:name="com.AboutActivity" />
+        <activity android:name="com.SettingsActivity" />
         <activity android:name="com.ProfileActivity" />
         <activity android:name="com.RecipeActivity" />
         <activity
