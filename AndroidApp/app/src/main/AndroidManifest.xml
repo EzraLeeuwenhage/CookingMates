@@ -9,35 +9,102 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CookingMatesApp">
-        <activity android:name="com.SettingsActivity"></activity>
-        <activity android:name="com.ProfileActivity" />
-        <activity android:name="com.RecipeActivity" />
+
+        <!-- Help activity -->
+        <activity
+            android:name="com.HelpActivity"
+            android:label="CookingMates"
+            android:theme="@style/Theme.CookingMatesApp.NoActionBar">
+        </activity>
+
+        <!-- About activity -->
+        <activity
+            android:name="com.AboutActivity"
+            android:label="CookingMates"
+            android:theme="@style/Theme.CookingMatesApp.NoActionBar">
+        </activity>
+
+        <!-- Settings activity -->
+        <activity
+            android:name="com.SettingsActivity"
+            android:label="CookingMates"
+            android:theme="@style/Theme.CookingMatesApp.NoActionBar">
+        </activity>
+
+        <!-- Profile activity -->
+        <activity
+            android:name="com.ProfileActivity"
+            android:label="CookingMates"
+            android:theme="@style/Theme.CookingMatesApp.NoActionBar">
+        </activity>
+
+        <!-- Recipe activity -->
+        <activity
+            android:name="com.RecipeActivity"
+            android:label="CookingMates"
+            android:theme="@style/Theme.CookingMatesApp.NoActionBar">
+        </activity>
+
+        <!-- Home activity -->
         <activity
             android:name="com.HomeActivity"
             android:label="CookingMates"
-            android:theme="@style/Theme.CookingMatesApp.NoActionBar" />
+            android:theme="@style/Theme.CookingMatesApp.NoActionBar">
+        </activity>
+
+        <!-- Main activity -->
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.CookingMatesApp.NoActionBar" />
+            android:theme="@style/Theme.CookingMatesApp.NoActionBar">
+        </activity>
+
+        <!-- Register User -->
         <activity
             android:name="com.RegisterUser"
             android:label="@string/app_name"
-            android:theme="@style/Theme.CookingMatesApp.NoActionBar" />
-        <activity android:name="com.CreateRecipeActivity" />
-        <activity android:name="com.UpdateDeleteRecipeActivity" />
-        <activity android:name="com.SearchRecipe" />
-        <activity android:name="com.MenuActivity" />
+            android:theme="@style/Theme.CookingMatesApp.NoActionBar">
+        </activity>
+
+        <!-- Create recipe activity -->
+        <activity
+            android:name="com.CreateRecipeActivity"
+            android:label="CookingMates"
+            android:theme="@style/Theme.CookingMatesApp.NoActionBar">
+        </activity>
+
+        <!-- update recipe activity -->
+        <activity
+            android:name="com.UpdateDeleteRecipeActivity"
+            android:label="CookingMates"
+            android:theme="@style/Theme.CookingMatesApp.NoActionBar">
+        </activity>
+
+        <!-- search recipe -->
+        <activity
+            android:name="com.SearchRecipe"
+            android:label="CookingMates"
+            android:theme="@style/Theme.CookingMatesApp.NoActionBar">
+        </activity>
+
+        <!-- Menu activity -->
+        <activity
+            android:name="com.MenuActivity"
+            android:label="CookingMates"
+            android:theme="@style/Theme.CookingMatesApp.NoActionBar">
+        </activity>
+
+        <!-- Login activity -->
         <activity
             android:name="com.LoginActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.CookingMatesApp.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
