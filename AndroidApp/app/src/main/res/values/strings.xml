@@ -8,6 +8,7 @@
     <string name="previous">Previous</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
+    <string name="delete">Delete Account</string>
     <string name="newAcc">New to CookingMates? Create account</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
