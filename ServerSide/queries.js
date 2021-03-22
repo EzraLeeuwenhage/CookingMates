@@ -120,7 +120,7 @@ const getRecipeByCreator = (request, response) => {
 
 const createRecipe = (request, response) => {
   const { creatorid, name, description, ingredients, quantities, numberpeople, adult, media } = request.body
-  pool.query('INSERT INTO recipes (creatorid, name, description, ingredients, quantities, numberpeople, adult, media) VALUES ($1, $2, $3, $4)', 
+  pool.query('INSERT INTO recipes (creatorid, name, description, ingredients, quantity, numberpeople, adult, media) VALUES ($1, $2, $3, $4)', 
   [creatorid, name, description, ingredients, quantities, numberpeople, adult, media], (error, results) => {
     if (error) {
       throw error
