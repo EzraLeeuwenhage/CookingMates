@@ -47,17 +47,21 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CreateRecipeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private final int REQUEST_READ_STORAGE = 1;
     private final int REQUEST_SELECT_IMAGE = 2;
 
+    private int creatorId = 0;
+    private boolean adult = true;
     private ServerCallsApi api;
     private Bitmap bitmapImage;
     private ImageView image;
-    private String filepath = "uploads/";
     private String filename = "";
+    private Spinner spinner1;
+    private Spinner spinner2;
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -74,9 +78,9 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.units));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        Spinner spinner1 = (Spinner) findViewById(R.id.unit1);
+        spinner1 = findViewById(R.id.unit1);
         spinner1.setAdapter(adapter);
-        Spinner spinner2 = (Spinner) findViewById(R.id.unit2);
+        spinner2 = findViewById(R.id.unit2);
         spinner2.setAdapter(adapter);
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -156,6 +160,7 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
 
     public void createRecipe(View view){
         if(bitmapImage == null){
+            //TODO upload default image
             Toast.makeText(this, "No image is uploaded", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -218,15 +223,32 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
 
     public void postRecipe(){
         //Title
-        EditText editTitle = (EditText) findViewById(R.id.editTitle);
-        String title = editTitle.getText().toString();
+        EditText editTitle = findViewById(R.id.editTitle);
+        String name = editTitle.getText().toString();
+
         //Description
-        EditText editDescription = (EditText) findViewById(R.id.editDescription);
+        EditText editDescription = findViewById(R.id.editDescription);
         String description = editDescription.getText().toString();
 
-        TextView textViewCreated = (TextView) findViewById(R.id.textViewResult);
-        //TODO get fields from gui and enter in the new recipe, like title and description
-        Recipe recipe = new Recipe(0, title, description, new ArrayList<>(), new ArrayList<>(), 0, false);
+        //Ingredients
+        List<String> ingredients = new ArrayList<>();
+        EditText ingredient1 = findViewById(R.id.editTextIngredient1);
+        ingredients.add(ingredient1.getText().toString());
+        EditText ingredient2 = findViewById(R.id.editTextIngredient2);
+        ingredients.add(ingredient2.getText().toString());
+
+        List<String> quantities = new ArrayList<>();
+        EditText quantity1 = findViewById(R.id.editTextQuantity1);
+        quantities.add(quantity1.getText().toString() + " " + spinner1.getSelectedItem().toString());
+        EditText quantity2 = findViewById(R.id.editTextQuantity2);
+        quantities.add(quantity2.getText().toString() + " " + spinner2.getSelectedItem().toString());
+
+        //Number of people, adult
+        EditText editNumberOfPeople = findViewById(R.id.editTextNrPeople);
+        int numberOfPeople = Integer.parseInt(editNumberOfPeople.getText().toString());
+
+        TextView textViewCreated = findViewById(R.id.textViewResult);
+        Recipe recipe = new Recipe(creatorId, name, description, ingredients, quantities, numberOfPeople, adult, filename);
         Call<Recipe> call = api.createRecipe(recipe);
         call.enqueue(new Callback<Recipe>() {
             @Override

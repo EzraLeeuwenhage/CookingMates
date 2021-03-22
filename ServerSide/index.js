@@ -39,11 +39,12 @@ app.put('/users/:id', db.updateUser)
 app.delete('/users/:id', db.deleteUser)
 
 app.get('/recipes', db.getRecipes)
-app.get('/recipes/:id', db.getRecipeById)
-app.get('/recipes/:id/:title', db.getRecipeByTitle)
+app.get('/recipes/:recipeid', db.getRecipeById)
+app.get('/recipes/:recipeid/:name', db.getRecipeByName)
+app.get('/recipes/:recipeid/:name/:creatorid', db.getRecipeByCreator)
 app.post('/recipes', db.createRecipe)
-app.put('/recipes/:id', db.updateRecipe)
-app.delete('/recipes/:id', db.deleteRecipe)
+app.put('/recipes/:recipeid', db.updateRecipe)
+app.delete('/recipes/:recipeid', db.deleteRecipe)
 
 // Post images
 app.post("/upload", multer({storage: storage}).single('upload'), function(req, res) {

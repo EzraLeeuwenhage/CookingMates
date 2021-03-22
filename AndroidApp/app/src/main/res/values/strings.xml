@@ -43,8 +43,8 @@
     <string name="ingredients">Ingredients:</string>
     <string name="edit_ingredient">Ingredient</string>
     <string name="button_add_ingredient">Add Ingredient</string>
-    <string name="steps">Steps:</string>
-    <string name="edit_step">Step</string>
+    <string name="nr_people">Number of people:</string>
+    <string name="edit_nr_people">0</string>
     <string name="button_send">Search Recipe</string>
     <string name="button_create">Create Recipe</string>
     <string name="button_image">Import Image</string>

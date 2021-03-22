@@ -77,7 +77,7 @@ const deleteUser = (request, response) => {
 }
 
 const getRecipes = (request, response) => {
-	pool.query("SELECT * FROM recipes ORDER BY id ASC", (error, results) => {
+	pool.query("SELECT * FROM recipes ORDER BY recipeid ASC", (error, results) => {
     if (error) {
       throw error
     }
@@ -86,9 +86,9 @@ const getRecipes = (request, response) => {
 }
 
 const getRecipeById = (request, response) => {
-  const id = parseInt(request.params.id)
+  const recipeid = parseInt(request.params.recipeid)
 
-  pool.query('SELECT * FROM recipes WHERE id = $1', [id], (error, results) => {
+  pool.query('SELECT * FROM recipes WHERE recipeid = $1', [recipeid], (error, results) => {
     if (error) {
       throw error
     }
@@ -96,10 +96,21 @@ const getRecipeById = (request, response) => {
   })
 }
 
-const getRecipeByTitle = (request, response) => {
-  const title = request.params.title;
+const getRecipeByName = (request, response) => {
+  const name = request.params.name;
 
-  pool.query('SELECT * FROM recipes WHERE title = $1', [title], (error, results) => {
+  pool.query('SELECT * FROM recipes WHERE name = $1', [name], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+const getRecipeByCreator = (request, response) => {
+  const creatorid = request.params.creatorid;
+
+  pool.query('SELECT * FROM recipes WHERE creatorid = $1', [creatorid], (error, results) => {
     if (error) {
       throw error
     }
@@ -108,8 +119,9 @@ const getRecipeByTitle = (request, response) => {
 }
 
 const createRecipe = (request, response) => {
-  const { title, description, filepath, filename } = request.body
-  pool.query('INSERT INTO recipes (title, description, filename, filepath) VALUES ($1, $2, $3, $4)', [title, description, filename, filepath], (error, results) => {
+  const { creatorid, name, description, ingredients, quantities, numberpeople, adult, media } = request.body
+  pool.query('INSERT INTO recipes (creatorid, name, description, ingredients, quantities, numberpeople, adult, media) VALUES ($1, $2, $3, $4)', 
+  [creatorid, name, description, ingredients, quantities, numberpeople, adult, media], (error, results) => {
     if (error) {
       throw error
     }
@@ -118,29 +130,29 @@ const createRecipe = (request, response) => {
 }
 
 const updateRecipe = (request, response) => {
-  const id = parseInt(request.params.id)
-  const { title, description, filepath, filename } = request.body
+  const recipeid = parseInt(request.params.recipeid)
+  const { creatorid, name, description, ingredients, quantities, numberpeople, adult, media } = request.body
 
   pool.query(
-    'UPDATE recipes SET title = $1, description = $2, filename = $3, filepath = $4 WHERE id = $5',
-    [title, description, filename, filepath, id],
+    'UPDATE recipes SET creatorid = $1, name = $2, description = $3, ingredients = $4, quantity = $5, numberpeople = $6, adult = $7, media = $8 WHERE recipeid = $5',
+    [creatorid, name, description, ingredients, quantities, numberpeople, adult, media, recipeid],
     (error, results) => {
       if (error) {
         throw error
       }
-      response.status(200).send(`Recipe modified with ID: ${id}`)
+      response.status(200).send(`Recipe modified with ID: ${recipeid}`)
     }
   )
 }
 
 const deleteRecipe = (request, response) => {
-  const id = parseInt(request.params.id)
+  const recipeid = parseInt(request.params.recipeid)
 
-  pool.query('DELETE FROM recipes WHERE id = $1', [id], (error, results) => {
+  pool.query('DELETE FROM recipes WHERE recipeid = $1', [recipeid], (error, results) => {
     if (error) {
       throw error
     }
-    response.status(200).send(`Recipe deleted with ID: ${id}`)
+    response.status(200).send(`Recipe deleted with ID: ${recipeid}`)
   })
 }
 
@@ -153,7 +165,8 @@ module.exports = {
   deleteUser,
   getRecipes,
   getRecipeById,
-  getRecipeByTitle,
+  getRecipeByName,
+  getRecipeByCreator,
   createRecipe,
   updateRecipe,
   deleteRecipe,

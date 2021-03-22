@@ -20,7 +20,7 @@ public class Recipe {
 
     private transient int TITLE_LENGTH = 3;
 
-    public Recipe(int creatorId, String name, String description, List<String> ingredients, List<String> quantities, int numberpeople, boolean adult) {
+    public Recipe(int creatorId, String name, String description, List<String> ingredients, List<String> quantities, int numberpeople, boolean adult, String filename) {
         this.creatorId = creatorId;
         this.name = name;
         this.description = description;
@@ -28,6 +28,7 @@ public class Recipe {
         this.quantities = quantities;
         this.numberpeople = numberpeople;
         this.adult = adult;
+        this.filename = filename;
     }
 
     //set the title of the recipe

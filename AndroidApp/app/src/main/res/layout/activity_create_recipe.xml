@@ -116,36 +116,17 @@
             app:layout_constraintTop_toTopOf="@+id/editTextIngredient2" />
 
         <EditText
-            android:id="@+id/editTextStep1"
-            android:layout_width="0dp"
+            android:id="@+id/editTextNrPeople"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
             android:ems="10"
-            android:hint="@string/edit_step"
-            android:inputType="textPersonName"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:hint="@string/edit_nr_people"
+            android:inputType="number"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewSteps" />
-
-        <EditText
-            android:id="@+id/editTextStep2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:ems="10"
-            android:hint="@string/edit_step"
-            android:inputType="textPersonName"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextStep1" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewNrPeople" />
 
         <Spinner
             android:id="@+id/unit1"
@@ -188,13 +169,13 @@
             app:layout_constraintTop_toBottomOf="@+id/editDescription" />
 
         <TextView
-            android:id="@+id/textViewSteps"
-            android:layout_width="76dp"
+            android:id="@+id/textViewNrPeople"
+            android:layout_width="wrap_content"
             android:layout_height="24dp"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
-            android:text="@string/steps"
+            android:text="@string/nr_people"
             android:textColor="#000000"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -209,19 +190,19 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextStep2" />
+            app:layout_constraintTop_toBottomOf="@+id/editTextNrPeople" />
 
         <Button
             android:id="@+id/button2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:onClick="createRecipe"
             android:text="@string/button_create"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextStep2" />
+            app:layout_constraintTop_toBottomOf="@+id/editTextNrPeople" />
 
         <Button
             android:id="@+id/buttonImage"
@@ -240,8 +221,11 @@
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
             android:layout_marginBottom="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/buttonImage"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewResult"
             app:layout_constraintVertical_bias="0.0"
