@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -43,7 +44,7 @@ public class HelpActivity
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
-        navigationView.setCheckedItem(R.id.nav_home);
+        navigationView.setCheckedItem(R.id.nav_help);
     }
 
     @Override
@@ -58,15 +59,26 @@ public class HelpActivity
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        // TODO add navigation
         switch(menuItem.getItemId()) {
             case R.id.nav_home:
+                Intent home_intent = new Intent(HelpActivity.this, HomeActivity.class);
+                home_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(home_intent);
                 break;
             case R.id.nav_profile:
+                Intent profile_intent = new Intent(HelpActivity.this, ProfileActivity.class);
+                profile_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(profile_intent);
                 break;
             case R.id.nav_settings:
+                Intent settings_intent = new Intent(HelpActivity.this, SettingsActivity.class);
+                settings_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(settings_intent);
                 break;
             case R.id.nav_about:
+                Intent about_intent = new Intent(HelpActivity.this, AboutActivity.class);
+                about_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(about_intent);
                 break;
             case R.id.nav_help:
                 // Just break - same screen
@@ -74,6 +86,9 @@ public class HelpActivity
             case R.id.nav_logout:
                 break;
             case R.id.nav_upload_recipe:
+                Intent upload_recipe_intent = new Intent(HelpActivity.this, CreateRecipeActivity.class);
+                upload_recipe_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(upload_recipe_intent);
                 break;
             case R.id.nav_findcookingmates:
                 break;

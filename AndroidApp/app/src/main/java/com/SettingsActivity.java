@@ -51,7 +51,7 @@ public class SettingsActivity
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
-        navigationView.setCheckedItem(R.id.nav_home);
+        navigationView.setCheckedItem(R.id.nav_settings);
 
         // define login button
         deleteAcc = (Button) findViewById(R.id.delete_acc_btn);
@@ -79,22 +79,36 @@ public class SettingsActivity
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        // TODO add navigation
         switch(menuItem.getItemId()) {
             case R.id.nav_home:
+                Intent home_intent = new Intent(SettingsActivity.this, HomeActivity.class);
+                home_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(home_intent);
                 break;
             case R.id.nav_profile:
+                Intent profile_intent = new Intent(SettingsActivity.this, ProfileActivity.class);
+                profile_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(profile_intent);
                 break;
             case R.id.nav_settings:
                 // Just break - same screen
                 break;
             case R.id.nav_about:
+                Intent about_intent = new Intent(SettingsActivity.this, AboutActivity.class);
+                about_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(about_intent);
                 break;
             case R.id.nav_help:
+                Intent help_intent = new Intent(SettingsActivity.this, HelpActivity.class);
+                help_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(help_intent);
                 break;
             case R.id.nav_logout:
                 break;
             case R.id.nav_upload_recipe:
+                Intent upload_recipe_intent = new Intent(SettingsActivity.this, CreateRecipeActivity.class);
+                upload_recipe_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(upload_recipe_intent);
                 break;
             case R.id.nav_findcookingmates:
                 break;

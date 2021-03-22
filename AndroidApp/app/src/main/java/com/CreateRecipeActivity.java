@@ -102,7 +102,7 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
-        navigationView.setCheckedItem(R.id.nav_home);
+        navigationView.setCheckedItem(R.id.nav_upload_recipe);
 
 
     }
@@ -258,17 +258,32 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        // TODO add navigation
+        // TODO add "Are you sure?" message on quit
         switch(menuItem.getItemId()) {
             case R.id.nav_home:
+                Intent home_intent = new Intent(CreateRecipeActivity.this, HomeActivity.class);
+                home_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(home_intent);
                 break;
             case R.id.nav_profile:
+                Intent profile_intent = new Intent(CreateRecipeActivity.this, ProfileActivity.class);
+                profile_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(profile_intent);
                 break;
             case R.id.nav_settings:
+                Intent settings_intent = new Intent(CreateRecipeActivity.this, SettingsActivity.class);
+                settings_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(settings_intent);
                 break;
             case R.id.nav_about:
+                Intent about_intent = new Intent(CreateRecipeActivity.this, AboutActivity.class);
+                about_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(about_intent);
                 break;
             case R.id.nav_help:
+                Intent help_intent = new Intent(CreateRecipeActivity.this, HelpActivity.class);
+                help_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(help_intent);
                 break;
             case R.id.nav_logout:
                 break;

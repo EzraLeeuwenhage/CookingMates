@@ -91,22 +91,36 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        // TODO add navigation
         switch(menuItem.getItemId()) {
             case R.id.nav_home:
                 // Just break - same screen
                 break;
             case R.id.nav_profile:
+                Intent profile_intent = new Intent(HomeActivity.this, ProfileActivity.class);
+                profile_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(profile_intent);
                 break;
             case R.id.nav_settings:
+                Intent settings_intent = new Intent(HomeActivity.this, SettingsActivity.class);
+                settings_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(settings_intent);
                 break;
             case R.id.nav_about:
+                Intent about_intent = new Intent(HomeActivity.this, AboutActivity.class);
+                about_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(about_intent);
                 break;
             case R.id.nav_help:
+                Intent help_intent = new Intent(HomeActivity.this, HelpActivity.class);
+                help_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(help_intent);
                 break;
             case R.id.nav_logout:
                 break;
             case R.id.nav_upload_recipe:
+                Intent create_recipe_intent = new Intent(HomeActivity.this, CreateRecipeActivity.class);
+                create_recipe_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(create_recipe_intent);
                 break;
             case R.id.nav_findcookingmates:
                 break;
