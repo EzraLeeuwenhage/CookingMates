@@ -94,6 +94,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         // TODO add navigation
         switch(menuItem.getItemId()) {
             case R.id.nav_home:
+                // Just break - same screen
                 break;
             case R.id.nav_profile:
                 break;
