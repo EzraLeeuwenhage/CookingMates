@@ -112,5 +112,8 @@ public class User {
         return (ch >= '0' && ch <= '9');
     }
 
+    public String getName() {
+        return username;
+    }
 
 }//end of class

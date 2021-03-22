@@ -1,21 +1,83 @@
 package com;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
-import com.example.cookingmatesapp.MainActivity;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import com.example.cookingmatesapp.R;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
+
+import java.util.Date;
+import java.util.List;
 
 public class RegisterUser extends AppCompatActivity {
+
+    // defining data to enter
+    private ServerCallsApi api;
+    private EditText editTextUsername;
+    private EditText editTextFullName;
+    private EditText editTextAge;
+    private EditText editTextEmail;
+    private EditText editTextPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_user);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://134.209.92.24:3000/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        api = retrofit.create(ServerCallsApi.class);
+
+        editTextUsername = findViewById(R.id.editTextUsername);
+        editTextFullName = findViewById(R.id.editTextFullName);
+        editTextAge = findViewById(R.id.editTextAge);
+        editTextEmail = findViewById(R.id.editTextEmail);
+        editTextPassword = findViewById(R.id.editTextPassword);
+    }
+
+    public void createAccount(View view) {
+        // retrieving entered data
+        String username = editTextUsername.getText().toString();
+        String name = editTextFullName.getText().toString();
+        Date date = new Date();
+        String email = editTextEmail.getText().toString();
+        String password = editTextPassword.getText().toString();
+
+        TextView responseView = findViewById(R.id.textViewResult);
+        // TODO add option for profile picture and work out issues adult stuff & email stuff
+        User user = new User(username, name, email, password, date, null, true);
+        Call<User> call = api.createUser(user);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if(!response.isSuccessful()){
+                    responseView.setText("Code: " + response.code());
+                    return;
+                }
+                User user = response.body();
+                responseView.setText(user.getName() + " created!");
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                responseView.setText(t.getMessage());
+            }
+        });
     }
 }

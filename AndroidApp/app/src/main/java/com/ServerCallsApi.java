@@ -28,8 +28,6 @@ public interface ServerCallsApi {
     @Path("var") + {var} allow for variable query
  */
 
-
-/*  This is commented out because the user class is commented out
     @GET("users")
     Call<List<User>> getUsers();
 
@@ -54,7 +52,7 @@ public interface ServerCallsApi {
 
     @DELETE("users/{id}")
     Call<Void> deleteUser(@Path("id") int id);
-*/
+
     @POST("recipes")
     Call<Recipe> createRecipe(@Body Recipe recipe);
 
