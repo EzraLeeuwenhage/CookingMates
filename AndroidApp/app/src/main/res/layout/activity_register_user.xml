@@ -58,7 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         android:ems="10"
-        android:hint="Date of Birth"
+        android:hint="Date of Birth: dd-mm-yyyy"
         android:inputType="date"
         app:layout_constraintTop_toBottomOf="@+id/editTextFullName"
         app:layout_constraintEnd_toEndOf="parent"
@@ -106,11 +106,11 @@
 
     <TextView
         android:id="@+id/textViewResult"
-        android:layout_width="147dp"
+        android:layout_width="345dp"
         android:layout_height="69dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
 
