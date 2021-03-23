@@ -42,7 +42,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            // TODO fix this stuff
+            // TODO check database for account upon logging in
+            // TODO only log in when entered info is correct
             case R.id.signInBtn:
                 Intent myIntent = new Intent(LoginActivity.this, HomeActivity.class);
                 startActivity(myIntent);
