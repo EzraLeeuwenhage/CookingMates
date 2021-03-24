@@ -60,8 +60,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            // TODO check database for account upon logging in
-            // TODO only log in when entered info is correct
             case R.id.signInBtn:
                 // storage for login info
                 HashMap<String, String> map = new HashMap<>();
@@ -77,7 +75,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 call.enqueue(new Callback<LoginResult>() {
                     @Override
                     public void onResponse(Call<LoginResult> call, Response<LoginResult> response) {
+                        //TODO use javascript code to handle responses
+                        //TODO check whether case/ break works as intended
+                        int x = 0;
 
+                        if (response.code() == x) {
+                            LoginResult result = response.body();
+
+                            Intent myIntent = new Intent(LoginActivity.this, HomeActivity.class);
+                            startActivity(myIntent);
+                            //optional
+                            finish();
+                        } else if (response.code() == x) {
+                            responseView.setText("Wrong username or password entered!");
+                        }
                     }
 
                     @Override
@@ -85,19 +96,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         responseView.setText(t.getMessage());
                     }
                 });
-
-
-//                Intent myIntent = new Intent(LoginActivity.this, HomeActivity.class);
-//                startActivity(myIntent);
-//                //optional
-//                finish();
                 break;
             case R.id.textView4:
                 startActivity(new Intent(this, RegisterUser.class));
                 break;
-//            case R.id.textView5:
-//                startActivity(new Intent(this, ResetPassword.class));
-//                break;
+            case R.id.textView5:
+                startActivity(new Intent(this, ResetPassword.class));
+                break;
         }
     }
 }
