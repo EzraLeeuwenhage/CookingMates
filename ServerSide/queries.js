@@ -17,14 +17,20 @@ const getUsers = (request, response) => {
 }
 
 const getUserById = (request, response) => {
-  const id = parseInt(request.params.id)
+  const {username, fullname, email, password, dateofbirth, profilepicture} = req.body;
 
-  pool.query('SELECT * FROM users WHERE UserId = $1', [id], (error, results) => {
-    if (error) {
-      throw error
+    try{
+        const todo = await pool.query("SELECT * FROM users WHERE (username = $1 AND password = $2)", [username, password]);
+
+        if(todo.rows[0])
+            res.json(todo.rows[0]);
+        else
+            res.json("No user with this username.");
+
+    } catch(err){
+        console.error(err.message);
     }
-    response.status(200).json(results.rows)
-  })
+    //res.json(req_username+' '+req_password);
 }
 
 const getUserByName = (request, response) => {
@@ -39,41 +45,50 @@ const getUserByName = (request, response) => {
 }
 
 const createUser = (request, response) => {
-  const { user_name, email, user_password } = request.body
+  try {   
+        console.log(req.body);
 
-  pool.query('INSERT INTO users (UserName, Email, Password) VALUES ($1, $2, $3)', [user_name, email, user_password], (error, results) => {
-    if (error) {
-      throw error
+        const {username, fullname, email, password, dateofbirth, profilepicture} = req.body;
+        //const newTodo = await pool.query("INSERT INTO todo (description) VALUES ($1) RETURNING *", [description] );
+
+        const verify = await pool.query("SELECT * FROM users WHERE username = $1", [username]);
+
+
+        if(verify.rows[0])
+        {
+            res.json("Username already taken.")
+            return;
+        }
+
+        const newLog = await pool.query("INSERT INTO users (username, fullname, email, password, dateofbirth, profilepicture) VALUES ($1,$2,$3,$4,$5,$6)", [username, fullname, email, password, dateofbirth, profilepicture]);
+
+        res.json("I made a new user with username: " + username + " and password: " + password);
+    } catch (err) {
+        console.error(err.message);
     }
-    response.status(201).send(results[0])
-  })
 }
 
 const updateUser = (request, response) => {
-  const id = parseInt(request.params.id)
-  const { user_name, user_password } = request.body
+  try{
+        const {username, fullname, email, password, dateofbirth, profilepicture} = req.body;
 
-  pool.query(
-    'UPDATE users SET UserName = $1, Password = $2 WHERE UserId = $3',
-    [user_name, user_password, id],
-    (error, results) => {
-      if (error) {
-        throw error
-      }
-      response.status(200).send(`User modified with ID: ${id}`)
+        const updateLog = await pool.query("UPDATE users SET password = $1 WHERE username = $2", [password, username])
+    
+        res.json("Password was updated!");
+    }catch(err) {
+        console.error(err.message);
     }
-  )
 }
 
 const deleteUser = (request, response) => {
-  const id = parseInt(request.params.id)
+  try {
+        const {username, fullname, email, password, dateofbirth, profilepicture} = req.body;
 
-  pool.query('DELETE FROM users WHERE UserId = $1', [id], (error, results) => {
-    if (error) {
-      throw error
+        const deleteLog = await pool.query("DELETE FROM users WHERE username = $1", [username]);
+        res.json("User was successfully deleted!");
+    } catch (err) {
+        console.error(err.message);
     }
-    response.status(200).send(`User deleted with ID: ${id}`)
-  })
 }
 
 const getRecipes = (request, response) => {
