@@ -1,5 +1,6 @@
 package com;
 
+import java.util.HashMap;
 import java.util.List;
 
 import okhttp3.MultipartBody;
@@ -27,6 +28,9 @@ public interface ServerCallsApi {
     @Body sends data with the request
     @Path("var") + {var} allow for variable query
  */
+
+    @POST("login")
+    Call<LoginResult> executeLogin(@Body HashMap<String, String> map);
 
     @GET("users")
     Call<List<User>> getUsers();
