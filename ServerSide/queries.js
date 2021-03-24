@@ -17,15 +17,15 @@ const getUsers = (request, response) => {
 }
 
 const getUserById = (request, response) => {
-  const {username, fullname, email, password, dateofbirth, profilepicture} = req.body;
+  const {username, fullname, email, password, dateofbirth, profilepicture} = request.body;
 
     try{
         const todo = pool.query("SELECT * FROM users WHERE (username = $1 AND password = $2)", [username, password]);
 
         if(todo.rows[0])
-            res.json(todo.rows[0]);
+            response.json(todo.rows[0]);
         else
-            res.json("No user with this username.");
+            response.json("No user with this username.");
 
     } catch(err){
         console.error(err.message);
@@ -46,9 +46,9 @@ const getUserByName = (request, response) => {
 
 const createUser = (request, response) => {
   try {   
-        console.log(req.body);
+        console.log(request.body);
 
-        const {username, fullname, email, password, dateofbirth, profilepicture} = req.body;
+        const {username, fullname, email, password, dateofbirth, profilepicture} = request.body;
         //const newTodo = await pool.query("INSERT INTO todo (description) VALUES ($1) RETURNING *", [description] );
 
         const verify = pool.query("SELECT * FROM users WHERE username = $1", [username]);
@@ -56,13 +56,13 @@ const createUser = (request, response) => {
 
         if(verify.rows[0])
         {
-            res.json("Username already taken.")
+            response.json("Username already taken.")
             return;
         }
 
         const newLog = pool.query("INSERT INTO users (username, fullname, email, password, dateofbirth, profilepicture) VALUES ($1,$2,$3,$4,$5,$6)", [username, fullname, email, password, dateofbirth, profilepicture]);
 
-        res.json("I made a new user with username: " + username + " and password: " + password);
+        response.json("I made a new user with username: " + username + " and password: " + password);
     } catch (err) {
         console.error(err.message);
     }
@@ -70,11 +70,11 @@ const createUser = (request, response) => {
 
 const updateUser = (request, response) => {
   try{
-        const {username, fullname, email, password, dateofbirth, profilepicture} = req.body;
+        const {username, fullname, email, password, dateofbirth, profilepicture} = request.body;
 
         const updateLog = pool.query("UPDATE users SET password = $1 WHERE username = $2", [password, username])
     
-        res.json("Password was updated!");
+        response.json("Password was updated!");
     }catch(err) {
         console.error(err.message);
     }
@@ -82,10 +82,10 @@ const updateUser = (request, response) => {
 
 const deleteUser = (request, response) => {
   try {
-        const {username, fullname, email, password, dateofbirth, profilepicture} = req.body;
+        const {username, fullname, email, password, dateofbirth, profilepicture} = request.body;
 
         const deleteLog = pool.query("DELETE FROM users WHERE username = $1", [username]);
-        res.json("User was successfully deleted!");
+        response.json("User was successfully deleted!");
     } catch (err) {
         console.error(err.message);
     }
