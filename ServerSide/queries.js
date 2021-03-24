@@ -20,7 +20,7 @@ const getUserById = (request, response) => {
   const {username, fullname, email, password, dateofbirth, profilepicture} = req.body;
 
     try{
-        const todo = await pool.query("SELECT * FROM users WHERE (username = $1 AND password = $2)", [username, password]);
+        const todo = pool.query("SELECT * FROM users WHERE (username = $1 AND password = $2)", [username, password]);
 
         if(todo.rows[0])
             res.json(todo.rows[0]);
@@ -51,7 +51,7 @@ const createUser = (request, response) => {
         const {username, fullname, email, password, dateofbirth, profilepicture} = req.body;
         //const newTodo = await pool.query("INSERT INTO todo (description) VALUES ($1) RETURNING *", [description] );
 
-        const verify = await pool.query("SELECT * FROM users WHERE username = $1", [username]);
+        const verify = pool.query("SELECT * FROM users WHERE username = $1", [username]);
 
 
         if(verify.rows[0])
@@ -60,7 +60,7 @@ const createUser = (request, response) => {
             return;
         }
 
-        const newLog = await pool.query("INSERT INTO users (username, fullname, email, password, dateofbirth, profilepicture) VALUES ($1,$2,$3,$4,$5,$6)", [username, fullname, email, password, dateofbirth, profilepicture]);
+        const newLog = pool.query("INSERT INTO users (username, fullname, email, password, dateofbirth, profilepicture) VALUES ($1,$2,$3,$4,$5,$6)", [username, fullname, email, password, dateofbirth, profilepicture]);
 
         res.json("I made a new user with username: " + username + " and password: " + password);
     } catch (err) {
@@ -72,7 +72,7 @@ const updateUser = (request, response) => {
   try{
         const {username, fullname, email, password, dateofbirth, profilepicture} = req.body;
 
-        const updateLog = await pool.query("UPDATE users SET password = $1 WHERE username = $2", [password, username])
+        const updateLog = pool.query("UPDATE users SET password = $1 WHERE username = $2", [password, username])
     
         res.json("Password was updated!");
     }catch(err) {
@@ -84,7 +84,7 @@ const deleteUser = (request, response) => {
   try {
         const {username, fullname, email, password, dateofbirth, profilepicture} = req.body;
 
-        const deleteLog = await pool.query("DELETE FROM users WHERE username = $1", [username]);
+        const deleteLog = pool.query("DELETE FROM users WHERE username = $1", [username]);
         res.json("User was successfully deleted!");
     } catch (err) {
         console.error(err.message);
