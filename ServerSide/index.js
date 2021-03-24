@@ -32,11 +32,10 @@ app.get('/', (request, response) => {
 })
 
 app.get('/users', db.getUsers)
-app.get('/users/:id', db.getUserById)
-app.get('/users/:id/:username', db.getUserByName)
+app.get('/users/:username', db.getUserByUsername)
 app.post('/users', db.createUser)
-app.put('/users/:id', db.updateUser)
-app.delete('/users/:id', db.deleteUser)
+app.patch('/users', db.updateUser)
+app.delete('/users', db.deleteUser)
 
 app.get('/recipes', db.getRecipes)
 app.get('/recipes/:recipeid', db.getRecipeById)

@@ -16,8 +16,9 @@ const getUsers = (request, response) => {
   })
 }
 
-const getUserById = async(request, response) => {
-  const {username, fullname, email, password, dateofbirth, profilepicture} = request.body;
+const getUserByUsername = async(request, response) => {
+  const {password} = request.body;
+  const username = request.params.username;
 
     try{
         const todo = await pool.query("SELECT * FROM users WHERE (username = $1 AND password = $2)", [username, password]);
@@ -33,7 +34,7 @@ const getUserById = async(request, response) => {
     //res.json(req_username+' '+req_password);
 }
 
-const getUserByName = (request, response) => {
+/*const getUserByName = (request, response) => {
   const user_name = request.params.username;
 
   pool.query('SELECT * FROM users WHERE UserName = $1', [user_name], (error, results) => {
@@ -42,7 +43,7 @@ const getUserByName = (request, response) => {
     }
     response.status(200).json(results.rows)
   })
-}
+}*/
 
 const createUser = async(request, response) => {
   try {   
@@ -173,8 +174,7 @@ const deleteRecipe = (request, response) => {
 
 module.exports = {
   getUsers,
-  getUserById,
-  getUserByName,
+  getUserByUsername,
   createUser,
   updateUser,
   deleteUser,
