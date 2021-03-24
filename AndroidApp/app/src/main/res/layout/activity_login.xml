@@ -119,6 +119,15 @@
         app:layout_constraintTop_toBottomOf="@+id/textView"
         app:srcCompat="@drawable/logo" />
 
-<!--    maybe add progressbar -->
+    <TextView
+        android:id="@+id/textViewResult"
+        android:layout_width="371dp"
+        android:layout_height="39dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <!--    maybe add progressbar -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
