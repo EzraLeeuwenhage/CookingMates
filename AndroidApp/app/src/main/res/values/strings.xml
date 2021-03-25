@@ -43,19 +43,20 @@
     <string name="ingredients">Ingredients:</string>
     <string name="edit_ingredient">Ingredient</string>
     <string name="button_add_ingredient">Add Ingredient</string>
+    <string name="recipe_description">Description:</string>
     <string name="nr_people">Number of people:</string>
     <string name="edit_nr_people">0</string>
     <string name="button_send">Search Recipe</string>
     <string name="button_create">Create Recipe</string>
     <string name="button_image">Import Image</string>
-
-    <string name="navigation_drawer_open">Open Navigation Drawer</string>
-    <string name="navigation_drawer_close">Close Navigation Drawer</string>
-
     <string-array name="units">
         <item>g</item>
         <item>mL</item>
         <item>-</item>
     </string-array>
 
+
+    <string name="navigation_drawer_open">Open Navigation Drawer</string>
+    <string name="navigation_drawer_close">Close Navigation Drawer</string>
+    <string name="search_bar">Search...</string>
 </resources>

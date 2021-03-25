@@ -5,6 +5,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import retrofit2.Call;
@@ -15,8 +16,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import com.example.cookingmatesapp.R;
 import com.google.android.material.navigation.NavigationView;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -24,13 +29,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.ToggleButton;
 
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    private ServerCallsApi api;
     private ImageButton recipe1;
+    private List<Recipe> recommendedRecipes;
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -41,14 +51,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        /* Code for retrofit object creation
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://134.209.92.24/")
+                .baseUrl("http://134.209.92.24:3000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
+        api = retrofit.create(ServerCallsApi.class);
 
-        ServerCallsApi api = retrofit.create(ServerCallsApi.class);
-         */
 
         // Hooks
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -68,15 +76,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_home);
 
-
-        recipe1 = (ImageButton)findViewById(R.id.img_btn);
-        recipe1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent myIntent = new Intent(HomeActivity.this, RecipeActivity.class);
-                startActivity(myIntent);
-            }
-        });
+        getRecipes();
     }
 
     @Override
@@ -138,25 +138,78 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
     
-    /* Example of a request
-    private void getUsers(){
-        Call<List<User>> call = api.getUsers();
-        call.enqueue(new Callback<List<User>>() {
+    // Example of a request
+    private void getRecipes(){
+        Log.i("tag", "Recipes are being retrieved");
+        Call<List<Recipe>> call = api.getRecipes();
+        call.enqueue(new Callback<List<Recipe>>() {
             @Override
-            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
                 if(!response.isSuccessful()){
                     Log.e("ErrorTag","Code: " + response.code());
                     return;
+                }else{
+                    Log.i("SuccessTag", "Recipes retrieved");
                 }
 
-                //Result of the getUsers request
-                List<User> users = response.body();
+                //Result of the getRecipes request
+                recommendedRecipes = response.body();
+                createButtons();
             }
 
             @Override
-            public void onFailure(Call<List<User>> call, Throwable t) {
-                //Something went wrong
+            public void onFailure(Call<List<Recipe>> call, Throwable t) {
+                t.printStackTrace();
             }
         });
-    }*/
+    }
+
+    public void getImageInButton(ImageButton btn, Recipe recipe){
+        String path = "http://134.209.92.24:3000/uploads/" + recipe.getFilename();
+        Picasso.get().load(path).into(new Target() {
+
+            @Override
+            public void onPrepareLoad(Drawable arg0) { }
+
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom arg1) {
+                Bitmap bitmapImage = bitmap;
+                btn.setImageBitmap(bitmapImage);
+            }
+
+            @Override
+            public void onBitmapFailed(Exception e, Drawable arg0) { }
+        });
+    }
+
+    private void createButtons(){
+        if(recommendedRecipes != null) {
+            LinearLayout ll = findViewById(R.id.recipeLayout);
+
+            for (int i = 0; i < recommendedRecipes.size() && i < 10; i++) {
+                ImageButton btn = new ImageButton(this);
+                btn.setId(i);
+                if(recommendedRecipes.get(i).getFilename() == null) {
+                    btn.setImageResource(R.drawable.logo);
+                }else{
+                    getImageInButton(btn, recommendedRecipes.get(i));
+                }
+                btn.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+                ll.addView(btn);
+                btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent myIntent = new Intent(HomeActivity.this, RecipeActivity.class);
+                        if(recommendedRecipes.get(v.getId()) == null){
+                            Log.i("isnull", "Recipe is null");
+                        }else{
+                            Log.i("isnull", recommendedRecipes.get(v.getId()).getName());
+                        }
+                        myIntent.putExtra("recipe", recommendedRecipes.get(v.getId()));
+                        startActivity(myIntent);
+                    }
+                });
+            }
+        }
+    }
 }

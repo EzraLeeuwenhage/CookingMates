@@ -6,15 +6,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.cookingmatesapp.MainActivity;
 import com.example.cookingmatesapp.R;
-
-import java.util.HashMap;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -93,7 +89,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.textView4:
                 startActivity(new Intent(this, RegisterUser.class));
                 break;
-            case R.id.textView5:
+            case R.id.recipeIngredientsHeader:
                 startActivity(new Intent(this, ResetPassword.class));
                 break;
         }
