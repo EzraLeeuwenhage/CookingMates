@@ -1,6 +1,8 @@
 package com;
 
 import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -9,7 +11,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class User {
+public class User implements Parcelable {
     @SerializedName("userid")
     private int userId;
     public String username;
@@ -18,12 +20,12 @@ public class User {
     private String password;
     @SerializedName("dateofbirth")
     private Date dateOfBirth;
-    private Bitmap personal_image;
+    private String personal_image;
     private boolean adult;
     public transient List<Recipe> recipes;
     private transient int PASSWORD_LENGTH =8;
 
-    public User(String name, String fullname, String email, String password, Date date, Bitmap image, boolean adult) {
+    public User(String name, String fullname, String email, String password, Date date, String image, boolean adult) {
         set_user_name(name);
         this.fullname = fullname;
         this.email = email;
@@ -33,6 +35,28 @@ public class User {
         this.adult = adult;
         recipes = new ArrayList<Recipe>();
     }//end of User function
+
+    protected User(Parcel in) {
+        userId = in.readInt();
+        username = in.readString();
+        fullname = in.readString();
+        email = in.readString();
+        password = in.readString();
+        personal_image = in.readString();
+        adult = in.readByte() != 0;
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 
     //maybe check the other names to be sure that name is unique
     private void set_user_name(String name){
@@ -66,7 +90,7 @@ public class User {
         }//end else
     }//end set_b_date
 
-    private void set_personal_image (Bitmap image) throws NullPointerException, IllegalArgumentException {
+    private void set_personal_image (String image) throws NullPointerException, IllegalArgumentException {
         if (image == null) {
             new NullPointerException("no image was uploaded to choose");
         }//end if
@@ -116,4 +140,20 @@ public class User {
         return username;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.userId);;
+        dest.writeString(this.username);
+        dest.writeString(this.fullname);
+        dest.writeString(this.email);
+        dest.writeString(this.password);
+        dest.writeString(this.dateOfBirth.toString());
+        dest.writeString(this.personal_image);
+        dest.writeByte((byte) (this.adult ? 1 : 0));
+    }
 }//end of class

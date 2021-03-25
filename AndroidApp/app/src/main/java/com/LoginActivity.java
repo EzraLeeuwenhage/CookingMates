@@ -61,38 +61,34 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.signInBtn:
-                // storage for login info
-                HashMap<String, String> map = new HashMap<>();
 
-                map.put("username", username.getText().toString());
-                map.put("password", password.getText().toString());
-
-                Call<LoginResult> call = api.executeLogin(map);
+                Call<User> call = api.getUserByUsername(
+                        username.getText().toString(), password.getText().toString());
 
                 // create window to show response
                 TextView responseView = findViewById(R.id.textViewResult);
 
-                call.enqueue(new Callback<LoginResult>() {
+                call.enqueue(new Callback<User>() {
                     @Override
-                    public void onResponse(Call<LoginResult> call, Response<LoginResult> response) {
+                    public void onResponse(Call<User> call, Response<User> response) {
                         //TODO use javascript code to handle responses
                         //TODO check whether case/ break works as intended
                         int x = 0;
 
-                        if (response.code() == x) {
-                            LoginResult result = response.body();
+                        if (response.code() == 200) {
+                            User user = response.body();
 
                             Intent myIntent = new Intent(LoginActivity.this, HomeActivity.class);
                             startActivity(myIntent);
                             //optional
                             finish();
-                        } else if (response.code() == x) {
+                        } else if (response.code() == 404) {
                             responseView.setText("Wrong username or password entered!");
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<LoginResult> call, Throwable t)  {
+                    public void onFailure(Call<User> call, Throwable t)  {
                         responseView.setText(t.getMessage());
                     }
                 });
