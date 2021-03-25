@@ -24,9 +24,9 @@ const getUserByUsername = async(request, response) => {
         const todo = await pool.query("SELECT * FROM users WHERE (username = $1 AND password = $2)", [username, password]);
 
         if(todo.rows[0])
-            response.json(todo.rows[0]);
+            response.status(200).json(todo.rows[0]);
         else
-            response.json("No user with this username.");
+            response.status(404).json("No user with this username.");
 
     } catch(err){
         console.error(err.message);
