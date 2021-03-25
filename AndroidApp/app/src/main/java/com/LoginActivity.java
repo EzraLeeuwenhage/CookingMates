@@ -71,10 +71,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 call.enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
-                        //TODO use javascript code to handle responses
-                        //TODO check whether case/ break works as intended
-                        int x = 0;
-
                         if (response.code() == 200) {
                             User user = response.body();
 

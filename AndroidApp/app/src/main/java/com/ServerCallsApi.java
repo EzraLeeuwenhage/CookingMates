@@ -39,8 +39,8 @@ public interface ServerCallsApi {
     Call<User> createUser(@Body User user);
 
     //Gets user with specified name
-    @GET("users/{username}")
-    Call<User> getUserByUsername(@Path("username") String username, @Body String password);
+    @GET("users/{username}/{password}")
+    Call<User> getUserByUsername(@Path("username") String username, @Path("password") String password);
 
     //Completely replaces object
     @PUT("users")
