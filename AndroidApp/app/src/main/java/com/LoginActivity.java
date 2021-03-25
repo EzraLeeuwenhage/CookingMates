@@ -79,6 +79,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             User user = response.body();
 
                             Intent myIntent = new Intent(LoginActivity.this, HomeActivity.class);
+                            myIntent.putExtra("User object", user);
                             startActivity(myIntent);
                             //optional
                             finish();
