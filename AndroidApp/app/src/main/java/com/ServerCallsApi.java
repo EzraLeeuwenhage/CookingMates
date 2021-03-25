@@ -38,24 +38,20 @@ public interface ServerCallsApi {
     @POST("users")
     Call<User> createUser(@Body User user);
 
-    //Gets recipe with specified id
-    @GET("users/{id}")
-    Call<List<User>> getUser(@Path("id") int id);
-
-    //Gets recipe with specified name
-    @GET("users/0/{name}")
-    Call<List<User>> getUserByName(@Path("name") String name);
+    //Gets user with specified name
+    @GET("users/{username}")
+    Call<User> getUserByUsername(@Path("username") String username, @Body String password);
 
     //Completely replaces object
-    @PUT("users/{id}")
-    Call<User> putUser(@Path("id") int id, @Body User user);
+    @PUT("users")
+    Call<User> putUser(@Body User user);
 
     //Only changes specified fields
-    @PATCH("users/{id}")
-    Call<User> patchUser(@Path("id") int id, @Body User user);
+    @PATCH("users")
+    Call<User> patchUser(@Body User user);
 
-    @DELETE("users/{id}")
-    Call<Void> deleteUser(@Path("id") int id);
+    @DELETE("users")
+    Call<Void> deleteUser(@Body User user);
 
     @POST("recipes")
     Call<Recipe> createRecipe(@Body Recipe recipe);
