@@ -32,7 +32,7 @@ app.get('/', (request, response) => {
 })
 
 app.get('/users', db.getUsers)
-app.get('/users/:username', db.getUserByUsername)
+app.get('/users/:username/:password', db.getUserByUsername)
 app.post('/users', db.createUser)
 app.patch('/users', db.updateUser)
 app.delete('/users', db.deleteUser)

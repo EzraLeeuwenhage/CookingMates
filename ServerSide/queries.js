@@ -17,8 +17,8 @@ const getUsers = (request, response) => {
 }
 
 const getUserByUsername = async(request, response) => {
-  const {password} = request.body;
   const username = request.params.username;
+  const password = request.params.password;
 
     try{
         const todo = await pool.query("SELECT * FROM users WHERE (username = $1 AND password = $2)", [username, password]);
