@@ -17,6 +17,7 @@ public class Recipe implements Parcelable {
     private String name;
     private String description;
     private List<String> ingredients = new ArrayList<>();
+    @SerializedName("quantity")
     private List<String> quantities = new ArrayList<>();
     private int numberpeople;
     private boolean adult;
@@ -27,7 +28,7 @@ public class Recipe implements Parcelable {
 
     public Recipe(){};
 
-    public Recipe(int creatorId, String name, String description, List<String> ingredients, List<String> quantities, int numberpeople, boolean adult, String filename) {
+    public Recipe(int creatorId, String name, String description, List<String> ingredients, List<String> quantities, int numberpeople, boolean adult) {
         this.creatorId = creatorId;
         this.name = name;
         this.description = description;
@@ -35,7 +36,6 @@ public class Recipe implements Parcelable {
         this.quantities = quantities;
         this.numberpeople = numberpeople;
         this.adult = adult;
-        this.filename = filename;
     }
 
     public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
@@ -142,6 +142,8 @@ public class Recipe implements Parcelable {
     public String getFilename() {
         return filename;
     }
+
+    public void setFilename(String filename) { this.filename = filename; }
 
     @Override
     public int describeContents() {

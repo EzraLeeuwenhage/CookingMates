@@ -69,20 +69,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/searchBarBg" />
 
-        <ImageButton
-            android:id="@+id/img_btn"
-            android:layout_width="233dp"
-            android:layout_height="220dp"
-            android:scaleType="fitXY"
-            android:background="@android:color/transparent"
-            app:layout_constraintBottom_toTopOf="@+id/SocialBg"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/searchBarBg"
-            app:layout_constraintVertical_bias="0.1"
-            tools:srcCompat="@drawable/logo" />
-
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"

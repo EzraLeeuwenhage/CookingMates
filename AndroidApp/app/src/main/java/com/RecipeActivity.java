@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,16 +31,19 @@ public class RecipeActivity extends AppCompatActivity {
             ImageView image = findViewById(R.id.recipeImage);
             getImage(image, recipe);
 
-            if(recipe.getIngredients() != null && recipe.getQuantities() != null && recipe.getIngredients().size() == recipe.getQuantities().size()) {
-                LinearLayout ll = findViewById(R.id.recipeLayout);
+            TextView nrPeople = findViewById(R.id.editNrPeople);
+            nrPeople.setText(" " + recipe.getNumberpeople());
+
+            if(recipe.getIngredients() != null && recipe.getQuantities() != null) {
+                LinearLayout ll = (LinearLayout) findViewById(R.id.ingredientsLayout);
                 for (int i = 0; i < recipe.getIngredients().size(); i++) {
-                    String ingredient = recipe.getIngredients().get(i) + " " + recipe.getQuantities().get(i);
-                    LayoutParams lparams = new LayoutParams(
-                            LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+                    String ingredient = recipe.getQuantities().get(i) + " " + recipe.getIngredients().get(i);
                     TextView tv = new TextView(this);
-                    tv.setLayoutParams(lparams);
+                    tv.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
                     tv.setText(ingredient);
-                    ll.addView(tv);
+                    if(ll != null) {
+                        ll.addView(tv);
+                    }
                 }
             }
 
