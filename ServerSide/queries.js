@@ -115,7 +115,7 @@ const getRecipeById = (request, response) => {
 const getRecipeByName = (request, response) => {
   const name = request.params.name;
 
-  pool.query('SELECT * FROM recipes WHERE name = $1', [name], (error, results) => {
+  pool.query('SELECT * FROM recipes WHERE name LIKE %$1%', [name], (error, results) => {
     if (error) {
       throw error
     }
@@ -127,6 +127,19 @@ const getRecipeByCreator = (request, response) => {
   const creatorid = request.params.creatorid;
 
   pool.query('SELECT * FROM recipes WHERE creatorid = $1', [creatorid], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+const getRecipeByIngredient = (request, response) => {
+  const ingredient = request.params.ingredient;
+
+  pool.query('SELECT * FROM recipes WHERE EXISTS (' +
+    'SELECT -- can be empty' +
+    'FROM unnest(ingredients) elem WHERE elem LIKE ''%$1%'');', [ingredient], (error, results) => {
     if (error) {
       throw error
     }
@@ -182,6 +195,7 @@ module.exports = {
   getRecipeById,
   getRecipeByName,
   getRecipeByCreator,
+  getRecipeByIngredient,
   createRecipe,
   updateRecipe,
   deleteRecipe,
