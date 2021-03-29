@@ -137,9 +137,7 @@ const getRecipeByCreator = (request, response) => {
 const getRecipeByIngredient = (request, response) => {
   const ingredient = request.params.ingredient;
 
-  pool.query('SELECT * FROM recipes WHERE EXISTS (' +
-    'SELECT -- can be empty' +
-    "FROM unnest(ingredients) elem WHERE elem LIKE '%' || $1 || '%')", [ingredient], (error, results) => {
+  pool.query("SELECT * FROM recipes WHERE EXISTS (SELECT * FROM unnest(ingredients) elem WHERE elem LIKE '%' || $1 || '%')", [ingredient], (error, results) => {
     if (error) {
       throw error
     }
