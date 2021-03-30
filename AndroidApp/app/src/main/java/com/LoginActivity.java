@@ -89,7 +89,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             finish();
                         } else if (response.code() == 404) {
                             responseView.setText("Wrong username or password entered!");
-                        }
+                        } 
                     }
 
                     @Override

@@ -38,6 +38,8 @@ public class RegisterUser extends AppCompatActivity {
     private EditText editTextEmail;
     private EditText editTextPassword;
 
+    private String username;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +60,7 @@ public class RegisterUser extends AppCompatActivity {
 
     public void createAccount(View view) {
         // retrieving entered data
-        String username = editTextUsername.getText().toString();
+        username = editTextUsername.getText().toString();
         String name = editTextFullName.getText().toString();
         String email = editTextEmail.getText().toString();
         String password = editTextPassword.getText().toString();
@@ -80,17 +82,21 @@ public class RegisterUser extends AppCompatActivity {
             call.enqueue(new Callback<User>() {
                 @Override
                 public void onResponse(Call<User> call, Response<User> response) {
-                    if(!response.isSuccessful()){
-                        responseView.setText("Code: " + response.code());
-                        return;
+//                    if(!response.isSuccessful()){
+//                        responseView.setText("Code: " + response.code());
+//                        return;
+//                    }
+
+                    if (response.code() == 200) {
+                        responseView.setText(username + " created!");
+                    } else if (response.code() == 404) {
+                        responseView.setText(username + " already exists as username!");
                     }
-                    User user = response.body();
-                    responseView.setText(user.getName() + " created!");
                 }
 
                 @Override
                 public void onFailure(Call<User> call, Throwable t) {
-                    responseView.setText(t.getMessage());
+                    t.printStackTrace();
                 }
             });
         } catch (Exception e) {
