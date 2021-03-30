@@ -28,11 +28,16 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.InputType;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,13 +61,14 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
 
     private int creatorId = 0;
     private boolean adult = true;
+    private Recipe recipe;
     private ServerCallsApi api;
     private Bitmap bitmapImage;
     private ImageView image;
     private String filename = "";
-    private Spinner spinner1;
-    private Spinner spinner2;
+    private List<Spinner> spinners = new ArrayList<>();
 
+    LinearLayout ingredientsLayout;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     Toolbar toolbar;
@@ -77,11 +83,6 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(CreateRecipeActivity.this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.units));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        spinner1 = findViewById(R.id.unit1);
-        spinner1.setAdapter(adapter);
-        spinner2 = findViewById(R.id.unit2);
-        spinner2.setAdapter(adapter);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://134.209.92.24:3000/")
@@ -108,7 +109,56 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_upload_recipe);
 
+        ingredientsLayout = findViewById(R.id.ingredientsLayout);
+        for(int i = 0; i < 2; i++){
+            LinearLayout line = new LinearLayout(this);
+            line.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+            line.setPadding(16, 16, 0, 0);
+            line.setOrientation(LinearLayout.HORIZONTAL);
 
+            EditText ingredient = new EditText(this);
+            ingredient.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+            ingredient.setHint(R.string.edit_ingredient);
+            line.addView(ingredient);
+
+            EditText quantity = new EditText(this);
+            quantity.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+            quantity.setInputType(InputType.TYPE_CLASS_NUMBER);
+            quantity.setHint("0");
+            line.addView(quantity);
+
+            Spinner spinner = new Spinner(this);
+            spinner.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+            spinner.setAdapter(adapter);
+            line.addView(spinner);
+            spinners.add(spinner);
+
+            ingredientsLayout.addView(line);
+        }
+    }
+
+    //Recipes are invalid if there is no title, no ingredient or the description is smaller than 20
+    //characters
+    public boolean isValidRecipe(Recipe recipe){
+        if(recipe.getName() == null){
+            Toast.makeText(getApplicationContext(), "No title present", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(recipe.getName().equals("")){
+            Toast.makeText(getApplicationContext(), "No title present", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if(recipe.getDescription().length() < 20) {
+            Toast.makeText(getApplicationContext(), "Description too short", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if(recipe.getIngredients().size() == 0){
+            Toast.makeText(getApplicationContext(), "No ingredients present", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
     }
 
 //Start methods for importing images
@@ -165,7 +215,57 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
             return;
         }
 
-        uploadImage();
+        //Title
+        EditText editTitle = findViewById(R.id.editTitle);
+        String name = editTitle.getText().toString();
+
+        //Description
+        EditText editDescription = findViewById(R.id.editDescription);
+        String description = editDescription.getText().toString();
+
+        //Ingredients + Quantities
+        List<String> ingredients = new ArrayList<>();
+        List<String> quantities = new ArrayList<>();
+        for(int i = 0; i < 2; i++) {
+            LinearLayout line = (LinearLayout) ingredientsLayout.getChildAt(i);
+            String ingredientString = "";
+            String quantityString = "";
+            for (int j = 0; j < line.getChildCount(); j++) {
+                switch (j) {
+                    case 0:
+                        EditText ingredient = (EditText) line.getChildAt(j);
+                        ingredientString = ingredient.getText().toString();
+                        break;
+                    case 1:
+                        EditText quantity = (EditText) line.getChildAt(j);
+                        quantityString = quantity.getText().toString();
+                        break;
+                }
+
+                if (!ingredientString.equals("") && !quantityString.equals("")) {
+                    Log.i("ingredient", ingredientString + " - " + quantityString + spinners.get(i).getSelectedItem().toString());
+                    ingredients.add(ingredientString);
+                    ingredientString = "";
+                    quantities.add(quantityString + " " + spinners.get(i).getSelectedItem().toString());
+                    quantityString = "";
+                    Log.i("ingredient", ingredients.size() + " - " + quantities.size());
+                }
+            }
+        }
+
+        //Number of people, adult
+        EditText editNumberOfPeople = findViewById(R.id.editTextNrPeople);
+        int numberOfPeople = 0;
+        if(!editNumberOfPeople.getText().toString().equals("")){
+            numberOfPeople = Integer.parseInt(editNumberOfPeople.getText().toString());
+        }
+
+        TextView textViewCreated = findViewById(R.id.textViewResult);
+        this.recipe = new Recipe(creatorId, name, description, ingredients, quantities, numberOfPeople, adult);
+        if (isValidRecipe(this.recipe)) {
+            Log.i("created", "Recipe valid");
+            uploadImage();
+        }
     }
 
     public void uploadImage(){
@@ -198,6 +298,7 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
                     if (response.code() == 200) {
                         try {
                             filename = response.body().string();
+                            recipe.setFilename(filename);
                             Toast.makeText(getApplicationContext(), "Uploaded Successfully!", Toast.LENGTH_SHORT).show();
                             postRecipe();
                         }catch (IOException e){
@@ -222,48 +323,21 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
     }
 
     public void postRecipe(){
-        //Title
-        EditText editTitle = findViewById(R.id.editTitle);
-        String name = editTitle.getText().toString();
-
-        //Description
-        EditText editDescription = findViewById(R.id.editDescription);
-        String description = editDescription.getText().toString();
-
-        //Ingredients
-        List<String> ingredients = new ArrayList<>();
-        EditText ingredient1 = findViewById(R.id.editTextIngredient1);
-        ingredients.add(ingredient1.getText().toString());
-        EditText ingredient2 = findViewById(R.id.editTextIngredient2);
-        ingredients.add(ingredient2.getText().toString());
-
-        List<String> quantities = new ArrayList<>();
-        EditText quantity1 = findViewById(R.id.editTextQuantity1);
-        quantities.add(quantity1.getText().toString() + " " + spinner1.getSelectedItem().toString());
-        EditText quantity2 = findViewById(R.id.editTextQuantity2);
-        quantities.add(quantity2.getText().toString() + " " + spinner2.getSelectedItem().toString());
-
-        //Number of people, adult
-        EditText editNumberOfPeople = findViewById(R.id.editTextNrPeople);
-        int numberOfPeople = Integer.parseInt(editNumberOfPeople.getText().toString());
-
-        TextView textViewCreated = findViewById(R.id.textViewResult);
-        Recipe recipe = new Recipe(creatorId, name, description, ingredients, quantities, numberOfPeople, adult, filename);
-        Call<Recipe> call = api.createRecipe(recipe);
+        Call<Recipe> call = api.createRecipe(this.recipe);
         call.enqueue(new Callback<Recipe>() {
             @Override
             public void onResponse(Call<Recipe> call, Response<Recipe> response) {
                 if(!response.isSuccessful()){
-                    textViewCreated.setText("Code: " + response.code());
+                    Toast.makeText(getApplicationContext(), "Code: " + response.code(), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 Recipe recipe = response.body();
-                textViewCreated.setText(recipe.getName() + " created!");
+                Toast.makeText(getApplicationContext(), recipe.getName() + " created!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(Call<Recipe> call, Throwable t) {
-                textViewCreated.setText(t.getMessage());
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

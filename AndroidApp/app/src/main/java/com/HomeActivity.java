@@ -27,6 +27,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -180,6 +181,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom arg1) {
                 Bitmap bitmapImage = bitmap;
                 btn.setImageBitmap(bitmapImage);
+                btn.setScaleType(ImageView.ScaleType.CENTER_CROP);
             }
 
             @Override
@@ -199,19 +201,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 }else{
                     getImageInButton(btn, recommendedRecipes.get(i));
                 }
-                btn.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+                btn.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, 400));
+                btn.setPadding(0, 32, 0,0);
                 ll.addView(btn);
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent myIntent = new Intent(HomeActivity.this, RecipeActivity.class);
-                        if(recommendedRecipes.get(v.getId()) == null){
-                            Log.i("isnull", "Recipe is null");
-                        }else{
-                            Log.i("isnull", recommendedRecipes.get(v.getId()).getName());
-                        }
-                        myIntent.putExtra("recipe", recommendedRecipes.get(v.getId()));
-                        startActivity(myIntent);
+                        Intent intent = new Intent(HomeActivity.this, RecipeActivity.class);
+                        intent.putExtra("recipe", recommendedRecipes.get(v.getId()));
+                        startActivity(intent);
                     }
                 });
             }

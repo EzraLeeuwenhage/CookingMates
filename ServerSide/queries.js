@@ -115,7 +115,7 @@ const getRecipeById = (request, response) => {
 const getRecipeByName = (request, response) => {
   const name = request.params.name;
 
-  pool.query('SELECT * FROM recipes WHERE name = $1', [name], (error, results) => {
+  pool.query("SELECT * FROM recipes WHERE name LIKE '%' || $1 || '%'", [name], (error, results) => {
     if (error) {
       throw error
     }
@@ -134,10 +134,21 @@ const getRecipeByCreator = (request, response) => {
   })
 }
 
+const getRecipeByIngredient = (request, response) => {
+  const ingredient = request.params.ingredient;
+
+  pool.query("SELECT * FROM recipes WHERE EXISTS (SELECT * FROM unnest(ingredients) elem WHERE elem LIKE '%' || $1 || '%')", [ingredient], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
 const createRecipe = (request, response) => {
-  const { creatorid, name, description, ingredients, quantities, numberpeople, adult, media } = request.body
+  const { creatorid, name, description, ingredients, quantity, numberpeople, adult, media } = request.body
   pool.query('INSERT INTO recipes (creatorid, name, description, ingredients, quantity, numberpeople, adult, media) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', 
-  [creatorid, name, description, ingredients, quantities, numberpeople, adult, media], (error, results) => {
+  [creatorid, name, description, ingredients, quantity, numberpeople, adult, media], (error, results) => {
     if (error) {
       throw error
     }
@@ -147,11 +158,11 @@ const createRecipe = (request, response) => {
 
 const updateRecipe = (request, response) => {
   const recipeid = parseInt(request.params.recipeid)
-  const { creatorid, name, description, ingredients, quantities, numberpeople, adult, media } = request.body
+  const { creatorid, name, description, ingredients, quantity, numberpeople, adult, media } = request.body
 
   pool.query(
     'UPDATE recipes SET creatorid = $1, name = $2, description = $3, ingredients = $4, quantity = $5, numberpeople = $6, adult = $7, media = $8 WHERE recipeid = $9',
-    [creatorid, name, description, ingredients, quantities, numberpeople, adult, media, recipeid],
+    [creatorid, name, description, ingredients, quantity, numberpeople, adult, media, recipeid],
     (error, results) => {
       if (error) {
         throw error
@@ -182,6 +193,7 @@ module.exports = {
   getRecipeById,
   getRecipeByName,
   getRecipeByCreator,
+  getRecipeByIngredient,
   createRecipe,
   updateRecipe,
   deleteRecipe,

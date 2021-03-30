@@ -23,7 +23,9 @@
         android:layout_height="match_parent"
         tools:context=".CreateRecipeActivity">
 
-        <include layout="@layout/toolbar" />
+        <include
+            android:id="@+id/include4"
+            layout="@layout/toolbar" />
 
         <EditText
             android:id="@+id/editTitle"
@@ -60,62 +62,6 @@
             app:layout_constraintTop_toBottomOf="@+id/editTitle" />
 
         <EditText
-            android:id="@+id/editTextIngredient1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:ems="10"
-            android:hint="@string/edit_ingredient"
-            android:inputType="textPersonName"
-            app:layout_constraintEnd_toStartOf="@+id/editTextQuantity1"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewIngredients" />
-
-        <EditText
-            android:id="@+id/editTextQuantity1"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:ems="10"
-            android:inputType="number"
-            app:layout_constraintEnd_toStartOf="@+id/unit1"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/editTextIngredient1"
-            app:layout_constraintTop_toTopOf="@+id/editTextIngredient1" />
-
-        <EditText
-            android:id="@+id/editTextIngredient2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:ems="10"
-            android:hint="@string/edit_ingredient"
-            android:inputType="textPersonName"
-            app:layout_constraintEnd_toStartOf="@+id/editTextQuantity2"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextIngredient1" />
-
-        <EditText
-            android:id="@+id/editTextQuantity2"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:ems="10"
-            android:inputType="number"
-            app:layout_constraintEnd_toStartOf="@+id/unit2"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/editTextIngredient2"
-            app:layout_constraintTop_toTopOf="@+id/editTextIngredient2" />
-
-        <EditText
             android:id="@+id/editTextNrPeople"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -128,31 +74,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewNrPeople" />
 
-        <Spinner
-            android:id="@+id/unit1"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/ingredientsLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
+            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/editTextQuantity1"
-            app:layout_constraintTop_toTopOf="@+id/editTextIngredient1" />
+            app:layout_constraintStart_toEndOf="@+id/textViewIngredients"
+            app:layout_constraintTop_toBottomOf="@+id/textViewIngredients">
 
-        <Spinner
-            android:id="@+id/unit2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/editTextQuantity2"
-            app:layout_constraintTop_toTopOf="@+id/editTextIngredient2" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/textViewIngredients"
@@ -180,7 +111,7 @@
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextIngredient2" />
+            app:layout_constraintTop_toBottomOf="@+id/ingredientsLayout" />
 
         <TextView
             android:id="@+id/textViewResult"

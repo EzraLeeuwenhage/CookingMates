@@ -62,8 +62,14 @@ public interface ServerCallsApi {
     @GET("recipes/{id}")
     Call<List<Recipe>> getRecipe(@Path("id") int id);
 
-    @GET("recipes/0/{title}")
-    Call<List<Recipe>> getRecipeByTitle(@Path("title") String title);
+    @GET("recipes/0/{name}")
+    Call<List<Recipe>> getRecipeByTitle(@Path("name") String name);
+
+    @GET("recipes/0/0/{creatorid}")
+    Call<List<Recipe>> getRecipeByCreator(@Path("creatorid") int creatorid);
+
+    @GET("recipes/0/0/0/{ingredient}")
+    Call<List<Recipe>> getRecipeByIngredient(@Path("ingredient") String ingredient);
 
     //Completely replaces object
     @PUT("recipes/{id}")
