@@ -181,7 +181,8 @@ public class SearchRecipe extends AppCompatActivity implements NavigationView.On
             @Override
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
                 if(!response.isSuccessful()){
-                    Toast.makeText(getApplicationContext(), "Code: " + response.code(), Toast.LENGTH_SHORT);
+                    Toast.makeText(getApplicationContext(), "Code: " + response.code(),
+                            Toast.LENGTH_SHORT).show();
                     return;
                 }
                 foundRecipes = response.body();
@@ -199,7 +200,7 @@ public class SearchRecipe extends AppCompatActivity implements NavigationView.On
 
             @Override
             public void onFailure(Call<List<Recipe>> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT);
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

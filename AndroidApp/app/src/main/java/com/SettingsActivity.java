@@ -15,23 +15,38 @@ import com.example.cookingmatesapp.R;
 
 import android.content.Intent;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SettingsActivity
         extends AppCompatActivity
         implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
 
-    private Button deleteAcc;
+    private ServerCallsApi api;
+    private User user;
 
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
-    Toolbar toolbar;
+    private Button delete;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://134.209.92.24:3000/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        api = retrofit.create(ServerCallsApi.class);
 
         // Navigation
         // Hooks
@@ -52,18 +67,41 @@ public class SettingsActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_settings);
 
-        // define login button
-        deleteAcc = (Button) findViewById(R.id.delete_acc_btn);
-        deleteAcc.setOnClickListener(this);
-
+        delete = (Button) findViewById(R.id.delete_acc_btn);
+        delete.setOnClickListener(this);
     };
 
     @Override
     public void onClick (View v){
-        Intent myIntent = new Intent(SettingsActivity.this, LoginActivity.class);
-        startActivity(myIntent);
-        //optional
-        finish();
+        switch (v.getId()) {
+            case R.id.delete_acc_btn:
+                // retrieve the user currently logged into
+                user = getIntent().getParcelableExtra("user");
+
+                // make a call to the server to delete the user from the database
+                Call<Void> call = api.deleteUser(user);
+
+                call.enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if(response.isSuccessful()) {
+                            Toast.makeText(getApplicationContext(),
+                                    "Successfully deleted user", Toast.LENGTH_SHORT).show();
+
+                            Intent myIntent = new Intent(SettingsActivity.this,
+                                    LoginActivity.class);
+                            startActivity(myIntent);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t)  {
+                        Toast.makeText(getApplicationContext(), t.getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+                break;
+        }
     }
 
     @Override
