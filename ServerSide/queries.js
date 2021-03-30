@@ -57,13 +57,13 @@ const createUser = async(request, response) => {
 
         if(verify.rows[0])
         {
-            response.json("Username already taken.")
+            response.status(404).send("Username already exists")
             return;
         }
 
         const newLog = await pool.query("INSERT INTO users (username, fullname, email, password, dateofbirth, profilepicture) VALUES ($1,$2,$3,$4,$5,$6)", [username, fullname, email, password, dateofbirth, profilepicture]);
 
-        response.json("I made a new user with username: " + username + " and password: " + password);
+        response.status(200).send("Created user")
     } catch (err) {
         console.error(err.message);
     }
