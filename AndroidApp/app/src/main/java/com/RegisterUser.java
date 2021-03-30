@@ -25,6 +25,8 @@ import com.squareup.picasso.Target;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -71,9 +73,26 @@ public class RegisterUser extends AppCompatActivity {
         // create window to show response
         TextView responseView = findViewById(R.id.textViewResult);
 
+        // validate username
+        if (username == null || username == "") {
+            responseView.setText("Please enter a username!");
+            return;
+        }
+
+        // validate full name
+        if (name == null || name == "") {
+            responseView.setText("Please enter a full name!");
+            return;
+        }
+
+        //validate email
+        if (!isValidEmail(email)) {
+            responseView.setText("Email is not valid!");
+            return;
+        }
+
         //validate password
-        String regex = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,1000}$";
-        if (!isValidPassword(password, regex)) {
+        if (!isValidPassword(password)) {
             responseView.setText("Password is not valid!");
             return;
         }
@@ -83,6 +102,16 @@ public class RegisterUser extends AppCompatActivity {
             SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
             format.setLenient(false);
             Date date = format.parse(dateAsString);
+
+            String oldDate = "01-01-1900";
+            Date old = format.parse(oldDate);
+
+            // check if date is also reasonable (at least year 1900 and at most current date)
+            if (date.before(old) || date.after(new Date())) {
+                responseView.setText("Enter a date after the 19th century and " +
+                        "before the current date!");
+                return;
+            }
 
             User user = new User(username, name, email, password, date, null);
             Call<User> call = api.createUser(user);
@@ -115,10 +144,24 @@ public class RegisterUser extends AppCompatActivity {
     }
 
     // method for validating password
-    public static boolean isValidPassword(String password,String regex)
-    {
+    public static boolean isValidPassword(String password) {
+        // stores correct format for password
+        String regex = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,1000}$";
+
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(password);
+        return matcher.matches();
+    }
+
+    //method for validating email
+    public static boolean isValidEmail(String email)
+    {
+        // stores correct format for email
+        String regex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@" +  //part before @
+                "(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(email);
         return matcher.matches();
     }
 }
