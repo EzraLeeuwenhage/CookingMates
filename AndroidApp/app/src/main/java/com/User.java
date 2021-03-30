@@ -161,6 +161,8 @@ public class User implements Parcelable {
         return Calendar.getInstance().get(Calendar.YEAR) - cal.get(Calendar.YEAR) > 17;
     }
 
+    public int getUserId() { return userId; }
+
     @Override
     public int describeContents() {
         return 0;

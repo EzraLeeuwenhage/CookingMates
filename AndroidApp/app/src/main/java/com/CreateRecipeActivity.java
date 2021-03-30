@@ -38,6 +38,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,7 +60,6 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
     private final int REQUEST_SELECT_IMAGE = 2;
 
     private int creatorId = 0;
-    private boolean adult = true;
     private Recipe recipe;
     private ServerCallsApi api;
     private Bitmap bitmapImage;
@@ -76,6 +76,10 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_recipe);
+
+        // store id of the user that is going to create a recipe
+        User user = getIntent().getParcelableExtra("user");
+        creatorId = user.getUserId();
 
         image = findViewById(R.id.imageRecipe);
 
@@ -259,7 +263,10 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
             numberOfPeople = Integer.parseInt(editNumberOfPeople.getText().toString());
         }
 
-        TextView textViewCreated = findViewById(R.id.textViewResult);
+        // set if recipe is for adults or not
+        Switch sw = findViewById(R.id.switch1);
+        boolean adult = sw.isChecked();
+
         this.recipe = new Recipe(creatorId, name, description, ingredients, quantities, numberOfPeople, adult);
         if (isValidRecipe(this.recipe)) {
             Log.i("created", "Recipe valid");

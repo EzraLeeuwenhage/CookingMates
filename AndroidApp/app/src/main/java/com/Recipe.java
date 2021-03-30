@@ -135,7 +135,7 @@ public class Recipe implements Parcelable {
         return numberpeople;
     }
 
-    public boolean isAdult() {
+    public boolean isForAdult() {
         return adult;
     }
 

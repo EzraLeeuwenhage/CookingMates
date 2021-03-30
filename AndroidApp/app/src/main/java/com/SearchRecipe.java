@@ -185,6 +185,15 @@ public class SearchRecipe extends AppCompatActivity implements NavigationView.On
                     return;
                 }
                 foundRecipes = response.body();
+
+                User user = getIntent().getParcelableExtra("user");
+                if (!user.isAdult()) {
+                    for (Recipe recipe: foundRecipes) {
+                        if (recipe.isForAdult()) {
+                            foundRecipes.remove(recipe);
+                        }
+                    }
+                }
                 createButtons(foundRecipes, findViewById(R.id.resultLayout));
             }
 
