@@ -28,6 +28,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class RegisterUser extends AppCompatActivity {
 
     // defining data to enter
@@ -68,15 +71,19 @@ public class RegisterUser extends AppCompatActivity {
         // create window to show response
         TextView responseView = findViewById(R.id.textViewResult);
 
+        //validate password
+        String regex = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,1000}$";
+        if (!isValidPassword(password, regex)) {
+            responseView.setText("Password is not valid!");
+            return;
+        }
+
         try {
             String dateAsString = editTextAge.getText().toString();
             SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
             format.setLenient(false);
             Date date = format.parse(dateAsString);
-            System.out.println("date: " + date.toString());
 
-            // TODO add option for profile picture and adult stuff
-            // TODO add email verification?
             User user = new User(username, name, email, password, date, null);
             Call<User> call = api.createUser(user);
             call.enqueue(new Callback<User>() {
@@ -105,5 +112,13 @@ public class RegisterUser extends AppCompatActivity {
                         "date in the following format: (dd-mm-yyyy)");
             }
         }
+    }
+
+    // method for validating password
+    public static boolean isValidPassword(String password,String regex)
+    {
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(password);
+        return matcher.matches();
     }
 }

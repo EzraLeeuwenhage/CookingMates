@@ -80,7 +80,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     public void onResponse(Call<User> call, Response<User> response) {
                         if (response.code() == 200) {
                             User user = response.body();
-                            Log.i("userdate", user.getDateOfBirth().toString());
 
                             Intent myIntent = new Intent(LoginActivity.this, HomeActivity.class);
                             myIntent.putExtra("user", user);
@@ -89,7 +88,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             finish();
                         } else if (response.code() == 404) {
                             responseView.setText("Wrong username or password entered!");
-                        } 
+                        }
                     }
 
                     @Override
