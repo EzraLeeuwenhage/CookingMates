@@ -23,8 +23,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/greenLight"
-        tools:context="com.HomeActivity">
+        android:background="@color/greenLight">
 
         <include layout="@layout/toolbar" />
 
@@ -38,6 +37,35 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/searchBarBg"
+            app:layout_constraintEnd_toEndOf="@+id/searchBarBg"
+            app:layout_constraintStart_toEndOf="@+id/textInputEditText"
+            app:layout_constraintTop_toTopOf="@+id/searchBarBg">
+
+            <Button
+                android:id="@+id/homeButtonSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="32dip"
+                android:onClick="getRecipesByName"
+                android:text="Search"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/homeButtonFilter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:insetBottom="0dp"
+                android:minHeight="32dip"
+                android:onClick="openSearchRecipeActivity"
+                android:text="Filter"
+                android:textAllCaps="false" />
+        </LinearLayout>
+
         <View
             android:id="@+id/SocialBg"
             android:layout_width="match_parent"
@@ -48,24 +76,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/textInputEditText"
-            app:layout_constraintEnd_toEndOf="@+id/searchBarBg"
-            app:layout_constraintStart_toStartOf="@+id/searchBarBg"
-            app:layout_constraintTop_toTopOf="@+id/textInputEditText">
-
-        </com.google.android.material.textfield.TextInputLayout>
-
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/textInputEditText"
-            android:layout_width="200dp"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:hint="hint"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:hint="@string/search_bar"
             app:layout_constraintBottom_toBottomOf="@+id/searchBarBg"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/searchBarBg" />
 

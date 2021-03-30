@@ -20,12 +20,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".CreateRecipeActivity">
+        android:layout_height="match_parent">
 
-        <include
-            android:id="@+id/include4"
-            layout="@layout/toolbar" />
+        <include layout="@layout/toolbar" />
 
         <EditText
             android:id="@+id/editTitle"

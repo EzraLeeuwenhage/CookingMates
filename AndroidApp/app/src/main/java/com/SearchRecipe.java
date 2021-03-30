@@ -1,6 +1,11 @@
 package com;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -11,33 +16,33 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cookingmatesapp.R;
+import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class SearchRecipe extends AppCompatActivity {
+public class SearchRecipe extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private ServerCallsApi api;
-    private TextView textViewTitle;
-    private TextView textViewDescription;
-    private EditText editTextId;
-    private EditText editTextTitle;
-    private ImageView imageView;
+    private EditText editSearchBar;
 
     private Bitmap bitmapImage;
-    private Recipe recipe;
+    private List<Recipe> foundRecipes = new ArrayList<>();
 
-    private List<Recipe> foundRecipes;
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,89 +55,132 @@ public class SearchRecipe extends AppCompatActivity {
                 .build();
         api = retrofit.create(ServerCallsApi.class);
 
-        textViewTitle = findViewById(R.id.textViewResult);
-        textViewDescription = findViewById(R.id.textViewDescription);
-        editTextId = findViewById(R.id.editTextNumber);
-        editTextTitle = findViewById(R.id.editTitle);
-        imageView = findViewById(R.id.imageView2);
+        // Hooks
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        toolbar = findViewById(R.id.toolbar);
+
+        navigationView.bringToFront();
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this,
+                drawerLayout,
+                toolbar,
+                R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.nav_home);
+
+        editSearchBar = findViewById(R.id.editSearchBar);
     }
 
+    @Override
+    public void onBackPressed() {
+
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch(menuItem.getItemId()) {
+            case R.id.nav_home:
+                // Just break - same screen
+                break;
+            case R.id.nav_profile:
+                Intent profile_intent = new Intent(SearchRecipe.this, ProfileActivity.class);
+                profile_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(profile_intent);
+                break;
+            case R.id.nav_settings:
+                Intent settings_intent = new Intent(SearchRecipe.this, SettingsActivity.class);
+                settings_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(settings_intent);
+                break;
+            case R.id.nav_about:
+                Intent about_intent = new Intent(SearchRecipe.this, AboutActivity.class);
+                about_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(about_intent);
+                break;
+            case R.id.nav_help:
+                Intent help_intent = new Intent(SearchRecipe.this, HelpActivity.class);
+                help_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(help_intent);
+                break;
+            case R.id.nav_logout:
+                Intent logout_intent = new Intent(SearchRecipe.this, LoginActivity.class);
+                // this removes the User object attached to the context upon logging in
+                logout_intent.getExtras().clear();
+                logout_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(logout_intent);
+                break;
+            case R.id.nav_upload_recipe:
+                Intent create_recipe_intent = new Intent(SearchRecipe.this, CreateRecipeActivity.class);
+                create_recipe_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(create_recipe_intent);
+                break;
+            case R.id.nav_findcookingmates:
+                break;
+            case R.id.nav_contact:
+                break;
+            case R.id.nav_instagram:
+                break;
+            case R.id.nav_facebook:
+                break;
+        }
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    //Get methods get recipes from server database and put them in recipes list
+
+    //Gets all recipes
     public void getRecipes(View view){
         Call<List<Recipe>> call = api.getRecipes();
-        call.enqueue(new Callback<List<Recipe>>() {
-            @Override
-            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-                if(!response.isSuccessful()){
-                    textViewTitle.setText("Code: " + response.code());
-                    return;
-                }
-                foundRecipes = response.body();
-                createButtons(foundRecipes, findViewById(0));
-//                List<Recipe> posts = response.body();
-//                recipe = posts.get(0);
-//                getImage(imageView);
-//
-//                textViewTitle.setText(recipe.getName());
-//                textViewDescription.setText(recipe.getDescription());
-            }
-
-            @Override
-            public void onFailure(Call<List<Recipe>> call, Throwable t) {
-                textViewTitle.setText(t.getMessage());
-            }
-        });
+        makeCall(call);
     }
 
-    public void getRecipeById(View view){
-        int id = Integer.parseInt(editTextId.getText().toString());
-        Call<List<Recipe>> call = api.getRecipe(id);
-        call.enqueue(new Callback<List<Recipe>>() {
-            @Override
-            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-                if(!response.isSuccessful()){
-                    textViewTitle.setText("Code: " + response.code());
-                    return;
-                }
-                foundRecipes = response.body();
-                createButtons(foundRecipes, findViewById(0));
-//                List<Recipe> posts = response.body();
-//                Recipe first = posts.get(0);
-//                textViewTitle.setText(first.getName());
-//                textViewDescription.setText(first.getDescription());
-            }
-
-            @Override
-            public void onFailure(Call<List<Recipe>> call, Throwable t) {
-                textViewTitle.setText(t.getMessage());
-            }
-        });
-    }
-
+    //Gets all recipes where the search string is in the name
     public void getRecipeByTitle(View view){
-        String title = editTextTitle.getText().toString();
+        String title = editSearchBar.getText().toString();
         Call<List<Recipe>> call = api.getRecipeByTitle(title);
+        makeCall(call);
+    }
+
+    //Gets all recipes where the search string is in at least one ingredient
+    public void getRecipeByIngredient(View view){
+        String ingredient = editSearchBar.getText().toString();
+        Call<List<Recipe>> call = api.getRecipeByIngredient(ingredient);
+        makeCall(call);
+    }
+
+    //Actually makes the call for the get methods
+    public void makeCall(Call<List<Recipe>> call){
         call.enqueue(new Callback<List<Recipe>>() {
             @Override
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
                 if(!response.isSuccessful()){
-                    textViewTitle.setText("Code: " + response.code());
+                    Toast.makeText(getApplicationContext(), "Code: " + response.code(), Toast.LENGTH_SHORT);
                     return;
                 }
                 foundRecipes = response.body();
-                createButtons(foundRecipes, findViewById(0));
-//                    Recipe first = posts.get(0);
-//                    textViewTitle.setText(first.getName());
-//                    textViewDescription.setText(first.getDescription());
             }
 
             @Override
             public void onFailure(Call<List<Recipe>> call, Throwable t) {
-                textViewTitle.setText(t.getMessage());
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT);
             }
         });
     }
 
-    public void getImage(ImageView view){
+    //Retrieves the image of the input recipe and places it in the input view
+    public void getImage(ImageView view, Recipe recipe){
         String path = "http://134.209.92.24:3000/uploads" + recipe.getFilename();
         Picasso.get().load(path).into(new Target() {
 
@@ -141,15 +189,7 @@ public class SearchRecipe extends AppCompatActivity {
 
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom arg1) {
-                if(bitmap != null) {
-                    Log.i("bitmapTag", "Bitmap is being retrieved");
-                }
                 bitmapImage = bitmap;
-                if(bitmapImage != null){
-                    Log.i("drawableNull", "Drawable is not null");
-                }else{
-                    Log.i("drawableNotNull", "Drawable is null");
-                }
                 view.setImageBitmap(bitmapImage);
             }
 

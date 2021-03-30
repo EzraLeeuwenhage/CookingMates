@@ -85,8 +85,6 @@ public class HelpActivity
                 break;
             case R.id.nav_logout:
                 Intent logout_intent = new Intent(HelpActivity.this, LoginActivity.class);
-//                // this removes the User object attached to the context upon logging in
-//                logout_intent.getExtras().clear();
                 logout_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(logout_intent);
                 break;
