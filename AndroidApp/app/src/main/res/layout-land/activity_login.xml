@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--TODO make proper landscape layout-->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -21,7 +20,7 @@
         android:id="@+id/view"
         style="@style/ViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="55dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
@@ -112,13 +111,24 @@
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="248dp"
-        android:layout_height="208dp"
+        android:layout_width="72dp"
+        android:layout_height="52dp"
         app:layout_constraintBottom_toBottomOf="@+id/view"
         app:layout_constraintEnd_toEndOf="@+id/view"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintHorizontal_bias="0.155"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/logo" />
+
+    <TextView
+        android:id="@+id/textViewResult"
+        android:layout_width="371dp"
+        android:layout_height="39dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <!--    maybe add progressbar -->
 

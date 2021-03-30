@@ -61,8 +61,8 @@
 
         <TextView
             android:id="@+id/textView2"
-            android:layout_width="263dp"
-            android:layout_height="505dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="72dp"
             android:layout_marginLeft="72dp"
             android:layout_marginTop="44dp"
@@ -71,7 +71,8 @@
             android:text="@string/description"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view" />
+            app:layout_constraintTop_toBottomOf="@+id/view"
+            app:layout_constraintBottom_toTopOf="@+id/view10"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.drawerlayout.widget.DrawerLayout>
