@@ -128,6 +128,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="168dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView2" />
+
     <!--    maybe add progressbar -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
