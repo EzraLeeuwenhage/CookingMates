@@ -7,13 +7,16 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.cookingmatesapp.R;
@@ -33,6 +36,8 @@ public class SearchRecipe extends AppCompatActivity {
 
     private Bitmap bitmapImage;
     private Recipe recipe;
+
+    private List<Recipe> foundRecipes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,12 +66,14 @@ public class SearchRecipe extends AppCompatActivity {
                     textViewTitle.setText("Code: " + response.code());
                     return;
                 }
-                List<Recipe> posts = response.body();
-                recipe = posts.get(0);
-                getImage(imageView);
-
-                textViewTitle.setText(recipe.getName());
-                textViewDescription.setText(recipe.getDescription());
+                foundRecipes = response.body();
+                createButtons(foundRecipes, findViewById(0));
+//                List<Recipe> posts = response.body();
+//                recipe = posts.get(0);
+//                getImage(imageView);
+//
+//                textViewTitle.setText(recipe.getName());
+//                textViewDescription.setText(recipe.getDescription());
             }
 
             @Override
@@ -86,10 +93,12 @@ public class SearchRecipe extends AppCompatActivity {
                     textViewTitle.setText("Code: " + response.code());
                     return;
                 }
-                List<Recipe> posts = response.body();
-                Recipe first = posts.get(0);
-                textViewTitle.setText(first.getName());
-                textViewDescription.setText(first.getDescription());
+                foundRecipes = response.body();
+                createButtons(foundRecipes, findViewById(0));
+//                List<Recipe> posts = response.body();
+//                Recipe first = posts.get(0);
+//                textViewTitle.setText(first.getName());
+//                textViewDescription.setText(first.getDescription());
             }
 
             @Override
@@ -109,12 +118,11 @@ public class SearchRecipe extends AppCompatActivity {
                     textViewTitle.setText("Code: " + response.code());
                     return;
                 }
-                List<Recipe> posts = response.body();
-                if(posts.size() > 0) {
-                    Recipe first = posts.get(0);
-                    textViewTitle.setText(first.getName());
-                    textViewDescription.setText(first.getDescription());
-                }
+                foundRecipes = response.body();
+                createButtons(foundRecipes, findViewById(0));
+//                    Recipe first = posts.get(0);
+//                    textViewTitle.setText(first.getName());
+//                    textViewDescription.setText(first.getDescription());
             }
 
             @Override
@@ -148,5 +156,51 @@ public class SearchRecipe extends AppCompatActivity {
             @Override
             public void onBitmapFailed(Exception e, Drawable arg0) { }
         });
+    }
+
+    public void getImageInButton(ImageButton btn, Recipe recipe){
+        String path = "http://134.209.92.24:3000/uploads/" + recipe.getFilename();
+        Picasso.get().load(path).into(new Target() {
+
+            @Override
+            public void onPrepareLoad(Drawable arg0) { }
+
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom arg1) {
+                Bitmap bitmapImage = bitmap;
+                btn.setImageBitmap(bitmapImage);
+                btn.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            }
+
+            @Override
+            public void onBitmapFailed(Exception e, Drawable arg0) { }
+        });
+    }
+
+    public void createButtons(List<Recipe> list, LinearLayout layout){
+        if(list != null) {
+            LinearLayout ll = layout;
+
+            for (int i = 0; i < list.size() && i < 10; i++) {
+                ImageButton btn = new ImageButton(this);
+                btn.setId(i);
+                if (list.get(i).getFilename() == null) {
+                    btn.setImageResource(R.drawable.logo);
+                } else {
+                    getImageInButton(btn, list.get(i));
+                }
+                btn.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 400));
+                btn.setPadding(0, 32, 0,0);
+                ll.addView(btn);
+                btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(SearchRecipe.this, RecipeActivity.class);
+                        intent.putExtra("recipe", foundRecipes.get(v.getId()));
+                        startActivity(intent);
+                    }
+                });
+            }
+        }
     }
 }
