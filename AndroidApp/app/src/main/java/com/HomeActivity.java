@@ -171,9 +171,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 }else{
                     Log.i("SuccessTag", "Recipes retrieved");
                 }
-
                 //Result of the getRecipes request
                 recommendedRecipes = response.body();
+
+                User user = getIntent().getParcelableExtra("user");
+                if (!user.isAdult()) {
+                    for (Recipe recipe: recommendedRecipes) {
+                        if (recipe.isForAdult()) {
+                            recommendedRecipes.remove(recipe);
+                        }
+                    }
+                }
                 createButtons(recommendedRecipes, findViewById(R.id.recipeLayout));
             }
 
