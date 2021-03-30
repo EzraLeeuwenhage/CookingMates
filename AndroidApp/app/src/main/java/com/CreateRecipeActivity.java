@@ -308,6 +308,11 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
                 startActivity(help_intent);
                 break;
             case R.id.nav_logout:
+                Intent logout_intent = new Intent(CreateRecipeActivity.this, LoginActivity.class);
+                // this removes the User object attached to the context upon logging in
+                logout_intent.getExtras().clear();
+                logout_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(logout_intent);
                 break;
             case R.id.nav_upload_recipe:
                 // Just break - same screen
