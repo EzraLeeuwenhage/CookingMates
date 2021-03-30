@@ -25,7 +25,9 @@
         android:layout_height="match_parent"
         android:background="@color/greenLight">
 
-        <include layout="@layout/toolbar" />
+        <include
+            android:id="@+id/toolbarHome"
+            layout="@layout/toolbar" />
 
         <View
             android:id="@+id/searchBarBg"

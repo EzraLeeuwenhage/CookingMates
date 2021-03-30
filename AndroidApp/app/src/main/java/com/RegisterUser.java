@@ -75,7 +75,7 @@ public class RegisterUser extends AppCompatActivity {
 
             // TODO add option for profile picture and adult stuff
             // TODO add email verification?
-            User user = new User(username, name, email, password, date, null, true);
+            User user = new User(username, name, email, password, date, null);
             Call<User> call = api.createUser(user);
             call.enqueue(new Callback<User>() {
                 @Override

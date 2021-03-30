@@ -31,7 +31,7 @@ public class AboutActivity
         // Hooks
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
-        toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbarAbout);
 
         navigationView.bringToFront();
 

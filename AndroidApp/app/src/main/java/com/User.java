@@ -25,14 +25,13 @@ public class User implements Parcelable {
     public transient List<Recipe> recipes;
     private transient int PASSWORD_LENGTH =8;
 
-    public User(String name, String fullname, String email, String password, Date date, String image, boolean adult) {
+    public User(String name, String fullname, String email, String password, Date date, String image) {
         set_user_name(name);
         this.fullname = fullname;
         this.email = email;
         set_password(password);
         set_personal_image(image);
         set_b_date(date);
-        this.adult = adult;
         recipes = new ArrayList<Recipe>();
     }//end of User function
 
@@ -82,8 +81,10 @@ public class User implements Parcelable {
             new IllegalArgumentException("the inserted date is not accurate");
         }//end if
         this.dateOfBirth = b_date;
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(b_date);
         //check whether the user is adult or child
-        if ( (Calendar.getInstance().get(Calendar.YEAR) - this.dateOfBirth.getYear()) > 17 ) {
+        if ( (Calendar.getInstance().get(Calendar.YEAR) - cal.get(Calendar.YEAR)) > 17 ) {
             adult = true;
         }//end if
         else{
@@ -142,6 +143,23 @@ public class User implements Parcelable {
     }
 
     public Date getDateOfBirth() { return dateOfBirth; }
+
+    //Returns whether this user is adult or not
+    public boolean isAdult(){
+        if(dateOfBirth == null){
+            new NullPointerException("No date added, please enter a date");
+        }
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(dateOfBirth);
+
+        if(cal.get(Calendar.YEAR) < 1900){
+            new IllegalArgumentException("the inserted date is not accurate");
+        }
+
+        //check whether the user is adult or child
+        return Calendar.getInstance().get(Calendar.YEAR) - cal.get(Calendar.YEAR) > 17;
+    }
 
     @Override
     public int describeContents() {

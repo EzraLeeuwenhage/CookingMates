@@ -16,7 +16,6 @@ import com.example.cookingmatesapp.R;
 import android.content.Intent;
 import android.view.View;
 
-import com.example.cookingmatesapp.MainActivity;
 import com.google.android.material.navigation.NavigationView;
 
 public class SettingsActivity
@@ -38,7 +37,7 @@ public class SettingsActivity
         // Hooks
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
-        toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbarSettings);
 
         navigationView.bringToFront();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

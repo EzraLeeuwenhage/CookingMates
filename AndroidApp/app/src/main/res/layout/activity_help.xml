@@ -23,7 +23,7 @@
         tools:context="com.HelpActivity">
 
         <include
-            android:id="@+id/include3"
+            android:id="@+id/toolbarHelp"
             layout="@layout/toolbar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -37,7 +37,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/include3" />
+            app:layout_constraintTop_toBottomOf="@+id/toolbarHelp" />
 
         <View
             android:id="@+id/view10"
