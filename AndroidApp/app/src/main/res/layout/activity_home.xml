@@ -23,8 +23,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/greenLight"
-        tools:context="com.HomeActivity">
+        android:background="@color/greenLight">
 
         <include layout="@layout/toolbar" />
 
@@ -48,19 +47,21 @@
             app:layout_constraintTop_toTopOf="@+id/searchBarBg">
 
             <Button
-                android:id="@+id/button7"
+                android:id="@+id/homeButtonSearch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minHeight="32dip"
+                android:onClick="getRecipesByName"
                 android:text="Search"
                 android:textAllCaps="false" />
 
             <Button
-                android:id="@+id/button6"
+                android:id="@+id/homeButtonFilter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:insetBottom="0dp"
                 android:minHeight="32dip"
+                android:onClick="openSearchRecipeActivity"
                 android:text="Filter"
                 android:textAllCaps="false" />
         </LinearLayout>

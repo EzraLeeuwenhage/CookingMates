@@ -29,6 +29,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -40,7 +41,6 @@ import java.util.List;
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private ServerCallsApi api;
-    private ImageButton recipe1;
     private List<Recipe> recommendedRecipes;
 
     DrawerLayout drawerLayout;
@@ -142,12 +142,41 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-
+    public void openSearchRecipeActivity(View view){
+        Intent search_recipe_intent = new Intent(HomeActivity.this, SearchRecipe.class);
+        search_recipe_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(search_recipe_intent);
+    }
     
     // Example of a request
     private void getRecipes(){
         Log.i("tag", "Recipes are being retrieved");
         Call<List<Recipe>> call = api.getRecipes();
+        call.enqueue(new Callback<List<Recipe>>() {
+            @Override
+            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
+                if(!response.isSuccessful()){
+                    Log.e("ErrorTag","Code: " + response.code());
+                    return;
+                }else{
+                    Log.i("SuccessTag", "Recipes retrieved");
+                }
+
+                //Result of the getRecipes request
+                recommendedRecipes = response.body();
+                createButtons();
+            }
+
+            @Override
+            public void onFailure(Call<List<Recipe>> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    public void getRecipesByName(View view){
+        EditText name = findViewById(R.id.textInputEditText);
+        Call<List<Recipe>> call = api.getRecipeByTitle(name.getText().toString());
         call.enqueue(new Callback<List<Recipe>>() {
             @Override
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
