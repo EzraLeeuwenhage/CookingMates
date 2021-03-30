@@ -99,21 +99,25 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_profile:
                 Intent profile_intent = new Intent(HomeActivity.this, ProfileActivity.class);
                 profile_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                passUserObject(profile_intent);
                 startActivity(profile_intent);
                 break;
             case R.id.nav_settings:
                 Intent settings_intent = new Intent(HomeActivity.this, SettingsActivity.class);
                 settings_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                passUserObject(settings_intent);
                 startActivity(settings_intent);
                 break;
             case R.id.nav_about:
                 Intent about_intent = new Intent(HomeActivity.this, AboutActivity.class);
                 about_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                passUserObject(about_intent);
                 startActivity(about_intent);
                 break;
             case R.id.nav_help:
                 Intent help_intent = new Intent(HomeActivity.this, HelpActivity.class);
                 help_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                passUserObject(help_intent);
                 startActivity(help_intent);
                 break;
             case R.id.nav_logout:
@@ -122,9 +126,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(logout_intent);
                 break;
             case R.id.nav_upload_recipe:
-                Intent create_recipe_intent = new Intent(HomeActivity.this, CreateRecipeActivity.class);
-                create_recipe_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(create_recipe_intent);
+                Intent upload_recipe_intent = new Intent(HomeActivity.this, CreateRecipeActivity.class);
+                upload_recipe_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                passUserObject(upload_recipe_intent);
+                startActivity(upload_recipe_intent);
+                break;
+            case R.id.nav_search_recipe:
+                Intent search_recipe_intent = new Intent(HomeActivity.this, SearchRecipe.class);
+                search_recipe_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                passUserObject(search_recipe_intent);
+                startActivity(search_recipe_intent);
                 break;
             case R.id.nav_findcookingmates:
                 break;
@@ -138,6 +149,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void passUserObject(Intent myIntent) {
+        Intent currentIntent = getIntent();
+        User user = (User) currentIntent.getParcelableExtra("user");
+        myIntent.putExtra("user", user);
     }
 
     public void openSearchRecipeActivity(View view){
@@ -217,9 +234,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void createButtons(List<Recipe> list, LinearLayout layout){
-        if(list != null) {
-            LinearLayout ll = layout;
+        layout.removeAllViews();
 
+        if(list != null) {
             for (int i = 0; i < list.size() && i < 10; i++) {
                 ImageButton btn = new ImageButton(this);
                 btn.setId(i);
@@ -230,7 +247,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 }
                 btn.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, 400));
                 btn.setPadding(0, 32, 0,0);
-                ll.addView(btn);
+                layout.addView(btn);
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

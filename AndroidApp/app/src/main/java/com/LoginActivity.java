@@ -2,6 +2,7 @@ package com;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -69,9 +70,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     public void onResponse(Call<User> call, Response<User> response) {
                         if (response.code() == 200) {
                             User user = response.body();
+                            Log.i("userdate", user.getDateOfBirth().toString());
 
                             Intent myIntent = new Intent(LoginActivity.this, HomeActivity.class);
-                            myIntent.putExtra("User object", user);
+                            myIntent.putExtra("user", user);
                             startActivity(myIntent);
                             //optional
                             finish();

@@ -42,6 +42,7 @@ public class User implements Parcelable {
         fullname = in.readString();
         email = in.readString();
         password = in.readString();
+        dateOfBirth = new Date(in.readLong());
         personal_image = in.readString();
         adult = in.readByte() != 0;
     }
@@ -140,6 +141,8 @@ public class User implements Parcelable {
         return username;
     }
 
+    public Date getDateOfBirth() { return dateOfBirth; }
+
     @Override
     public int describeContents() {
         return 0;
@@ -152,7 +155,7 @@ public class User implements Parcelable {
         dest.writeString(this.fullname);
         dest.writeString(this.email);
         dest.writeString(this.password);
-        dest.writeString(this.dateOfBirth.toString());
+        dest.writeLong(this.dateOfBirth.getTime());
         dest.writeString(this.personal_image);
         dest.writeByte((byte) (this.adult ? 1 : 0));
     }

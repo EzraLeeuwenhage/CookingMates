@@ -10,6 +10,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.example.cookingmatesapp.R;
 import com.google.android.material.navigation.NavigationView;
@@ -45,6 +46,7 @@ public class ProfileActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_profile);
 
+        setProfileInfo();
     }
 
 
@@ -64,6 +66,7 @@ public class ProfileActivity
             case R.id.nav_home:
                 Intent home_intent = new Intent(ProfileActivity.this, HomeActivity.class);
                 home_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                passUserObject(home_intent);
                 startActivity(home_intent);
                 break;
             case R.id.nav_profile:
@@ -72,16 +75,19 @@ public class ProfileActivity
             case R.id.nav_settings:
                 Intent settings_intent = new Intent(ProfileActivity.this, SettingsActivity.class);
                 settings_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                passUserObject(settings_intent);
                 startActivity(settings_intent);
                 break;
             case R.id.nav_about:
                 Intent about_intent = new Intent(ProfileActivity.this, AboutActivity.class);
                 about_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                passUserObject(about_intent);
                 startActivity(about_intent);
                 break;
             case R.id.nav_help:
                 Intent help_intent = new Intent(ProfileActivity.this, HelpActivity.class);
                 help_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                passUserObject(help_intent);
                 startActivity(help_intent);
                 break;
             case R.id.nav_logout:
@@ -92,7 +98,14 @@ public class ProfileActivity
             case R.id.nav_upload_recipe:
                 Intent upload_recipe_intent = new Intent(ProfileActivity.this, CreateRecipeActivity.class);
                 upload_recipe_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                passUserObject(upload_recipe_intent);
                 startActivity(upload_recipe_intent);
+                break;
+            case R.id.nav_search_recipe:
+                Intent search_recipe_intent = new Intent(ProfileActivity.this, SearchRecipe.class);
+                search_recipe_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                passUserObject(search_recipe_intent);
+                startActivity(search_recipe_intent);
                 break;
             case R.id.nav_findcookingmates:
                 break;
@@ -108,5 +121,16 @@ public class ProfileActivity
         return true;
     }
 
+    public void passUserObject(Intent myIntent) {
+        Intent currentIntent = getIntent();
+        User user = (User) currentIntent.getParcelableExtra("user");
+        myIntent.putExtra("user", user);
+    }
+
+    public void setProfileInfo() {
+        User user = getIntent().getParcelableExtra("user");
+        TextView view = findViewById(R.id.textView7);
+        view.setText(user.username);
+    }
 
 }

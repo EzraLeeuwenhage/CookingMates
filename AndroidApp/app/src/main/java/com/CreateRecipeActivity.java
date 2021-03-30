@@ -359,26 +359,31 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
             case R.id.nav_home:
                 Intent home_intent = new Intent(CreateRecipeActivity.this, HomeActivity.class);
                 home_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                passUserObject(home_intent);
                 startActivity(home_intent);
                 break;
             case R.id.nav_profile:
                 Intent profile_intent = new Intent(CreateRecipeActivity.this, ProfileActivity.class);
                 profile_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                passUserObject(profile_intent);
                 startActivity(profile_intent);
                 break;
             case R.id.nav_settings:
                 Intent settings_intent = new Intent(CreateRecipeActivity.this, SettingsActivity.class);
                 settings_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                passUserObject(settings_intent);
                 startActivity(settings_intent);
                 break;
             case R.id.nav_about:
                 Intent about_intent = new Intent(CreateRecipeActivity.this, AboutActivity.class);
                 about_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                passUserObject(about_intent);
                 startActivity(about_intent);
                 break;
             case R.id.nav_help:
                 Intent help_intent = new Intent(CreateRecipeActivity.this, HelpActivity.class);
                 help_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                passUserObject(help_intent);
                 startActivity(help_intent);
                 break;
             case R.id.nav_logout:
@@ -388,6 +393,12 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
                 break;
             case R.id.nav_upload_recipe:
                 // Just break - same screen
+                break;
+            case R.id.nav_search_recipe:
+                Intent search_recipe_intent = new Intent(CreateRecipeActivity.this, SearchRecipe.class);
+                search_recipe_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                passUserObject(search_recipe_intent);
+                startActivity(search_recipe_intent);
                 break;
             case R.id.nav_findcookingmates:
                 break;
@@ -401,5 +412,11 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void passUserObject(Intent myIntent) {
+        Intent currentIntent = getIntent();
+        User user = (User) currentIntent.getParcelableExtra("user");
+        myIntent.putExtra("user", user);
     }
 }
