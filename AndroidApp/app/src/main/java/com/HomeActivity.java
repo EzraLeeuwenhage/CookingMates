@@ -118,8 +118,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_logout:
                 Intent logout_intent = new Intent(HomeActivity.this, LoginActivity.class);
-                // this removes the User object attached to the context upon logging in
-                logout_intent.getExtras().clear();
                 logout_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(logout_intent);
                 break;
@@ -164,7 +162,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                 //Result of the getRecipes request
                 recommendedRecipes = response.body();
-                createButtons();
+                createButtons(recommendedRecipes, findViewById(R.id.recipeLayout));
             }
 
             @Override
@@ -189,7 +187,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                 //Result of the getRecipes request
                 recommendedRecipes = response.body();
-                createButtons();
+                createButtons(recommendedRecipes, findViewById(R.id.recipeLayout));
             }
 
             @Override
@@ -218,17 +216,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    private void createButtons(){
-        if(recommendedRecipes != null) {
-            LinearLayout ll = findViewById(R.id.recipeLayout);
+    public void createButtons(List<Recipe> list, LinearLayout layout){
+        if(list != null) {
+            LinearLayout ll = layout;
 
-            for (int i = 0; i < recommendedRecipes.size() && i < 10; i++) {
+            for (int i = 0; i < list.size() && i < 10; i++) {
                 ImageButton btn = new ImageButton(this);
                 btn.setId(i);
-                if(recommendedRecipes.get(i).getFilename() == null) {
+                if (list.get(i).getFilename() == null) {
                     btn.setImageResource(R.drawable.logo);
-                }else{
-                    getImageInButton(btn, recommendedRecipes.get(i));
+                } else {
+                    getImageInButton(btn, list.get(i));
                 }
                 btn.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, 400));
                 btn.setPadding(0, 32, 0,0);

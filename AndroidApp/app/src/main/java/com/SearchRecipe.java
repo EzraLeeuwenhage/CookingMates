@@ -19,7 +19,9 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.cookingmatesapp.R;
@@ -36,7 +38,7 @@ public class SearchRecipe extends AppCompatActivity implements NavigationView.On
     private EditText editSearchBar;
 
     private Bitmap bitmapImage;
-    private List<Recipe> recipes = new ArrayList<>();
+    private List<Recipe> foundRecipes = new ArrayList<>();
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -167,7 +169,7 @@ public class SearchRecipe extends AppCompatActivity implements NavigationView.On
                     Toast.makeText(getApplicationContext(), "Code: " + response.code(), Toast.LENGTH_SHORT);
                     return;
                 }
-                recipes = response.body();
+                foundRecipes = response.body();
             }
 
             @Override
@@ -194,5 +196,51 @@ public class SearchRecipe extends AppCompatActivity implements NavigationView.On
             @Override
             public void onBitmapFailed(Exception e, Drawable arg0) { }
         });
+    }
+
+    public void getImageInButton(ImageButton btn, Recipe recipe){
+        String path = "http://134.209.92.24:3000/uploads/" + recipe.getFilename();
+        Picasso.get().load(path).into(new Target() {
+
+            @Override
+            public void onPrepareLoad(Drawable arg0) { }
+
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom arg1) {
+                Bitmap bitmapImage = bitmap;
+                btn.setImageBitmap(bitmapImage);
+                btn.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            }
+
+            @Override
+            public void onBitmapFailed(Exception e, Drawable arg0) { }
+        });
+    }
+
+    public void createButtons(List<Recipe> list, LinearLayout layout){
+        if(list != null) {
+            LinearLayout ll = layout;
+
+            for (int i = 0; i < list.size() && i < 10; i++) {
+                ImageButton btn = new ImageButton(this);
+                btn.setId(i);
+                if (list.get(i).getFilename() == null) {
+                    btn.setImageResource(R.drawable.logo);
+                } else {
+                    getImageInButton(btn, list.get(i));
+                }
+                btn.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 400));
+                btn.setPadding(0, 32, 0,0);
+                ll.addView(btn);
+                btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(SearchRecipe.this, RecipeActivity.class);
+                        intent.putExtra("recipe", foundRecipes.get(v.getId()));
+                        startActivity(intent);
+                    }
+                });
+            }
+        }
     }
 }
