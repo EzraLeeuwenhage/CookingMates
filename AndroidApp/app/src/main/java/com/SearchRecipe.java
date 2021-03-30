@@ -170,6 +170,7 @@ public class SearchRecipe extends AppCompatActivity implements NavigationView.On
                     return;
                 }
                 foundRecipes = response.body();
+                createButtons(foundRecipes, findViewById(R.id.resultLayout));
             }
 
             @Override
