@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -141,7 +142,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
             recipe.addRating(rating);
         }
 
-        Call<Void> call = api.addRatingToRecipe(this.recipe.getRecipeId(), this.recipe.getRatings());
+        Call<Void> call = api.addRatingToRecipe(this.recipe.getRecipeId(), this.recipe);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -164,7 +165,9 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
         String review = editReview.getText().toString();
         recipe.addReview(review);
 
-        Call<Void> call = api.addReviewToRecipe(recipe.getRecipeId(), recipe.getReviews());
+        Log.i("Id", recipe.getRecipeId() + "");
+
+        Call<Void> call = api.addReviewToRecipe(this.recipe.getRecipeId(), this.recipe);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {

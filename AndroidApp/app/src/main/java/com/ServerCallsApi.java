@@ -80,10 +80,10 @@ public interface ServerCallsApi {
     Call<Recipe> patchRecipe(@Path("id") int id, @Body Recipe recipe);
 
     @PATCH("recipes/rating/{id}")
-    Call<Void> addRatingToRecipe(@Path("id") int id, @Body List<Integer> ratings);
+    Call<Void> addRatingToRecipe(@Path("id") int id, @Body Recipe recipe);
 
     @PATCH("recipes/review/{id}")
-    Call<Void> addReviewToRecipe(@Path("id") int id, @Body List<String> reviews);
+    Call<Void> addReviewToRecipe(@Path("id") int id, @Body Recipe recipe);
 
     @DELETE("recipes/{id}")
     Call<Void> deleteRecipe(@Path("id") int id);

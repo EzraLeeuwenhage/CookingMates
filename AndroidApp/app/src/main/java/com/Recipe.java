@@ -179,6 +179,7 @@ public class Recipe implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.recipeId);
         dest.writeInt(this.creatorId);
         dest.writeString(this.name);
         dest.writeString(this.description);
@@ -192,6 +193,7 @@ public class Recipe implements Parcelable {
     }
 
     public Recipe(Parcel pc){
+        this.recipeId = pc.readInt();
         this.creatorId = pc.readInt();
         this.name = pc.readString();
         this.description = pc.readString();
