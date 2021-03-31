@@ -28,7 +28,10 @@ public class Recipe implements Parcelable {
 
     private transient int TITLE_LENGTH = 3;
 
-    public Recipe(){};
+    public Recipe() {
+    }
+
+    ;
 
     public Recipe(int creatorId, String name, String description, List<String> ingredients, List<String> quantities, int numberpeople, boolean adult) {
         this.creatorId = creatorId;
@@ -53,13 +56,13 @@ public class Recipe implements Parcelable {
     };
 
     //set the title of the recipe
-    public void set_title (String title) throws NullPointerException, IllegalArgumentException {
-        if( title == null){
-            NullPointerException exception=new NullPointerException("no title entered");
-           throw exception;
+    public void set_title(String title) throws NullPointerException, IllegalArgumentException {
+        if (title == null) {
+            NullPointerException exception = new NullPointerException("no title entered");
+            throw exception;
         }//end if
 
-        if( !is_word(title)){
+        if (!is_word(title)) {
             IllegalArgumentException exception = new IllegalArgumentException("the inserted title is not a word");
             throw exception;
         }//end if
@@ -67,30 +70,30 @@ public class Recipe implements Parcelable {
         this.name = title;
     }//end set_title
 
-    public void set_ingredients ( List<String> ingredients1)throws NullPointerException, IllegalArgumentException{
-        if( ingredients1 == null){
+    public void set_ingredients(List<String> ingredients1) throws NullPointerException, IllegalArgumentException {
+        if (ingredients1 == null) {
             throw (new NullPointerException("this list is empty"));
         }//end if
 
-        for (int i=0; i< ingredients1.size(); i++){
-            if(!( is_word( ingredients1.get(i) ) ) ){
-                throw( new IllegalArgumentException("the element "+ i + "is not a word"));
+        for (int i = 0; i < ingredients1.size(); i++) {
+            if (!(is_word(ingredients1.get(i)))) {
+                throw (new IllegalArgumentException("the element " + i + "is not a word"));
             }//end if
         }//end for
 
-        for( int i=0; i<ingredients1.size(); i++){
-            this.ingredients.add( ingredients1.get(i));
+        for (int i = 0; i < ingredients1.size(); i++) {
+            this.ingredients.add(ingredients1.get(i));
         }//end for
     }//end set_ingredients
 
     private boolean is_word(String title) {
-        if( title.length() < TITLE_LENGTH){
+        if (title.length() < TITLE_LENGTH) {
             return false;
         }
         char ch;
-        for( int i=0; i<title.length(); i++){
+        for (int i = 0; i < title.length(); i++) {
             ch = Character.toUpperCase(title.charAt(i));
-            if (!( ch> 'A' && ch < 'Z')){
+            if (!(ch > 'A' && ch < 'Z')) {
                 return false;
             }//end if
         }//end for
@@ -98,8 +101,8 @@ public class Recipe implements Parcelable {
     }//end is_word
 
     //check whether the recipe contains alcoholic ingredients or suitable for kids
-    private boolean is_for_kids(){
-        for(int i=0; i < this.ingredients.size(); i++){
+    private boolean is_for_kids() {
+        for (int i = 0; i < this.ingredients.size(); i++) {
             if (ingredients.get(i).equals("wine") || ingredients.get(i).equals("alcohol")) {
                 this.adult = false;
                 return this.adult;
@@ -145,11 +148,15 @@ public class Recipe implements Parcelable {
         return filename;
     }
 
-    public void setFilename(String filename) { this.filename = filename; }
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
 
-    public List<Integer> getRatings() { return ratings; }
+    public List<Integer> getRatings() {
+        return ratings;
+    }
 
-    public boolean hasRating(){
+    public boolean hasRating() {
         return ratings.size() > 0;
     }
 
@@ -157,16 +164,18 @@ public class Recipe implements Parcelable {
         this.ratings.add(rating);
     }
 
-    public float getRating(){
+    public float getRating() {
         float total = 0;
-        for(int i : this.ratings){
+        for (int i : this.ratings) {
             total += i;
         }
 
         return total / this.ratings.size();
     }
 
-    public List<String> getReviews() { return reviews; }
+    public List<String> getReviews() {
+        return reviews;
+    }
 
     public void addReview(String review) {
         this.reviews.add(review);
@@ -192,7 +201,7 @@ public class Recipe implements Parcelable {
         dest.writeStringList(this.reviews);
     }
 
-    public Recipe(Parcel pc){
+    public Recipe(Parcel pc) {
         this.recipeId = pc.readInt();
         this.creatorId = pc.readInt();
         this.name = pc.readString();
@@ -205,4 +214,24 @@ public class Recipe implements Parcelable {
         pc.readList(this.ratings, null);
         pc.readStringList(this.reviews);
     }
-}//end of the class
+
+    public Recipe search_recipe(String name, User user, List<Recipe> recipes_list) throws NullPointerException, IllegalArgumentException {
+        if (name == null || user == null || recipes_list == null) {
+            throw new NullPointerException("one of the inserted arguments is null");
+        }//end if
+
+        for (int i = 0; i < recipes_list.size(); i++) {
+            if (recipes_list.get(i).getName().equals(name)) {
+                Recipe the_recipe = new Recipe();
+                the_recipe = recipes_list.get(i);
+                if (the_recipe.is_for_kids() && user.isAdult()) {
+                    System.out.println("This recipe is not suitable for kids");
+                } else {
+                    return the_recipe;
+                }//end else
+            }//end if
+        }//end for
+        throw new IllegalArgumentException("there is no such recipe");
+    }// end of search_recipe
+
+}// /end of the class
