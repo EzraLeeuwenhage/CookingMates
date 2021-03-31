@@ -59,12 +59,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
             TextView text = findViewById(R.id.recipeTitle);
             text.setText(recipe.getName());
 
-            TextView rating = findViewById(R.id.recipeRating);
-            if(recipe.hasRating()) {
-                rating.setText("" + recipe.getRating());
-            }else{
-                rating.setText("-");
-            }
+            updateRatingText();
 
             ImageView image = findViewById(R.id.recipeImage);
             getImage(image, recipe);
@@ -88,18 +83,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
             TextView description = findViewById(R.id.recipeDescription);
             description.setText(recipe.getDescription());
 
-            if(recipe.getReviews() != null){
-                LinearLayout ll = findViewById(R.id.reviewLayout);
-                for (int i = 0; i < recipe.getReviews().size(); i++) {
-                    String review = recipe.getReviews().get(i);
-                    TextView tv = new TextView(this);
-                    tv.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-                    tv.setText(review);
-                    if(ll != null) {
-                        ll.addView(tv);
-                    }
-                }
-            }
+            updateReviewLayout();
         }
 
         // Hooks
@@ -150,6 +134,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
                                 return;
                             }
                             Toast.makeText(getApplicationContext(),"Rating added!", Toast.LENGTH_SHORT).show();
+                            updateRatingText();
                         }
 
                         @Override
@@ -159,6 +144,15 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
                     });
                 }
                 break;
+        }
+    }
+
+    public void updateRatingText(){
+        TextView rating = findViewById(R.id.recipeRating);
+        if(recipe.hasRating()) {
+            rating.setText("" + recipe.getRating());
+        }else{
+            rating.setText("-");
         }
     }
 
@@ -178,6 +172,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
                     return;
                 }
                 Toast.makeText(getApplicationContext(),"Review added!", Toast.LENGTH_SHORT).show();
+                updateReviewLayout();
             }
 
             @Override
@@ -185,6 +180,21 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
                 Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void updateReviewLayout(){
+        if(recipe.getReviews() != null){
+            LinearLayout ll = findViewById(R.id.reviewLayout);
+            for (int i = 0; i < recipe.getReviews().size(); i++) {
+                String review = recipe.getReviews().get(i);
+                TextView tv = new TextView(this);
+                tv.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+                tv.setText(review);
+                if(ll != null) {
+                    ll.addView(tv);
+                }
+            }
+        }
     }
 
     public void getImage(ImageView v, Recipe recipe){
