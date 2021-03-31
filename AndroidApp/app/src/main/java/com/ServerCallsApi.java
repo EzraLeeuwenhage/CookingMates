@@ -79,6 +79,12 @@ public interface ServerCallsApi {
     @PATCH("recipes/{id}")
     Call<Recipe> patchRecipe(@Path("id") int id, @Body Recipe recipe);
 
+    @PATCH("recipes/rating/{id}")
+    Call<Void> addRatingToRecipe(@Path("id") int id, @Body List<Integer> ratings);
+
+    @PATCH("recipes/review/{id}")
+    Call<Void> addReviewToRecipe(@Path("id") int id, @Body List<String> reviews);
+
     @DELETE("recipes/{id}")
     Call<Void> deleteRecipe(@Path("id") int id);
 

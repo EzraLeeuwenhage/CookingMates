@@ -44,6 +44,8 @@ app.get('/recipes/:recipeid/:name/:creatorid', db.getRecipeByCreator)
 app.get('/recipes/:recipeid/:name/:creatorid/:ingredient', db.getRecipeByIngredient)
 app.post('/recipes', db.createRecipe)
 app.put('/recipes/:recipeid', db.updateRecipe)
+app.patch('/recipes/rating/:recipeid', db.addRatingToRecipe)
+app.patch('/recipes/review/:recipeid', db.addReviewToRecipe)
 app.delete('/recipes/:recipeid', db.deleteRecipe)
 
 // Post images

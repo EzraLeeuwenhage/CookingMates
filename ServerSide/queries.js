@@ -172,6 +172,34 @@ const updateRecipe = (request, response) => {
   )
 }
 
+const addReviewToRecipe(){
+	const recipeid = parseInt(request.params.recipeid)
+	const { reviews } = request.body
+
+	pool.query('UPDATE recipes SET reviews = $1 WHERE recipeid = $2',
+		[reviews, recipeid], (error, results) => {
+		if (error) {
+			throw error
+		}
+		response.status(200).send(`Recipe modified with ID: ${recipeid}`)
+	}
+  )
+}
+
+const addRatingToRecipe(){
+	const recipeid = parseInt(request.params.recipeid)
+	const { ratings } = request.body
+
+	pool.query('UPDATE recipes SET ratings = $1, WHERE recipeid = $9',
+		[ratings, recipeid], (error, results) => {
+		if (error) {
+			throw error
+		}
+		response.status(200).send(`Recipe modified with ID: ${recipeid}`)
+    }
+  )
+}
+
 const deleteRecipe = (request, response) => {
   const recipeid = parseInt(request.params.recipeid)
 
@@ -196,5 +224,7 @@ module.exports = {
   getRecipeByIngredient,
   createRecipe,
   updateRecipe,
+  addRatingToRecipe,
+  addReviewToRecipe,
   deleteRecipe,
 }

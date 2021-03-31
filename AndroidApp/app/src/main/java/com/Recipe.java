@@ -23,6 +23,8 @@ public class Recipe implements Parcelable {
     private boolean adult;
     @SerializedName("media")
     private String filename;
+    private List<Integer> ratings = new ArrayList<>();
+    private List<String> reviews = new ArrayList<>();
 
     private transient int TITLE_LENGTH = 3;
 
@@ -145,6 +147,31 @@ public class Recipe implements Parcelable {
 
     public void setFilename(String filename) { this.filename = filename; }
 
+    public List<Integer> getRatings() { return ratings; }
+
+    public boolean hasRating(){
+        return ratings.size() > 0;
+    }
+
+    public void addRating(int rating) {
+        this.ratings.add(rating);
+    }
+
+    public float getRating(){
+        float total = 0;
+        for(int i : this.ratings){
+            total += i;
+        }
+
+        return total / this.ratings.size();
+    }
+
+    public List<String> getReviews() { return reviews; }
+
+    public void addReview(String review) {
+        this.reviews.add(review);
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -160,6 +187,8 @@ public class Recipe implements Parcelable {
         dest.writeInt(this.numberpeople);
         dest.writeByte((byte) (this.adult ? 1 : 0));
         dest.writeString(this.filename);
+        dest.writeList(this.ratings);
+        dest.writeStringList(this.reviews);
     }
 
     public Recipe(Parcel pc){
@@ -171,5 +200,7 @@ public class Recipe implements Parcelable {
         this.numberpeople = pc.readInt();
         this.adult = pc.readByte() != 0;
         this.filename = pc.readString();
+        pc.readList(this.ratings, null);
+        pc.readStringList(this.reviews);
     }
 }//end of the class

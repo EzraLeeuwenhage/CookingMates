@@ -37,6 +37,11 @@
     <string name="email">Email Address</string>
     <string name="delete">Delete Account</string>
 
+    <string-array name="account_types">
+        <item>Adult</item>
+        <item>Child</item>
+    </string-array>
+
     <!-- Strings used for recipe creation -->
     <string name="edit_title">Enter a title</string>
     <string name="edit_description">Enter a description</string>
@@ -54,11 +59,12 @@
         <item>mL</item>
         <item>-</item>
     </string-array>
+    <string name="review">Reviews:</string>
+    <string name="stars">Stars</string>
+    <string name="rating"> Rate: </string>
+    <string name="edit_review">Review</string>
+    <string name="button_review">Submit Review</string>
 
-    <string-array name="account_types">
-        <item>Adult</item>
-        <item>Child</item>
-    </string-array>
 
 
     <string name="navigation_drawer_open">Open Navigation Drawer</string>
