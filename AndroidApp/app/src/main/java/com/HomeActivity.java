@@ -155,6 +155,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     public void openSearchRecipeActivity(View view){
         Intent search_recipe_intent = new Intent(HomeActivity.this, SearchRecipe.class);
         search_recipe_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        passUserObject(search_recipe_intent);
         startActivity(search_recipe_intent);
     }
     
@@ -256,6 +257,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     public void onClick(View v) {
                         Intent intent = new Intent(HomeActivity.this, RecipeActivity.class);
                         intent.putExtra("recipe", recommendedRecipes.get(v.getId()));
+                        passUserObject(intent);
                         startActivity(intent);
                     }
                 });

@@ -263,6 +263,7 @@ public class SearchRecipe extends AppCompatActivity implements NavigationView.On
                     public void onClick(View v) {
                         Intent intent = new Intent(SearchRecipe.this, RecipeActivity.class);
                         intent.putExtra("recipe", foundRecipes.get(v.getId()));
+                        passUserObject(intent);
                         startActivity(intent);
                     }
                 });
