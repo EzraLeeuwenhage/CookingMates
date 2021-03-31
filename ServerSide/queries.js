@@ -190,7 +190,7 @@ const addRatingToRecipe = (request, response) => {
 	const recipeid = parseInt(request.params.recipeid)
 	const { ratings } = request.body
 
-	pool.query('UPDATE recipes SET ratings = $1, WHERE recipeid = $9',
+	pool.query('UPDATE recipes SET ratings = $1, WHERE recipeid = $2',
 		[ratings, recipeid], (error, results) => {
 		if (error) {
 			throw error
