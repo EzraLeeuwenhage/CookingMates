@@ -172,7 +172,7 @@ const updateRecipe = (request, response) => {
   )
 }
 
-const addReviewToRecipe(){
+const addReviewToRecipe() = (request, response) => {
 	const recipeid = parseInt(request.params.recipeid)
 	const { reviews } = request.body
 
@@ -181,12 +181,12 @@ const addReviewToRecipe(){
 		if (error) {
 			throw error
 		}
-		response.status(200)
+		response.status(200).send(`Recipe modified with ID: ${recipeid}`)
 	}
   )
 }
 
-const addRatingToRecipe(){
+const addRatingToRecipe() = (request, response) => {
 	const recipeid = parseInt(request.params.recipeid)
 	const { ratings } = request.body
 
@@ -195,7 +195,7 @@ const addRatingToRecipe(){
 		if (error) {
 			throw error
 		}
-		response.status(200)
+		response.status(200).send(`Recipe modified with ID: ${recipeid}`)
     }
   )
 }
