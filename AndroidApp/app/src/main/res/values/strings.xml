@@ -62,6 +62,7 @@
     <string name="review">Reviews:</string>
     <string name="stars">Stars</string>
     <string name="rating"> Rate: </string>
+    <string name="button_rating">Submit Rating</string>
     <string name="edit_review">Review</string>
     <string name="button_review">Submit Review</string>
 

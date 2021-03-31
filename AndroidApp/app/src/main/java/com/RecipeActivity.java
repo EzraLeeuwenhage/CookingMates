@@ -25,6 +25,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -39,6 +40,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     Toolbar toolbar;
+    int localRating = 0; // Rating of star that has been pressed before submitting
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,45 +121,45 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
     }
 
     public void sendRating(View view){
-        int rating = 0;
         switch (view.getId()){
             case R.id.rating1:
-                rating = 1;
+                localRating = 1;
                 break;
             case R.id.rating2:
-                rating = 2;
+                localRating = 2;
                 break;
             case R.id.rating3:
-                rating = 3;
+                localRating = 3;
                 break;
             case R.id.rating4:
-                rating = 4;
+                localRating = 4;
                 break;
             case R.id.rating5:
-                rating = 5;
+                localRating = 5;
+                break;
+            case R.id.buttonRating:
+                if(localRating != 0){
+                    recipe.addRating(localRating);
+
+                    Call<Void> call = api.addRatingToRecipe(this.recipe.getRecipeId(), this.recipe);
+                    call.enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            if(!response.isSuccessful()){
+                                Toast.makeText(getApplicationContext(), "Code: " + response.code(), Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            Toast.makeText(getApplicationContext(),"Rating added!", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
                 break;
         }
-
-        if(rating != 0){
-            recipe.addRating(rating);
-        }
-
-        Call<Void> call = api.addRatingToRecipe(this.recipe.getRecipeId(), this.recipe);
-        call.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if(!response.isSuccessful()){
-                    Toast.makeText(getApplicationContext(), "Code: " + response.code(), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                Toast.makeText(getApplicationContext(),"Rating added!", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     public void sendReview(View view){
