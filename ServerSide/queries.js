@@ -181,7 +181,7 @@ const addReviewToRecipe(){
 		if (error) {
 			throw error
 		}
-		response.status(200).send(`Recipe modified with ID: ${recipeid}`)
+		response.status(200)
 	}
   )
 }
@@ -195,7 +195,7 @@ const addRatingToRecipe(){
 		if (error) {
 			throw error
 		}
-		response.status(200).send(`Recipe modified with ID: ${recipeid}`)
+		response.status(200)
     }
   )
 }

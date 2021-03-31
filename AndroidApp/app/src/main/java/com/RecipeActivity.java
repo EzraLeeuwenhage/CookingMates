@@ -51,7 +51,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
         api = retrofit.create(ServerCallsApi.class);
 
         Intent intent = getIntent();
-        Recipe recipe = (Recipe)intent.getParcelableExtra("recipe");
+        this.recipe = (Recipe)intent.getParcelableExtra("recipe");
         if(recipe != null) {
             TextView text = findViewById(R.id.recipeTitle);
             text.setText(recipe.getName());
@@ -87,7 +87,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
 
             if(recipe.getReviews() != null){
                 LinearLayout ll = findViewById(R.id.reviewLayout);
-                for (int i = 0; i < recipe.getIngredients().size(); i++) {
+                for (int i = 0; i < recipe.getReviews().size(); i++) {
                     String review = recipe.getReviews().get(i);
                     TextView tv = new TextView(this);
                     tv.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
