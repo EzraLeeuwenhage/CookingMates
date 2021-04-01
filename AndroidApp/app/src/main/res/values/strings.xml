@@ -51,7 +51,8 @@
     <string name="recipe_description">Description:</string>
     <string name="nr_people">Number of people:</string>
     <string name="edit_nr_people">0</string>
-    <string name="edit_tags">Tags: (e.g. vegetarian,healthy,sweet)</string>
+    <string name="tags_header">Tags: (e.g. healthy,sweet)</string>
+    <string name="edit_tags">Tag</string>
     <string name="button_send">Search Recipe</string>
     <string name="button_create">Create Recipe</string>
     <string name="button_image">Import Image</string>
@@ -68,7 +69,9 @@
     <string name="edit_review">Review</string>
     <string name="button_review">Submit Review</string>
 
-
+    <string name="search_name">Search on name</string>
+    <string name="search_tag">Search on tag</string>
+    <string name="search_ingredient">Search on ingredient</string>
 
     <string name="navigation_drawer_open">Open Navigation Drawer</string>
     <string name="navigation_drawer_close">Close Navigation Drawer</string>

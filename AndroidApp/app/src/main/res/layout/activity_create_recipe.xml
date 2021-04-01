@@ -59,8 +59,8 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp"
                 android:ems="10"
+                android:hint="@string/edit_tags"
                 android:inputType="textPersonName"
-                android:text="Name"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
@@ -182,7 +182,10 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
-                android:text="@string/edit_tags"
+                android:text="@string/tags_header"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editTextNrPeople" />
 
