@@ -71,6 +71,9 @@ public interface ServerCallsApi {
     @GET("recipes/0/0/0/{ingredient}")
     Call<List<Recipe>> getRecipeByIngredient(@Path("ingredient") String ingredient);
 
+    @GET("recipes/0/0/0/0/{tag}")
+    Call<List<Recipe>> getRecipeByTag(@Path("tag") String tag);
+
     //Completely replaces object
     @PUT("recipes/{id}")
     Call<Recipe> putRecipe(@Path("id") int id, @Body Recipe recipe);

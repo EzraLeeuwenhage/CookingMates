@@ -269,7 +269,7 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
         //Tags
         EditText editTags = findViewById(R.id.editTags);
         String tagString = editTags.getText().toString();
-        List<String> tags = new ArrayList<>(Arrays.asList(tagString.split(" , ")));
+        List<String> tags = new ArrayList<>(Arrays.asList(tagString.split(",")));
 
         // set if recipe is for adults or not
         Switch sw = findViewById(R.id.switch1);

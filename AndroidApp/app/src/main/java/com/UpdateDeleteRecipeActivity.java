@@ -45,7 +45,7 @@ public class UpdateDeleteRecipeActivity extends AppCompatActivity {
         String title = editTextTitle.getText().toString();
         //TODO update only required fields
         Recipe updatedRecipe = new Recipe(0, "name", "description",
-                new ArrayList<>(),  new ArrayList<>(), 0, false);
+                new ArrayList<>(),  new ArrayList<>(), 0, false, new ArrayList<>());
         updatedRecipe.setFilename("");
         Call<Recipe> call = api.putRecipe(id, updatedRecipe);
         call.enqueue(new Callback<Recipe>() {

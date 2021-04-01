@@ -66,7 +66,11 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
 
             TextView tags = findViewById(R.id.recipeTag);
             String tagString = android.text.TextUtils.join(",", recipe.getTags());
-            tags.setText(tagString);
+            if(tagString.equals("")) {
+                tags.setText("-");
+            } else {
+                tags.setText(tagString);
+            }
 
             TextView nrPeople = findViewById(R.id.editNrPeople);
             nrPeople.setText(" " + recipe.getNumberpeople());

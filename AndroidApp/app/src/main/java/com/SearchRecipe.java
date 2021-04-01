@@ -175,6 +175,13 @@ public class SearchRecipe extends AppCompatActivity implements NavigationView.On
         makeCall(call);
     }
 
+    //Gets all recipes where the search string is in at least one tag
+    public void getRecipeByTag(View view){
+        String tag = editSearchBar.getText().toString();
+        Call<List<Recipe>> call = api.getRecipeByTag(tag);
+        makeCall(call);
+    }
+
     //Actually makes the call for the get methods
     public void makeCall(Call<List<Recipe>> call){
         call.enqueue(new Callback<List<Recipe>>() {
