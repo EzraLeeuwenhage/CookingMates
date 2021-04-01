@@ -64,6 +64,10 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
             ImageView image = findViewById(R.id.recipeImage);
             getImage(image, recipe);
 
+            TextView tags = findViewById(R.id.recipeTag);
+            String tagString = android.text.TextUtils.join(",", recipe.getTags());
+            tags.setText(tagString);
+
             TextView nrPeople = findViewById(R.id.editNrPeople);
             nrPeople.setText(" " + recipe.getNumberpeople());
 

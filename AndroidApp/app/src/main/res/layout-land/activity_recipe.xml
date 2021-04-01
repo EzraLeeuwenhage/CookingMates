@@ -49,6 +49,17 @@
                     app:layout_constraintStart_toEndOf="@+id/editReview"
                     app:layout_constraintTop_toTopOf="@+id/editReview" />
 
+                <Button
+                    android:id="@+id/buttonRating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="sendRating"
+                    android:text="@string/button_rating"
+                    android:textAllCaps="false"
+                    app:layout_constraintBottom_toBottomOf="@+id/textView18"
+                    app:layout_constraintEnd_toEndOf="@+id/buttonReview"
+                    app:layout_constraintTop_toTopOf="@+id/textView18" />
+
                 <EditText
                     android:id="@+id/editReview"
                     android:layout_width="wrap_content"
@@ -61,6 +72,67 @@
                     android:inputType="textPersonName"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/buttonRating" />
+
+                <ImageButton
+                    android:id="@+id/rating1"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:background="@null"
+                    android:onClick="sendRating"
+                    app:layout_constraintBottom_toBottomOf="@+id/textView18"
+                    app:layout_constraintStart_toEndOf="@+id/textView18"
+                    app:layout_constraintTop_toTopOf="@+id/textView18"
+                    app:srcCompat="@drawable/star" />
+
+                <ImageButton
+                    android:id="@+id/rating2"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@null"
+                    android:onClick="sendRating"
+                    app:layout_constraintBottom_toBottomOf="@+id/rating1"
+                    app:layout_constraintStart_toEndOf="@+id/rating1"
+                    app:layout_constraintTop_toTopOf="@+id/rating1"
+                    app:layout_constraintVertical_bias="0.0"
+                    app:srcCompat="@drawable/star" />
+
+                <ImageButton
+                    android:id="@+id/rating3"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@null"
+                    android:onClick="sendRating"
+                    app:layout_constraintBottom_toBottomOf="@+id/rating2"
+                    app:layout_constraintStart_toEndOf="@+id/rating2"
+                    app:layout_constraintTop_toTopOf="@+id/rating2"
+                    app:layout_constraintVertical_bias="1.0"
+                    app:srcCompat="@drawable/star" />
+
+                <ImageButton
+                    android:id="@+id/rating4"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@null"
+                    android:onClick="sendRating"
+                    app:layout_constraintBottom_toBottomOf="@+id/rating3"
+                    app:layout_constraintStart_toEndOf="@+id/rating3"
+                    app:layout_constraintTop_toTopOf="@+id/rating3"
+                    app:layout_constraintVertical_bias="0.0"
+                    app:srcCompat="@drawable/star" />
+
+                <ImageButton
+                    android:id="@+id/rating5"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@null"
+                    android:onClick="sendRating"
+                    app:layout_constraintBottom_toBottomOf="@+id/rating4"
+                    app:layout_constraintStart_toEndOf="@+id/rating4"
+                    app:layout_constraintTop_toTopOf="@+id/rating4"
+                    app:layout_constraintVertical_bias="0.0"
+                    app:srcCompat="@drawable/star" />
 
                 <ImageView
                     android:id="@+id/recipeImage"
@@ -87,6 +159,20 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/reviewLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView14"></LinearLayout>
+
                 <TextView
                     android:id="@+id/recipeIngredientsHeader"
                     android:layout_width="wrap_content"
@@ -102,7 +188,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="36sp"
-                    app:layout_constraintEnd_toStartOf="@+id/recipeRating"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -133,11 +219,10 @@
                     android:id="@+id/recipeNrPeople"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:text="@string/nr_people"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/editNrPeople"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintHorizontal_bias="0.499"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/recipeImage" />
 
@@ -146,9 +231,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintHorizontal_chainStyle="packed"
-                    app:layout_constraintStart_toEndOf="@+id/recipeNrPeople"
                     app:layout_constraintTop_toBottomOf="@+id/recipeImage" />
 
                 <TextView
@@ -161,20 +244,6 @@
                     android:text="@string/review"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/editReview" />
-
-                <LinearLayout
-                    android:id="@+id/reviewLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginRight="16dp"
-                    android:orientation="vertical"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView14"></LinearLayout>
 
                 <TextView
                     android:id="@+id/textStars"
@@ -207,77 +276,32 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/recipeDescription" />
 
-                <ImageButton
-                    android:id="@+id/rating1"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginLeft="12dp"
-                    android:background="@null"
-                    android:onClick="sendRating"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView18"
-                    app:layout_constraintStart_toEndOf="@+id/textView18"
-                    app:layout_constraintTop_toTopOf="@+id/textView18"
-                    app:srcCompat="@drawable/star" />
-
-                <ImageButton
-                    android:id="@+id/rating2"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:onClick="sendRating"
-                    android:background="@null"
-                    app:layout_constraintBottom_toBottomOf="@+id/rating1"
-                    app:layout_constraintStart_toEndOf="@+id/rating1"
-                    app:layout_constraintTop_toTopOf="@+id/rating1"
-                    app:layout_constraintVertical_bias="0.0"
-                    app:srcCompat="@drawable/star" />
-
-                <ImageButton
-                    android:id="@+id/rating3"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:onClick="sendRating"
-                    android:background="@null"
-                    app:layout_constraintBottom_toBottomOf="@+id/rating2"
-                    app:layout_constraintStart_toEndOf="@+id/rating2"
-                    app:layout_constraintTop_toTopOf="@+id/rating2"
-                    app:layout_constraintVertical_bias="1.0"
-                    app:srcCompat="@drawable/star" />
-
-                <ImageButton
-                    android:id="@+id/rating4"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:onClick="sendRating"
-                    android:background="@null"
-                    app:layout_constraintBottom_toBottomOf="@+id/rating3"
-                    app:layout_constraintStart_toEndOf="@+id/rating3"
-                    app:layout_constraintTop_toTopOf="@+id/rating3"
-                    app:layout_constraintVertical_bias="0.0"
-                    app:srcCompat="@drawable/star" />
-
-                <ImageButton
-                    android:id="@+id/rating5"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:onClick="sendRating"
-                    android:background="@null"
-                    app:layout_constraintBottom_toBottomOf="@+id/rating4"
-                    app:layout_constraintStart_toEndOf="@+id/rating4"
-                    app:layout_constraintTop_toTopOf="@+id/rating4"
-                    app:layout_constraintVertical_bias="0.0"
-                    app:srcCompat="@drawable/star" />
-
-                <Button
-                    android:id="@+id/buttonRating"
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/textTag"
+                    android:layout_width="34dp"
                     android:layout_height="wrap_content"
-                    android:onClick="sendRating"
-                    android:text="@string/button_rating"
-                    android:textAllCaps="false"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView18"
-                    app:layout_constraintEnd_toEndOf="@+id/buttonReview"
-                    app:layout_constraintTop_toTopOf="@+id/textView18" />
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/tags"
+                    app:layout_constraintEnd_toStartOf="@+id/recipeTag"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/recipeNrPeople"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/recipeImage" />
+
+                <TextView
+                    android:id="@+id/recipeTag"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginRight="24dp"
+                    android:text="TextView"
+                    app:layout_constraintEnd_toStartOf="@+id/recipeNrPeople"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toEndOf="@+id/textTag"
+                    app:layout_constraintTop_toTopOf="@+id/textTag" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

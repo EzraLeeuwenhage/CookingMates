@@ -25,6 +25,7 @@ public class Recipe implements Parcelable {
     private String filename;
     private List<Integer> ratings = new ArrayList<>();
     private List<String> reviews = new ArrayList<>();
+    private List<String> tags = new ArrayList<>();
 
     private transient int TITLE_LENGTH = 3;
 
@@ -33,7 +34,7 @@ public class Recipe implements Parcelable {
 
     ;
 
-    public Recipe(int creatorId, String name, String description, List<String> ingredients, List<String> quantities, int numberpeople, boolean adult) {
+    public Recipe(int creatorId, String name, String description, List<String> ingredients, List<String> quantities, int numberpeople, boolean adult, List<String> tags) {
         this.creatorId = creatorId;
         this.name = name;
         this.description = description;
@@ -41,6 +42,7 @@ public class Recipe implements Parcelable {
         this.quantities = quantities;
         this.numberpeople = numberpeople;
         this.adult = adult;
+        this.tags = tags;
     }
 
     public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
@@ -181,6 +183,8 @@ public class Recipe implements Parcelable {
         this.reviews.add(review);
     }
 
+    public List<String> getTags() { return tags; }
+
     @Override
     public int describeContents() {
         return 0;
@@ -199,6 +203,7 @@ public class Recipe implements Parcelable {
         dest.writeString(this.filename);
         dest.writeList(this.ratings);
         dest.writeStringList(this.reviews);
+        dest.writeStringList(this.tags);
     }
 
     public Recipe(Parcel pc) {
@@ -213,6 +218,7 @@ public class Recipe implements Parcelable {
         this.filename = pc.readString();
         pc.readList(this.ratings, null);
         pc.readStringList(this.reviews);
+        pc.readStringList(this.tags);
     }
 
     public Recipe search_recipe(String name, User user, List<Recipe> recipes_list) throws NullPointerException, IllegalArgumentException {

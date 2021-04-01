@@ -51,6 +51,7 @@
     <string name="recipe_description">Description:</string>
     <string name="nr_people">Number of people:</string>
     <string name="edit_nr_people">0</string>
+    <string name="edit_tags">Tags: (e.g. vegetarian,healthy,sweet)</string>
     <string name="button_send">Search Recipe</string>
     <string name="button_create">Create Recipe</string>
     <string name="button_image">Import Image</string>
@@ -59,6 +60,7 @@
         <item>mL</item>
         <item>-</item>
     </string-array>
+    <string name="tags">Tags:</string>
     <string name="review">Reviews:</string>
     <string name="stars">Stars</string>
     <string name="rating"> Rate: </string>

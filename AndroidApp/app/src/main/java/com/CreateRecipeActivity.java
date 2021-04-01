@@ -52,6 +52,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CreateRecipeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -258,18 +259,23 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
             }
         }
 
-        //Number of people, adult
+        //Number of people
         EditText editNumberOfPeople = findViewById(R.id.editTextNrPeople);
         int numberOfPeople = 0;
         if(!editNumberOfPeople.getText().toString().equals("")){
             numberOfPeople = Integer.parseInt(editNumberOfPeople.getText().toString());
         }
 
+        //Tags
+        EditText editTags = findViewById(R.id.editTags);
+        String tagString = editTags.getText().toString();
+        List<String> tags = new ArrayList<>(Arrays.asList(tagString.split(" , ")));
+
         // set if recipe is for adults or not
         Switch sw = findViewById(R.id.switch1);
         boolean adult = sw.isChecked();
 
-        this.recipe = new Recipe(creatorId, name, description, ingredients, quantities, numberOfPeople, adult);
+        this.recipe = new Recipe(creatorId, name, description, ingredients, quantities, numberOfPeople, adult, tags);
         if (isValidRecipe(this.recipe)) {
             Log.i("created", "Recipe valid");
             uploadImage();

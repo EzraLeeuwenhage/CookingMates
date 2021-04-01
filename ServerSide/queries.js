@@ -145,10 +145,21 @@ const getRecipeByIngredient = (request, response) => {
   })
 }
 
+const getRecipeByTag = (request, response) => {
+  const tag = request.params.tag;
+
+  pool.query("SELECT * FROM recipes WHERE EXISTS (SELECT * FROM unnest(tags) elem WHERE elem LIKE '%' || $1 || '%')", [tag], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
 const createRecipe = (request, response) => {
-  const { creatorid, name, description, ingredients, quantity, numberpeople, adult, media, ratings, reviews } = request.body
-  pool.query('INSERT INTO recipes (creatorid, name, description, ingredients, quantity, numberpeople, adult, media) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', 
-  [creatorid, name, description, ingredients, quantity, numberpeople, adult, media], (error, results) => {
+  const { creatorid, name, description, ingredients, quantity, numberpeople, adult, media, ratings, reviews, tags } = request.body
+  pool.query('INSERT INTO recipes (creatorid, name, description, ingredients, quantity, numberpeople, adult, media, tags) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)', 
+  [creatorid, name, description, ingredients, quantity, numberpeople, adult, media, tags], (error, results) => {
     if (error) {
       throw error
     }
@@ -222,6 +233,7 @@ module.exports = {
   getRecipeByName,
   getRecipeByCreator,
   getRecipeByIngredient,
+  getRecipeByTag,
   createRecipe,
   updateRecipe,
   addRatingToRecipe,
