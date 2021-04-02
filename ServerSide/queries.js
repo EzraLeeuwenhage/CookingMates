@@ -56,7 +56,7 @@ const createUser = (request, response) => {
 			throw error
 		}
 		
-		if(verify.rows[0]) {
+		if(results.rows[0]) {
 			response.status(404).send("Created")
 			return
 		}
