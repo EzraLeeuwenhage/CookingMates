@@ -43,7 +43,7 @@
                 android:id="@+id/buttonImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="64dp"
                 android:onClick="importImage"
                 android:text="@string/button_image"
                 app:layout_constraintEnd_toStartOf="@+id/button2"
@@ -70,14 +70,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="76dp"
+                android:layout_marginTop="72dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
                 android:ems="10"
                 android:hint="@string/edit_title"
                 android:inputType="textPersonName"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -200,10 +200,10 @@
                 android:text="Take photo"
                 app:layout_constraintBottom_toBottomOf="@+id/buttonImage"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.154"
+                app:layout_constraintHorizontal_bias="0.121"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.859" />
+                app:layout_constraintVertical_bias="0.881" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

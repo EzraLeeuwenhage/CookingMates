@@ -171,39 +171,20 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
         return true;
     }
 
-
-
-
-
-
-
-
-// Methods for taking a picture inside app                          VLAD
+    // Methods for taking a picture inside app
     public void listenerTakeImage() {
         Button button;
         button = (Button) findViewById(R.id.take_photo);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                takeImage();
+                Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(camera,CAMERA_REQUEST_CODE);
             }
         });
     }
 
-    public void takeImage() {
-        openCamera();
-    }
-
-    private void openCamera() {
-        Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(camera,CAMERA_REQUEST_CODE);
-    }                                                            // VLAD
-
-
-
-
-
-//Start methods for importing images
+    //Start methods for importing images
     public void importImage(View view){
         if(ContextCompat.checkSelfPermission(getApplicationContext(),
                 Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -292,12 +273,12 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
                 }
 
                 if (!ingredientString.equals("") && !quantityString.equals("")) {
-                    Log.i("ingredient", ingredientString + " - " + quantityString + spinners.get(i).getSelectedItem().toString());
+//                    Log.i("ingredient", ingredientString + " - " + quantityString + spinners.get(i).getSelectedItem().toString());
                     ingredients.add(ingredientString);
                     ingredientString = "";
                     quantities.add(quantityString + " " + spinners.get(i).getSelectedItem().toString());
                     quantityString = "";
-                    Log.i("ingredient", ingredients.size() + " - " + quantities.size());
+//                    Log.i("ingredient", ingredients.size() + " - " + quantities.size());
                 }
             }
         }
@@ -320,7 +301,7 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
 
         this.recipe = new Recipe(creatorId, name, description, ingredients, quantities, numberOfPeople, adult, tags);
         if (isValidRecipe(this.recipe)) {
-            Log.i("created", "Recipe valid");
+//            Log.i("created", "Recipe valid");
             uploadImage();
         }
     }

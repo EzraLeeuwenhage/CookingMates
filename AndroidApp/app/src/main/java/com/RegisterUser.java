@@ -124,7 +124,6 @@ public class RegisterUser extends AppCompatActivity {
 //                        return;
 //                    }
 
-                    Log.i("Resp code before if", String.valueOf(response.code()));
                     if (response.code() == 200) {
                         responseView.setText(username + " created!");
 
@@ -132,7 +131,6 @@ public class RegisterUser extends AppCompatActivity {
                         myIntent.putExtra("user", user);
                         startActivity(myIntent);
                     } else if (response.code() == 404) {
-                        Log.i("Resp code", String.valueOf(response.code()));
                         responseView.setText(username + " already exists as username!");
                     }
                 }
