@@ -45,28 +45,24 @@ const getUserByUsername = async(request, response) => {
   })
 }*/
 
-const createUser = (request, response) => {
-  
+const createUser = async(request, response) => {
+  try{
 	const {username, fullname, email, password, dateofbirth, profilepicture} = request.body;
 
-	pool.query("SELECT * FROM users WHERE username = $1", [username], (error, results) => {
-		if (error) {
-			throw error
-		}
+	const verify = await pool.query("SELECT * FROM users WHERE username = $1", [username]);
 
-		if(results[0]) {
-			response.status(404).send("Username exists already")
-			return
-		}else{
-			pool.query("INSERT INTO users (username, fullname, email, password, dateofbirth, profilepicture) VALUES ($1,$2,$3,$4,$5,$6)", [username, fullname, email, password, dateofbirth, profilepicture], (error, results) => {
-				if (error) {
-					throw error
-				}
-				response.status(200).json(results[0])
-			})
-		}
-	})
-
+	if(verify.rows[0]) {
+		response.status(404).send("Username exists already")
+		return
+	}
+	
+	const newuser = await pool.query("INSERT INTO users (username, fullname, email, password, dateofbirth, profilepicture) VALUES ($1,$2,$3,$4,$5,$6)", [username, fullname, email, password, dateofbirth, profilepicture]);
+				
+	response.status(200).json(newuser.rows[0])
+			
+  }catch(err){
+	  console.error(err.message);
+  }
 	
 }
 
