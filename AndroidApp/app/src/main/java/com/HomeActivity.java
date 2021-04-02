@@ -31,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -174,14 +175,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 }
                 //Result of the getRecipes request
                 recommendedRecipes = response.body();
-
+                List<Recipe> recipes = new ArrayList<>();
                 User user = getIntent().getParcelableExtra("user");
                 if (!user.isAdult()) {
                     for (Recipe recipe: recommendedRecipes) {
-                        if (recipe.isForAdult()) {
-                            recommendedRecipes.remove(recipe);
+                        if (!recipe.isForAdult()) {
+                            recipes.add(recipe);
                         }
                     }
+                    recommendedRecipes = recipes;
                 }
                 createButtons(recommendedRecipes, findViewById(R.id.recipeLayout));
             }
@@ -208,6 +210,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                 //Result of the getRecipes request
                 recommendedRecipes = response.body();
+                List<Recipe> recipes = new ArrayList<>();
+                User user = getIntent().getParcelableExtra("user");
+                if (!user.isAdult()) {
+                    for (Recipe recipe: recommendedRecipes) {
+                        if (!recipe.isForAdult()) {
+                            recipes.add(recipe);
+                        }
+                    }
+                    recommendedRecipes = recipes;
+                }
                 createButtons(recommendedRecipes, findViewById(R.id.recipeLayout));
             }
 
