@@ -114,7 +114,7 @@ public class RegisterUser extends AppCompatActivity {
                 return;
             }
 
-            User user = new User(username, name, email, password, date, null);
+            User user = new User(username, name, email, password, date, "new String()");
             Call<User> call = api.createUser(user);
             call.enqueue(new Callback<User>() {
                 @Override
@@ -124,12 +124,15 @@ public class RegisterUser extends AppCompatActivity {
 //                        return;
 //                    }
 
+                    Log.i("Resp code before if", String.valueOf(response.code()));
                     if (response.code() == 200) {
                         responseView.setText(username + " created!");
+
                         Intent myIntent = new Intent(RegisterUser.this, HomeActivity.class);
                         myIntent.putExtra("user", user);
                         startActivity(myIntent);
                     } else if (response.code() == 404) {
+                        Log.i("Resp code", String.valueOf(response.code()));
                         responseView.setText(username + " already exists as username!");
                     }
                 }

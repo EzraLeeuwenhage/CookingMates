@@ -198,6 +198,13 @@ public class ProfileActivity
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         String dateString = formatter.format(user.getDateOfBirth());
         date.setText(dateString);
+        //Account type
+        TextView account = findViewById(R.id.textView16);
+        if (user.isAdult()) {
+            account.setText("Adult");
+        } else {
+            account.setText("Child");
+        }
     }
 
 }
