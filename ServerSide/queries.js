@@ -61,9 +61,12 @@ const createUser = async(request, response) => {
             return;
         }
 
-        const newLog = await pool.query("INSERT INTO users (username, fullname, email, password, dateofbirth, profilepicture) VALUES ($1,$2,$3,$4,$5,$6)", [username, fullname, email, password, dateofbirth, profilepicture]);
-
-        response.status(200).send("Created user")
+        pool.query("INSERT INTO users (username, fullname, email, password, dateofbirth, profilepicture) VALUES ($1,$2,$3,$4,$5,$6)", [username, fullname, email, password, dateofbirth, profilepicture], (error, results) => {
+			if (error) {
+				throw error
+			}
+			response.status(200).send("Created")
+		})
     } catch (err) {
         console.error(err.message);
     }
