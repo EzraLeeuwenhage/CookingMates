@@ -47,27 +47,26 @@ const getUserByUsername = async(request, response) => {
 
 const createUser = (request, response) => {
   
-	console.log(request.body);
-
 	const {username, fullname, email, password, dateofbirth, profilepicture} = request.body;
 
 	pool.query("SELECT * FROM users WHERE username = $1", [username], (error, results) => {
 		if (error) {
 			throw error
 		}
-		
-		if(results.rows[0]) {
-			response.status(404).send("Created")
-			return
+
+		if(results[0]) {
+			response.status(404).end()
 		}
+
+		pool.query("INSERT INTO users (username, fullname, email, password, dateofbirth, profilepicture) VALUES ($1,$2,$3,$4,$5,$6)", [username, fullname, email, password, dateofbirth, profilepicture], (error, results) => {
+			if (error) {
+				throw error
+			}
+			response.status(200).json(results[0])
+		})
 	})
 
-	pool.query("INSERT INTO users (username, fullname, email, password, dateofbirth, profilepicture) VALUES ($1,$2,$3,$4,$5,$6)", [username, fullname, email, password, dateofbirth, profilepicture], (error, results) => {
-		if (error) {
-			throw error
-		}
-		response.status(200).send("Created")
-	})
+	
 }
 
 const updateUser = async(request, response) => {
