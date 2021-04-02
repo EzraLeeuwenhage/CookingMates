@@ -36,7 +36,7 @@ public interface ServerCallsApi {
     Call<List<User>> getUsers();
 
     @POST("users")
-    Call<User> createUser(@Body User user);
+    Call<Void> createUser(@Body User user);
 
     //Gets user with specified name
     @GET("users/{username}/{password}")

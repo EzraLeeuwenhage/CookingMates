@@ -115,15 +115,10 @@ public class RegisterUser extends AppCompatActivity {
             }
 
             User user = new User(username, name, email, password, date, "new String()");
-            Call<User> call = api.createUser(user);
-            call.enqueue(new Callback<User>() {
+            Call<Void> call = api.createUser(user);
+            call.enqueue(new Callback<Void>() {
                 @Override
-                public void onResponse(Call<User> call, Response<User> response) {
-//                    if(!response.isSuccessful()){
-//                        responseView.setText("Code: " + response.code());
-//                        return;
-//                    }
-
+                public void onResponse(Call<Void> call, Response<Void> response) {
                     if (response.code() == 200) {
                         responseView.setText(username + " created!");
 
@@ -136,7 +131,7 @@ public class RegisterUser extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<User> call, Throwable t) {
+                public void onFailure(Call<Void> call, Throwable t) {
                     t.printStackTrace();
                 }
             });
