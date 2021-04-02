@@ -33,13 +33,13 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.Spinner;
 import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cookingmatesapp.R;
@@ -60,6 +60,11 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
     private final int REQUEST_READ_STORAGE = 1;
     private final int REQUEST_SELECT_IMAGE = 2;
 
+    public static final int CAMERA_PERM_CODE = 101;              // VLAD
+    public static final int CAMERA_REQUEST_CODE = 102;
+    ImageView selectedImage;
+    Button cameraBtn, galleryBtn;                               // VLAD
+
     private int creatorId = 0;
     private Recipe recipe;
     private ServerCallsApi api;
@@ -77,6 +82,7 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_recipe);
+        listenerTakeImage();
 
         // store id of the user that is going to create a recipe
         User user = getIntent().getParcelableExtra("user");
@@ -165,6 +171,38 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
         return true;
     }
 
+
+
+
+
+
+
+
+// Methods for taking a picture inside app                          VLAD
+    public void listenerTakeImage() {
+        Button button;
+        button = (Button) findViewById(R.id.take_photo);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                takeImage();
+            }
+        });
+    }
+
+    public void takeImage() {
+        openCamera();
+    }
+
+    private void openCamera() {
+        Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(camera,CAMERA_REQUEST_CODE);
+    }                                                            // VLAD
+
+
+
+
+
 //Start methods for importing images
     public void importImage(View view){
         if(ContextCompat.checkSelfPermission(getApplicationContext(),
@@ -198,6 +236,11 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
                     }
                 }
             }
+        }
+        if(requestCode == CAMERA_REQUEST_CODE)
+        {
+            bitmapImage = (Bitmap) data.getExtras().get("data");
+            image.setImageBitmap(bitmapImage);
         }
     }
 
