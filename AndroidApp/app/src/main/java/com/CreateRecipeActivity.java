@@ -239,11 +239,6 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
 //End methods for importing images
 
     public void createRecipe(View view){
-        if(bitmapImage == null){
-            //TODO upload default image
-            Toast.makeText(this, "No image is uploaded", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         //Title
         EditText editTitle = findViewById(R.id.editTitle);
@@ -301,8 +296,12 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
 
         this.recipe = new Recipe(creatorId, name, description, ingredients, quantities, numberOfPeople, adult, tags);
         if (isValidRecipe(this.recipe)) {
-//            Log.i("created", "Recipe valid");
-            uploadImage();
+            if(bitmapImage == null){
+                this.recipe.setFilename("logo.png");
+                postRecipe();
+            }else {
+                uploadImage();
+            }
         }
     }
 
