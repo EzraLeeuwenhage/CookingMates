@@ -45,28 +45,29 @@ const getUserByUsername = async(request, response) => {
   })
 }*/
 
-const createUser = async(request, response) => {
-  try {   
-        console.log(request.body);
+const createUser = (request, response) => {
+  
+	console.log(request.body);
 
-        const {username, fullname, email, password, dateofbirth, profilepicture} = request.body;
-        //const newTodo = await pool.query("INSERT INTO todo (description) VALUES ($1) RETURNING *", [description] );
+	const {username, fullname, email, password, dateofbirth, profilepicture} = request.body;
 
-        const verify = await pool.query("SELECT * FROM users WHERE username = $1", [username]);
+	pool.query("SELECT * FROM users WHERE username = $1", [username], (error, results) => {
+		if (error) {
+			throw error
+		}
+		
+		if(results.rows[0]) {
+			response.status(404).send("Created")
+			return
+		}
+	})
 
-
-        if(verify.rows[0])
-        {
-            response.status(404).send("Username already exists")
-            return;
-        }
-
-        const newLog = await pool.query("INSERT INTO users (username, fullname, email, password, dateofbirth, profilepicture) VALUES ($1,$2,$3,$4,$5,$6)", [username, fullname, email, password, dateofbirth, profilepicture]);
-
-        response.status(200).send("Created user")
-    } catch (err) {
-        console.error(err.message);
-    }
+	pool.query("INSERT INTO users (username, fullname, email, password, dateofbirth, profilepicture) VALUES ($1,$2,$3,$4,$5,$6)", [username, fullname, email, password, dateofbirth, profilepicture], (error, results) => {
+		if (error) {
+			throw error
+		}
+		response.status(200).send("Created")
+	})
 }
 
 const updateUser = async(request, response) => {
