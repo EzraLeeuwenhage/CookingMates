@@ -6,27 +6,48 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cookingmatesapp.R;
 import com.google.android.material.navigation.NavigationView;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 public class ProfileActivity
         extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
 
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
-    Toolbar toolbar;
+    private ServerCallsApi api;
+    private User user;
+
+    private Button delete;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://134.209.92.24:3000/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        api = retrofit.create(ServerCallsApi.class);
 
         // Hooks
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -46,9 +67,44 @@ public class ProfileActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_profile);
 
+        delete = (Button) findViewById(R.id.delete_acc_btn);
+        delete.setOnClickListener(this);
+
         setProfileInfo();
     }
 
+    @Override
+    public void onClick (View v){
+        switch (v.getId()) {
+            case R.id.delete_acc_btn:
+                // retrieve the user currently logged into
+                user = getIntent().getParcelableExtra("user");
+
+                // make a call to the server to delete the user from the database
+                Call<Void> call = api.deleteUser(user.getUserId());
+
+                call.enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if(response.isSuccessful()) {
+                            Toast.makeText(getApplicationContext(),
+                                    "Successfully deleted user", Toast.LENGTH_SHORT).show();
+
+                            Intent myIntent = new Intent(ProfileActivity.this,
+                                    LoginActivity.class);
+                            startActivity(myIntent);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t)  {
+                        Toast.makeText(getApplicationContext(), t.getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+                break;
+        }
+    }
 
     @Override
     public void onBackPressed() {
@@ -127,10 +183,21 @@ public class ProfileActivity
         myIntent.putExtra("user", user);
     }
 
+    //Display user info
     public void setProfileInfo() {
         User user = getIntent().getParcelableExtra("user");
+
+        //Username
         TextView view = findViewById(R.id.textView7);
-        view.setText(user.username);
+        view.setText(user.getName());
+        //Email
+        TextView email = findViewById(R.id.textView8);
+        email.setText(user.getEmail());
+        //Date of birth
+        TextView date = findViewById(R.id.textView9);
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        String dateString = formatter.format(user.getDateOfBirth());
+        date.setText(dateString);
     }
 
 }

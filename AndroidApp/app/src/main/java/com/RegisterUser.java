@@ -7,6 +7,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -125,6 +126,9 @@ public class RegisterUser extends AppCompatActivity {
 
                     if (response.code() == 200) {
                         responseView.setText(username + " created!");
+                        Intent myIntent = new Intent(RegisterUser.this, HomeActivity.class);
+                        myIntent.putExtra("user", user);
+                        startActivity(myIntent);
                     } else if (response.code() == 404) {
                         responseView.setText(username + " already exists as username!");
                     }
@@ -146,7 +150,7 @@ public class RegisterUser extends AppCompatActivity {
     // method for validating password
     public static boolean isValidPassword(String password) {
         // stores correct format for password
-        String regex = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,1000}$";
+        String regex = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{7,1000}$";
 
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(password);

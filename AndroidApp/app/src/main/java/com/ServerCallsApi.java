@@ -50,8 +50,8 @@ public interface ServerCallsApi {
     @PATCH("users")
     Call<User> patchUser(@Body User user);
 
-    @DELETE("users")
-    Call<Void> deleteUser(@Body User user);
+    @DELETE("users/{id}")
+    Call<Void> deleteUser(@Path("id") int id);
 
     @POST("recipes")
     Call<Recipe> createRecipe(@Body Recipe recipe);

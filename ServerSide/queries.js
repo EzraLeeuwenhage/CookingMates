@@ -83,9 +83,9 @@ const updateUser = async(request, response) => {
 
 const deleteUser = async(request, response) => {
   try {
-        const {username, fullname, email, password, dateofbirth, profilepicture} = request.body;
+        const userid = request.params.userid;
 
-        const deleteLog = await pool.query("DELETE FROM users WHERE username = $1", [username]);
+        const deleteLog = await pool.query("DELETE FROM users WHERE userid = $1", [userid]);
         response.json("User was successfully deleted!");
     } catch (err) {
         console.error(err.message);

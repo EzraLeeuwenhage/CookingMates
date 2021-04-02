@@ -142,6 +142,10 @@ public class User implements Parcelable {
         return username;
     }
 
+    public String getEmail() { return email; }
+
+    public String getPassword() { return password; }
+
     public Date getDateOfBirth() { return dateOfBirth; }
 
     //Returns whether this user is adult or not

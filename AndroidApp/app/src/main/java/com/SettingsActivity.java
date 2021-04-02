@@ -15,9 +15,13 @@ import com.example.cookingmatesapp.R;
 
 import android.content.Intent;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -69,6 +73,8 @@ public class SettingsActivity
 
         delete = (Button) findViewById(R.id.delete_acc_btn);
         delete.setOnClickListener(this);
+
+        setProfileInfo();
     };
 
     @Override
@@ -79,7 +85,7 @@ public class SettingsActivity
                 user = getIntent().getParcelableExtra("user");
 
                 // make a call to the server to delete the user from the database
-                Call<Void> call = api.deleteUser(user);
+                Call<Void> call = api.deleteUser(user.getUserId());
 
                 call.enqueue(new Callback<Void>() {
                     @Override
@@ -179,5 +185,25 @@ public class SettingsActivity
         Intent currentIntent = getIntent();
         User user = (User) currentIntent.getParcelableExtra("user");
         myIntent.putExtra("user", user);
+    }
+
+    //Display user info
+    public void setProfileInfo() {
+        User user = getIntent().getParcelableExtra("user");
+
+        //Username
+        TextView view = findViewById(R.id.textView7);
+        view.setText(user.getName());
+        //Email
+        TextView email = findViewById(R.id.textView8);
+        email.setText(user.getEmail());
+        //Password
+        TextView password = findViewById(R.id.textView9);
+        password.setText(user.getPassword());
+        //Date of birth
+        TextView date = findViewById(R.id.textView11);
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        String dateString = formatter.format(user.getDateOfBirth());
+        date.setText(dateString);
     }
 }
