@@ -40,6 +40,7 @@
     <string-array name="account_types">
         <item>Adult</item>
         <item>Child</item>
+        <item>Cook</item>
     </string-array>
 
     <!-- Strings used for recipe creation -->
