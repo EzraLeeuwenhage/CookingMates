@@ -36,11 +36,11 @@
     <string name="age">Age</string>
     <string name="email">Email Address</string>
     <string name="delete">Delete Account</string>
+    <string name="adultorchild">Adult or Child:</string>
 
     <string-array name="account_types">
-        <item>Adult</item>
-        <item>Child</item>
         <item>Cook</item>
+        <item>Not Cook</item>
     </string-array>
 
     <!-- Strings used for recipe creation -->

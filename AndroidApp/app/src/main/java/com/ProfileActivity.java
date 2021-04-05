@@ -180,7 +180,9 @@ public class ProfileActivity
     public void passUserObject(Intent myIntent) {
         Intent currentIntent = getIntent();
         User user = (User) currentIntent.getParcelableExtra("user");
+        String cook = currentIntent.getStringExtra("cook");
         myIntent.putExtra("user", user);
+        myIntent.putExtra("cook", cook);
     }
 
     //Display user info
@@ -188,6 +190,8 @@ public class ProfileActivity
         User user = getIntent().getParcelableExtra("user");
 
         //Username
+        TextView username = findViewById(R.id.textView);
+        username.setText(user.getName());
         TextView view = findViewById(R.id.textView7);
         view.setText(user.getName());
         //Email
@@ -199,7 +203,11 @@ public class ProfileActivity
         String dateString = formatter.format(user.getDateOfBirth());
         date.setText(dateString);
         //Account type
-        TextView account = findViewById(R.id.textView16);
+        TextView cook = findViewById(R.id.textView16);
+        String cookString = getIntent().getStringExtra("cook");
+        cook.setText(cookString);
+
+        TextView account = findViewById(R.id.textView19);
         if (user.isAdult()) {
             account.setText("Adult");
         } else {

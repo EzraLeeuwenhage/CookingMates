@@ -27,6 +27,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ServerCallsApi api;
+    private Spinner spinner;
     private Button login;
     private TextView register;
     private TextView reset;
@@ -43,7 +44,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 getResources().getStringArray(R.array.account_types));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        Spinner spinner = findViewById(R.id.spinner);
+        spinner = findViewById(R.id.spinner);
         spinner.setAdapter(adapter);
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -91,6 +92,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                             Intent myIntent = new Intent(LoginActivity.this, HomeActivity.class);
                             myIntent.putExtra("user", user);
+                            myIntent.putExtra("cook", spinner.getSelectedItem().toString());
                             startActivity(myIntent);
                             //optional
                             finish();

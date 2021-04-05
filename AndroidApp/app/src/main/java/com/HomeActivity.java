@@ -150,7 +150,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     public void passUserObject(Intent myIntent) {
         Intent currentIntent = getIntent();
         User user = (User) currentIntent.getParcelableExtra("user");
+        String cook = currentIntent.getStringExtra("cook");
         myIntent.putExtra("user", user);
+        myIntent.putExtra("cook", cook);
     }
 
     public void openSearchRecipeActivity(View view){

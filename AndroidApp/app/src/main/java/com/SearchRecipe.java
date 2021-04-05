@@ -150,7 +150,9 @@ public class SearchRecipe extends AppCompatActivity implements NavigationView.On
     public void passUserObject(Intent myIntent) {
         Intent currentIntent = getIntent();
         User user = (User) currentIntent.getParcelableExtra("user");
+        String cook = currentIntent.getStringExtra("cook");
         myIntent.putExtra("user", user);
+        myIntent.putExtra("cook", cook);
     }
 
     //Get methods get recipes from server database and put them in recipes list
