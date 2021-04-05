@@ -15,6 +15,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cookingmatesapp.R;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -69,11 +72,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch (v.getId()) {
             case R.id.signInBtn:
 
-                Call<User> call = api.getUserByUsername(
-                        username.getText().toString(), password.getText().toString());
-
                 // create window to show response
                 TextView responseView = findViewById(R.id.textViewResult);
+
+                if(!isValidPassword(password.getText().toString())){
+                    responseView.setText("Invalid password");
+                    return;
+                }
+
+                Call<User> call = api.getUserByUsername(
+                        username.getText().toString(), password.getText().toString());
 
                 call.enqueue(new Callback<User>() {
                     @Override
@@ -104,5 +112,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(new Intent(this, ResetPassword.class));
                 break;
         }
+    }
+
+    // method for validating password
+    public static boolean isValidPassword(String password) {
+        // stores correct format for password
+        String regex = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{7,1000}$";
+
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(password);
+        return matcher.matches();
     }
 }
