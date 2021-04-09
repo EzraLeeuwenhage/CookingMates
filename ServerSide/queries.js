@@ -112,7 +112,7 @@ const getRecipeById = (request, response) => {
 const getRecipeByName = (request, response) => {
   const name = request.params.name;
 
-  pool.query("SELECT * FROM recipes WHERE (name ~ $1) OR (name ~ LOWER($1)", [name], (error, results) => {
+  pool.query("SELECT * FROM recipes", [name], (error, results) => {
     if (error) {
       throw error
     }
