@@ -14,7 +14,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CookingMatesApp"
         android:usesCleartextTraffic="true">
-        <activity android:name="com.FindCookingMatesActivity"></activity>
+        <activity
+            android:name="com.FindCookingMatesActivity"
+            android:label="CookingMates"
+            android:theme="@style/Theme.CookingMatesApp.NoActionBar"
+        />
         <activity android:name="com.ResetPassword" /> <!-- Help activity -->
         <activity
             android:name="com.HelpActivity"
