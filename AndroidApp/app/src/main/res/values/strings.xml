@@ -15,18 +15,8 @@
     <string name="about">About</string>
     <string name="help">Help</string>
     <string name="find_cooking_mates">Find Cooking Mates</string>
-    <string name="illegal">This feature is not allowed for kids</string>
-    <string name="description">Group 17 made CookingMates for DBL App Development Lorem ipsum
-        dolor sit amet, consectetur adipiscing elit. Proin dapibus vel massa a cursus. Praesent
-        porta tortor eu massa tempor imperdiet. Proin porta risus in sapien porta, ac hendrerit
-        eros bibendum. Proin vel libero no problem libero. Curabitur accumsan vestibulum diam sit amet
-        elementum. Nam elementum turpis eu mauris mattis pretium. Pellentesque vehicula orci in
-        ipsum pharetra, eget volutpat eros posuere. Curabitur quis volutpat odio, molestie auctor
-        orci. Sed non leo turpis. Nullam et pulvinar risus, et consectetur urna. Sed et pulvinar
-        sapien, tincidunt hendrerit leo. Nullam viverra, risus nec ornare facilisis, ex lectus
-        euismod velit, tincidunt feugiat quam ligula quis diam. Nullam et risus sed tortor semper
-        pretium. Curabitur non feugiat enim. Suspendisse vel orci ullamcorper, gravida eros
-        mattis, dignissim leo.</string>
+    <string name="illegal">This feature is not implemented in general and not allowed for kids.</string>
+    <string name="description">Group 17 made CookingMates for DBL App Development .</string>
     <string name="newAcc">New to CookingMates? Create account</string>
 
     <!-- Strings used for account management -->
