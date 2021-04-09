@@ -10,6 +10,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.example.cookingmatesapp.R;
 import com.google.android.material.navigation.NavigationView;
@@ -23,7 +24,15 @@ public class FindCookingMatesActivity extends AppCompatActivity implements Navig
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_find_cooking_mates);
+
+        Intent currentIntent = getIntent();
+        User user = (User) currentIntent.getParcelableExtra("user");
+        if(user.isAdult()){
+            setContentView(R.layout.activity_find_cooking_mates);
+        }
+        else{
+            setContentView(R.layout.activity_find_cooking_mates_children);
+        }
 
         // Navigation
         // Hooks
@@ -43,6 +52,7 @@ public class FindCookingMatesActivity extends AppCompatActivity implements Navig
 
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_findcookingmates);
+
     }
 
     @Override
@@ -126,5 +136,6 @@ public class FindCookingMatesActivity extends AppCompatActivity implements Navig
         String cook = currentIntent.getStringExtra("cook");
         myIntent.putExtra("user", user);
         myIntent.putExtra("cook", cook);
+
     }
 }
