@@ -124,6 +124,7 @@ public class RegisterUser extends AppCompatActivity {
 
                         Intent myIntent = new Intent(RegisterUser.this, HomeActivity.class);
                         myIntent.putExtra("user", user);
+                        myIntent.putExtra("cook", "Cook");
                         startActivity(myIntent);
                     } else if (response.code() == 404) {
                         responseView.setText(username + " already exists as username!");

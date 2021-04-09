@@ -278,6 +278,10 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
                 startActivity(create_recipe_intent);
                 break;
             case R.id.nav_findcookingmates:
+                Intent findcookingmates_intent = new Intent(RecipeActivity.this, FindCookingMatesActivity.class);
+                findcookingmates_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                passUserObject(findcookingmates_intent);
+                startActivity(findcookingmates_intent);
                 break;
             case R.id.nav_contact:
                 break;

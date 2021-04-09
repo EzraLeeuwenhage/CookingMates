@@ -106,6 +106,10 @@ public class AboutActivity
                 startActivity(search_recipe_intent);
                 break;
             case R.id.nav_findcookingmates:
+                Intent findcookingmates_intent = new Intent(AboutActivity.this, FindCookingMatesActivity.class);
+                findcookingmates_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                passUserObject(findcookingmates_intent);
+                startActivity(findcookingmates_intent);
                 break;
             case R.id.nav_contact:
                 break;
