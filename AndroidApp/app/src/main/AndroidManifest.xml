@@ -14,56 +14,56 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CookingMatesApp"
         android:usesCleartextTraffic="true">
-        <activity android:name="com.ResetPassword"></activity>
-        <!-- Help activity -->
+        <activity android:name="com.FindCookingMatesActivity"></activity>
+        <activity android:name="com.ResetPassword" /> <!-- Help activity -->
         <activity
             android:name="com.HelpActivity"
             android:label="CookingMates"
-            android:theme="@style/Theme.CookingMatesApp.NoActionBar"></activity> <!-- About activity -->
+            android:theme="@style/Theme.CookingMatesApp.NoActionBar" /> <!-- About activity -->
         <activity
             android:name="com.AboutActivity"
             android:label="CookingMates"
-            android:theme="@style/Theme.CookingMatesApp.NoActionBar"></activity> <!-- Settings activity -->
+            android:theme="@style/Theme.CookingMatesApp.NoActionBar" /> <!-- Settings activity -->
         <activity
             android:name="com.SettingsActivity"
             android:label="CookingMates"
-            android:theme="@style/Theme.CookingMatesApp.NoActionBar"></activity> <!-- Profile activity -->
+            android:theme="@style/Theme.CookingMatesApp.NoActionBar" /> <!-- Profile activity -->
         <activity
             android:name="com.ProfileActivity"
             android:label="CookingMates"
-            android:theme="@style/Theme.CookingMatesApp.NoActionBar"></activity> <!-- Recipe activity -->
+            android:theme="@style/Theme.CookingMatesApp.NoActionBar" /> <!-- Recipe activity -->
         <activity
             android:name="com.RecipeActivity"
             android:label="CookingMates"
-            android:theme="@style/Theme.CookingMatesApp.NoActionBar"></activity> <!-- Home activity -->
+            android:theme="@style/Theme.CookingMatesApp.NoActionBar" /> <!-- Home activity -->
         <activity
             android:name="com.HomeActivity"
             android:label="CookingMates"
-            android:theme="@style/Theme.CookingMatesApp.NoActionBar"></activity> <!-- Main activity -->
+            android:theme="@style/Theme.CookingMatesApp.NoActionBar" /> <!-- Main activity -->
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.CookingMatesApp.NoActionBar"></activity> <!-- Register User -->
+            android:theme="@style/Theme.CookingMatesApp.NoActionBar" /> <!-- Register User -->
         <activity
             android:name="com.RegisterUser"
             android:label="@string/app_name"
-            android:theme="@style/Theme.CookingMatesApp.NoActionBar"></activity> <!-- Create recipe activity -->
+            android:theme="@style/Theme.CookingMatesApp.NoActionBar" /> <!-- Create recipe activity -->
         <activity
             android:name="com.CreateRecipeActivity"
             android:label="CookingMates"
-            android:theme="@style/Theme.CookingMatesApp.NoActionBar"></activity> <!-- update recipe activity -->
+            android:theme="@style/Theme.CookingMatesApp.NoActionBar" /> <!-- update recipe activity -->
         <activity
             android:name="com.UpdateDeleteRecipeActivity"
             android:label="CookingMates"
-            android:theme="@style/Theme.CookingMatesApp.NoActionBar"></activity> <!-- search recipe -->
+            android:theme="@style/Theme.CookingMatesApp.NoActionBar" /> <!-- search recipe -->
         <activity
             android:name="com.SearchRecipe"
             android:label="CookingMates"
-            android:theme="@style/Theme.CookingMatesApp.NoActionBar"></activity> <!-- Menu activity -->
+            android:theme="@style/Theme.CookingMatesApp.NoActionBar" /> <!-- Menu activity -->
         <activity
             android:name="com.MenuActivity"
             android:label="CookingMates"
-            android:theme="@style/Theme.CookingMatesApp.NoActionBar"></activity> <!-- Login activity -->
+            android:theme="@style/Theme.CookingMatesApp.NoActionBar" /> <!-- Login activity -->
         <activity
             android:name="com.LoginActivity"
             android:label="@string/app_name"
