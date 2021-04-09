@@ -23,7 +23,7 @@ public class FindCookingMatesActivity extends AppCompatActivity implements Navig
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_help);
+        setContentView(R.layout.activity_find_cooking_mates);
 
         // Navigation
         // Hooks
@@ -42,7 +42,7 @@ public class FindCookingMatesActivity extends AppCompatActivity implements Navig
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
-        navigationView.setCheckedItem(R.id.nav_help);
+        navigationView.setCheckedItem(R.id.nav_findcookingmates);
     }
 
     @Override
@@ -83,7 +83,10 @@ public class FindCookingMatesActivity extends AppCompatActivity implements Navig
                 startActivity(about_intent);
                 break;
             case R.id.nav_help:
-                // Just break - same screen
+                Intent help_intent = new Intent(FindCookingMatesActivity.this, HelpActivity.class);
+                help_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                passUserObject(help_intent);
+                startActivity(help_intent);
                 break;
             case R.id.nav_logout:
                 Intent logout_intent = new Intent(FindCookingMatesActivity.this, LoginActivity.class);
@@ -103,6 +106,7 @@ public class FindCookingMatesActivity extends AppCompatActivity implements Navig
                 startActivity(search_recipe_intent);
                 break;
             case R.id.nav_findcookingmates:
+                //do nothing
                 break;
             case R.id.nav_contact:
                 break;
