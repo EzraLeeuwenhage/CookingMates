@@ -240,7 +240,9 @@ public class HomeActivity
 
     public void getImageInButton(ImageButton btn, Recipe recipe){
         String path = "http://134.209.92.24:3000/uploads/" + recipe.getFilename();
-        Picasso.get().load(path).into(new Target() {
+        Picasso.get().load(path).into(btn);
+        btn.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        /*Picasso.get().load(path).into(new Target() {
 
             @Override
             public void onPrepareLoad(Drawable arg0) { }
@@ -253,8 +255,10 @@ public class HomeActivity
             }
 
             @Override
-            public void onBitmapFailed(Exception e, Drawable arg0) { }
-        });
+            public void onBitmapFailed(Exception e, Drawable arg0) {
+                btn.setImageResource(R.drawable.logo);
+            }
+        });*/
     }
 
     public void createButtons(List<Recipe> list, LinearLayout layout){
