@@ -112,7 +112,7 @@ const getRecipeById = (request, response) => {
 const getRecipeByName = (request, response) => {
   const name = request.params.name;
 
-  pool.query("SELECT * FROM recipes", [name], (error, results) => {
+  pool.query("SELECT * FROM recipes WHERE name LIKE '%' || $1 || '%'", [name], (error, results) => {
     if (error) {
       throw error
     }
@@ -134,7 +134,7 @@ const getRecipeByCreator = (request, response) => {
 const getRecipeByIngredient = (request, response) => {
   const ingredient = request.params.ingredient;
 
-  pool.query("SELECT * FROM recipes WHERE EXISTS (SELECT * FROM unnest(ingredients) elem WHERE elem ~* $1)", [ingredient], (error, results) => {
+  pool.query("SELECT * FROM recipes WHERE EXISTS (SELECT * FROM unnest(ingredients) elem WHERE elem LIKE '%' || $1 || '%'", [ingredient], (error, results) => {
     if (error) {
       throw error
     }
@@ -145,7 +145,7 @@ const getRecipeByIngredient = (request, response) => {
 const getRecipeByTag = (request, response) => {
   const tag = request.params.tag;
 
-  pool.query("SELECT * FROM recipes WHERE EXISTS (SELECT * FROM unnest(tags) elem WHERE elem ~* $1)", [tag], (error, results) => {
+  pool.query("SELECT * FROM recipes WHERE EXISTS (SELECT * FROM unnest(tags) elem WHERE elem LIKE '%' || $1 || '%'", [tag], (error, results) => {
     if (error) {
       throw error
     }
