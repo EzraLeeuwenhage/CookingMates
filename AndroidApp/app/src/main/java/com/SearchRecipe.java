@@ -32,11 +32,12 @@ import com.squareup.picasso.Target;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchRecipe extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class SearchRecipe
+        extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     private ServerCallsApi api;
     private EditText editSearchBar;
-
     private Bitmap bitmapImage;
     private List<Recipe> foundRecipes = new ArrayList<>();
 
@@ -74,7 +75,7 @@ public class SearchRecipe extends AppCompatActivity implements NavigationView.On
         navigationView.setCheckedItem(R.id.nav_home);
 
         editSearchBar = findViewById(R.id.editSearchBar);
-    }
+    }//end of OnCreate
 
     @Override
     public void onBackPressed() {
@@ -84,7 +85,7 @@ public class SearchRecipe extends AppCompatActivity implements NavigationView.On
         } else {
             super.onBackPressed();
         }
-    }
+    }//end of onBackPressed
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -134,7 +135,7 @@ public class SearchRecipe extends AppCompatActivity implements NavigationView.On
                 // Just break - same screen
                 break;
             case R.id.nav_findcookingmates:
-                Intent findcookingmates_intent = new Intent(SearchRecipe.this, FindCookingMates.class);
+                Intent findcookingmates_intent = new Intent(SearchRecipe.this, FindCookingMatesActivity.class);
                 findcookingmates_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 passUserObject(findcookingmates_intent);
                 startActivity(findcookingmates_intent);
@@ -145,7 +146,7 @@ public class SearchRecipe extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_facebook:
                 break;
-        }
+        }//end of navigation
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
@@ -157,7 +158,7 @@ public class SearchRecipe extends AppCompatActivity implements NavigationView.On
         String cook = currentIntent.getStringExtra("cook");
         myIntent.putExtra("user", user);
         myIntent.putExtra("cook", cook);
-    }
+    }//end of function
 
     //Get methods get recipes from server database and put them in recipes list
 
