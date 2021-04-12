@@ -55,19 +55,11 @@
         <activity
             android:name="com.CreateRecipeActivity"
             android:label="CookingMates"
-            android:theme="@style/Theme.CookingMatesApp.NoActionBar" /> <!-- update recipe activity -->
-        <activity
-            android:name="com.UpdateDeleteRecipeActivity"
-            android:label="CookingMates"
-            android:theme="@style/Theme.CookingMatesApp.NoActionBar" /> <!-- search recipe -->
+            android:theme="@style/Theme.CookingMatesApp.NoActionBar" />  <!-- search recipe -->
         <activity
             android:name="com.SearchRecipe"
             android:label="CookingMates"
-            android:theme="@style/Theme.CookingMatesApp.NoActionBar" /> <!-- Menu activity -->
-        <activity
-            android:name="com.MenuActivity"
-            android:label="CookingMates"
-            android:theme="@style/Theme.CookingMatesApp.NoActionBar" /> <!-- Login activity -->
+            android:theme="@style/Theme.CookingMatesApp.NoActionBar" />  <!-- Login activity -->
         <activity
             android:name="com.LoginActivity"
             android:label="@string/app_name"
