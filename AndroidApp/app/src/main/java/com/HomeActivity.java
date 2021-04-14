@@ -40,24 +40,23 @@ public class HomeActivity
 
     private ServerCallsApi api;
     private List<Recipe> recommendedRecipes;
-
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
-    Toolbar toolbar;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        //Create api object to make calls to server
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://134.209.92.24:3000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         api = retrofit.create(ServerCallsApi.class);
 
-
-        // Hooks
+        //Define navigation bar
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbarHome);
@@ -75,9 +74,11 @@ public class HomeActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_home);
 
+        //Show all recipes
         getRecipes();
     }
 
+    //Toggles navigation bar
     @Override
     public void onBackPressed() {
 
@@ -88,6 +89,7 @@ public class HomeActivity
         }
     }
 
+    //Starts activity based on button clicked in navigation bar
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch(menuItem.getItemId()) {
@@ -153,6 +155,7 @@ public class HomeActivity
         return true;
     }
 
+    //Retrieves user data from current intent and add the data to specified intent
     public void passUserObject(Intent myIntent) {
         Intent currentIntent = getIntent();
         User user = (User) currentIntent.getParcelableExtra("user");
@@ -161,39 +164,27 @@ public class HomeActivity
         myIntent.putExtra("cook", cook);
     }
 
+    //Starts search recipe activity when button is pressed
     public void openSearchRecipeActivity(View view){
-        Intent search_recipe_intent = new Intent(HomeActivity.this, SearchRecipe.class);
-        search_recipe_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        passUserObject(search_recipe_intent);
-        startActivity(search_recipe_intent);
+        Intent search_intent = new Intent(HomeActivity.this, SearchRecipe.class);
+        search_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        passUserObject(search_intent);
+        startActivity(search_intent);
     }
     
-    // Example of a request
+    //Gets all recipes from database, then calls filterRecipes() and createButtons() on success
     private void getRecipes(){
-        Log.i("tag", "Recipes are being retrieved");
         Call<List<Recipe>> call = api.getRecipes();
         call.enqueue(new Callback<List<Recipe>>() {
             @Override
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-                if(!response.isSuccessful()){
-                    Log.e("ErrorTag","Code: " + response.code());
-                    return;
-                }else{
-                    Log.i("SuccessTag", "Recipes retrieved");
+                if(response.isSuccessful()){
+                    recommendedRecipes = response.body();
+
+                    filterRecipes(recommendedRecipes);
+
+                    createButtons(recommendedRecipes, findViewById(R.id.recipeLayout));
                 }
-                //Result of the getRecipes request
-                recommendedRecipes = response.body();
-                List<Recipe> recipes = new ArrayList<>();
-                User user = getIntent().getParcelableExtra("user");
-                if (!user.isAdult()) {
-                    for (Recipe recipe: recommendedRecipes) {
-                        if (!recipe.isForAdult()) {
-                            recipes.add(recipe);
-                        }
-                    }
-                    recommendedRecipes = recipes;
-                }
-                createButtons(recommendedRecipes, findViewById(R.id.recipeLayout));
             }
 
             @Override
@@ -203,32 +194,22 @@ public class HomeActivity
         });
     }
 
+    //Gets all recipes from database, where the string in the search bar editText is a substring
+    // of the recipe's name, then calls filterRecipes() and createButtons() on success
+    //Is called when the search button is pressed
     public void getRecipesByName(View view){
         EditText name = findViewById(R.id.textInputEditText);
         Call<List<Recipe>> call = api.getRecipeByTitle(name.getText().toString());
         call.enqueue(new Callback<List<Recipe>>() {
             @Override
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-                if(!response.isSuccessful()){
-                    Log.e("ErrorTag","Code: " + response.code());
-                    return;
-                }else{
-                    Log.i("SuccessTag", "Recipes retrieved");
-                }
+                if(response.isSuccessful()) {
+                    recommendedRecipes = response.body();
 
-                //Result of the getRecipes request
-                recommendedRecipes = response.body();
-                List<Recipe> recipes = new ArrayList<>();
-                User user = getIntent().getParcelableExtra("user");
-                if (!user.isAdult()) {
-                    for (Recipe recipe: recommendedRecipes) {
-                        if (!recipe.isForAdult()) {
-                            recipes.add(recipe);
-                        }
-                    }
-                    recommendedRecipes = recipes;
+                    filterRecipes(recommendedRecipes);
+
+                    createButtons(recommendedRecipes, findViewById(R.id.recipeLayout));
                 }
-                createButtons(recommendedRecipes, findViewById(R.id.recipeLayout));
             }
 
             @Override
@@ -238,29 +219,32 @@ public class HomeActivity
         });
     }
 
+    //Retrieves image of specified recipe from server and puts it in specified ImageButton
     public void getImageInButton(ImageButton btn, Recipe recipe){
         String path = "http://134.209.92.24:3000/uploads/" + recipe.getFilename();
         Picasso.get().load(path).into(btn);
         btn.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        /*Picasso.get().load(path).into(new Target() {
-
-            @Override
-            public void onPrepareLoad(Drawable arg0) { }
-
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom arg1) {
-                Bitmap bitmapImage = bitmap;
-                btn.setImageBitmap(bitmapImage);
-                btn.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            }
-
-            @Override
-            public void onBitmapFailed(Exception e, Drawable arg0) {
-                btn.setImageResource(R.drawable.logo);
-            }
-        });*/
     }
 
+    //Filters out adult recipes if intent's user is child
+    public List<Recipe> filterRecipes(List<Recipe> recipeList){
+        List<Recipe> recipes = new ArrayList<>();
+
+        User user = getIntent().getParcelableExtra("user");
+        if (!user.isAdult()) {
+            for (Recipe recipe: recipeList) {
+                if (!recipe.isForAdult()) {
+                    recipes.add(recipe);
+                }
+            }
+            recipeList = recipes;
+        }
+
+        return recipeList;
+    }
+
+    //Creates an ImageButton for every recipe in the specified list, sets the image of the button
+    // to the recipe's image and links the button to RecipeActivity
     public void createButtons(List<Recipe> list, LinearLayout layout){
         layout.removeAllViews();
 

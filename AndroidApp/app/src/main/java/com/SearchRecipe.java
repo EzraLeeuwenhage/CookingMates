@@ -13,8 +13,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,12 +20,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.widget.LinearLayout.LayoutParams;
 
 import com.example.cookingmatesapp.R;
 import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,25 +35,24 @@ public class SearchRecipe
 
     private ServerCallsApi api;
     private EditText editSearchBar;
-    private Bitmap bitmapImage;
     private List<Recipe> foundRecipes = new ArrayList<>();
-
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
-    Toolbar toolbar;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_recipe);
 
+        //Create api object to make calls to server
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://134.209.92.24:3000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         api = retrofit.create(ServerCallsApi.class);
 
-        // Hooks
+        //Define navigation bar
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbarSearch);
@@ -74,9 +70,11 @@ public class SearchRecipe
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_home);
 
+        //Define search bar
         editSearchBar = findViewById(R.id.editSearchBar);
     }//end of OnCreate
 
+    //Toggles navigation bar
     @Override
     public void onBackPressed() {
 
@@ -87,6 +85,7 @@ public class SearchRecipe
         }
     }//end of onBackPressed
 
+    //Starts activity based on button clicked in navigation bar
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch(menuItem.getItemId()) {
@@ -152,6 +151,7 @@ public class SearchRecipe
         return true;
     }
 
+    //Retrieves user data from current intent and add the data to specified intent
     public void passUserObject(Intent myIntent) {
         Intent currentIntent = getIntent();
         User user = (User) currentIntent.getParcelableExtra("user");
@@ -160,108 +160,80 @@ public class SearchRecipe
         myIntent.putExtra("cook", cook);
     }//end of function
 
-    //Get methods get recipes from server database and put them in recipes list
 
-    //Gets all recipes
-    public void getRecipes(View view){
-        Call<List<Recipe>> call = api.getRecipes();
-        makeCall(call);
-    }
-
-    //Gets all recipes where the search string is in the name
+    //Gets all recipes from database where the string in the search bar is a substring of
+    // the recipe's name and puts the result in list foundRecipes
     public void getRecipeByTitle(View view){
         String title = editSearchBar.getText().toString();
         Call<List<Recipe>> call = api.getRecipeByTitle(title);
         makeCall(call);
     }
 
-    //Gets all recipes where the search string is in at least one ingredient
+    //Gets all recipes from database where the string in the search bar is a substring of
+    // at least one of the recipe's ingredients and puts the result in list foundRecipes
     public void getRecipeByIngredient(View view){
         String ingredient = editSearchBar.getText().toString();
         Call<List<Recipe>> call = api.getRecipeByIngredient(ingredient);
         makeCall(call);
     }
 
-    //Gets all recipes where the search string is in at least one tag
+    //Gets all recipes from database where the string in the search bar is a substring of
+    // at least one of the recipe's tags and puts the result in list foundRecipes
     public void getRecipeByTag(View view){
         String tag = editSearchBar.getText().toString();
         Call<List<Recipe>> call = api.getRecipeByTag(tag);
         makeCall(call);
     }
 
-    //Actually makes the call for the get methods
+    //Actually makes the call for the get methods above
     public void makeCall(Call<List<Recipe>> call){
         call.enqueue(new Callback<List<Recipe>>() {
             @Override
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-                if(!response.isSuccessful()){
-                    Toast.makeText(getApplicationContext(), "Code: " + response.code(),
-                            Toast.LENGTH_SHORT).show();
-                    return;
+                if(response.isSuccessful()){
+                    foundRecipes = response.body();
+
+                    filterRecipes(foundRecipes);
+
+                    createButtons(foundRecipes, findViewById(R.id.resultLayout));
                 }
-                foundRecipes = response.body();
-                List<Recipe> recipes = new ArrayList<>();
-                User user = getIntent().getParcelableExtra("user");
-                if (!user.isAdult()) {
-                    for (Recipe recipe: foundRecipes) {
-                        if (!recipe.isForAdult()) {
-                            recipes.add(recipe);
-                        }
-                    }
-                    foundRecipes = recipes;
-                }
-                createButtons(foundRecipes, findViewById(R.id.resultLayout));
             }
 
             @Override
             public void onFailure(Call<List<Recipe>> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                t.printStackTrace();
             }
         });
     }
 
-    //Retrieves the image of the input recipe and places it in the input view
-    public void getImage(ImageView view, Recipe recipe){
-        String path = "http://134.209.92.24:3000/uploads" + recipe.getFilename();
-        Picasso.get().load(path).into(new Target() {
-
-            @Override
-            public void onPrepareLoad(Drawable arg0) { }
-
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom arg1) {
-                bitmapImage = bitmap;
-                view.setImageBitmap(bitmapImage);
-            }
-
-            @Override
-            public void onBitmapFailed(Exception e, Drawable arg0) { }
-        });
-    }
-
+    //Retrieves image of specified recipe from server and puts it in specified ImageButton
     public void getImageInButton(ImageButton btn, Recipe recipe){
         String path = "http://134.209.92.24:3000/uploads/" + recipe.getFilename();
         Picasso.get().load(path).into(btn);
         btn.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        /*Picasso.get().load(path).into(new Target() {
-
-            @Override
-            public void onPrepareLoad(Drawable arg0) { }
-
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom arg1) {
-                Bitmap bitmapImage = bitmap;
-                btn.setImageBitmap(bitmapImage);
-                btn.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            }
-
-            @Override
-            public void onBitmapFailed(Exception e, Drawable arg0) { }
-        });*/
     }
 
+    //Filters out adult recipes if intent's user is child
+    public List<Recipe> filterRecipes(List<Recipe> recipeList){
+        List<Recipe> recipes = new ArrayList<>();
+
+        User user = getIntent().getParcelableExtra("user");
+        if (!user.isAdult()) {
+            for (Recipe recipe: recipeList) {
+                if (!recipe.isForAdult()) {
+                    recipes.add(recipe);
+                }
+            }
+            recipeList = recipes;
+        }
+
+        return recipeList;
+    }
+
+    //Creates an ImageButton for every recipe in the specified list, sets the image of the button
+    // to the recipe's image and links the button to RecipeActivity
     public void createButtons(List<Recipe> list, LinearLayout layout) {
-            layout.removeAllViews();
+        layout.removeAllViews();
 
         if(list != null) {
             for (int i = 0; i < list.size() && i < 10; i++) {
@@ -272,7 +244,7 @@ public class SearchRecipe
                 } else {
                     getImageInButton(btn, list.get(i));
                 }
-                btn.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 400));
+                btn.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, 400));
                 btn.setPadding(0, 32, 0,0);
                 layout.addView(btn);
                 btn.setOnClickListener(new View.OnClickListener() {

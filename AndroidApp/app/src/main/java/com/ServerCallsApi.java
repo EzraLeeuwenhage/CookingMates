@@ -17,47 +17,50 @@ import retrofit2.http.Path;
 
 public interface ServerCallsApi {
 
-/*
-    @GET -> query data
-    @POST -> create new record
-    @PUT -> update record
-    @DELETE -> delete record
-
-    @Body sends data with the request
-    @Path("var") + {var} allow for variable query
- */
-
+    //Posts specified user to server to put in database
     @POST("users")
     Call<Void> createUser(@Body User user);
 
-    //Gets user with specified name
+    //Gets user with specified name and password from database
     @GET("users/{username}/{password}")
-    Call<User> getUserByUsername(@Path("username") String username, @Path("password") String password);
+    Call<User> getUserByUsername(@Path("username") String username,
+                                 @Path("password") String password);
 
+    //Deletes user with specified id from database
     @DELETE("users/{id}")
     Call<Void> deleteUser(@Path("id") int id);
 
+    //Posts specified user to server to put in database
     @POST("recipes")
     Call<Recipe> createRecipe(@Body Recipe recipe);
 
+    //Gets all recipes from database
     @GET("recipes")
     Call<List<Recipe>> getRecipes();
 
+    //Gets all recipes from database that have specified string as a substring of their name
     @GET("recipes/0/{name}")
     Call<List<Recipe>> getRecipeByTitle(@Path("name") String name);
 
+    //Gets all recipes from database that have specified string as a substring of at least
+    // one of their ingredients
     @GET("recipes/0/0/0/{ingredient}")
     Call<List<Recipe>> getRecipeByIngredient(@Path("ingredient") String ingredient);
 
+    //Gets all recipes from database that have specified string as a substring of at least
+    // one of their tags
     @GET("recipes/0/0/0/0/{tag}")
     Call<List<Recipe>> getRecipeByTag(@Path("tag") String tag);
 
+    //Patches recipe with specified id in database using specified recipe with new rating
     @PATCH("recipes/rating/{id}")
     Call<Void> addRatingToRecipe(@Path("id") int id, @Body Recipe recipe);
 
+    //Patches recipe with specified id in database using specified recipe with new review
     @PATCH("recipes/review/{id}")
     Call<Void> addReviewToRecipe(@Path("id") int id, @Body Recipe recipe);
 
+    //Posts specified image to server in /uploads
     @Multipart
     @POST("/upload")
     Call<ResponseBody> postImage(@Part MultipartBody.Part image, @Part("upload") RequestBody name);

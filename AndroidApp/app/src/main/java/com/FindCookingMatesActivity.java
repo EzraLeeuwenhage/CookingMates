@@ -10,21 +10,23 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.example.cookingmatesapp.R;
 import com.google.android.material.navigation.NavigationView;
 
-public class FindCookingMatesActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class FindCookingMatesActivity
+        extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
-    Toolbar toolbar;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //Set content of activity based on isAdult of the intent's user
         Intent currentIntent = getIntent();
         User user = (User) currentIntent.getParcelableExtra("user");
         if(user.isAdult()){
@@ -34,8 +36,7 @@ public class FindCookingMatesActivity extends AppCompatActivity implements Navig
             setContentView(R.layout.activity_find_cooking_mates_children);
         }
 
-        // Navigation
-        // Hooks
+        //Setup navigation bar
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbarHelp);
@@ -55,6 +56,7 @@ public class FindCookingMatesActivity extends AppCompatActivity implements Navig
 
     }
 
+    //Toggles navigation bar
     @Override
     public void onBackPressed() {
 
@@ -65,6 +67,7 @@ public class FindCookingMatesActivity extends AppCompatActivity implements Navig
         }
     }
 
+    //Starts activity based on button clicked in navigation bar
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch(menuItem.getItemId()) {
@@ -130,6 +133,7 @@ public class FindCookingMatesActivity extends AppCompatActivity implements Navig
         return true;
     }
 
+    //Retrieves user data from current intent and add the data to specified intent
     public void passUserObject(Intent myIntent) {
         Intent currentIntent = getIntent();
         User user = (User) currentIntent.getParcelableExtra("user");

@@ -18,17 +18,16 @@ public class AboutActivity
         extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
-    Toolbar toolbar;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
 
-        // Navigation
-        // Hooks
+        //Define navigation bar
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbarAbout);
@@ -48,6 +47,7 @@ public class AboutActivity
         navigationView.setCheckedItem(R.id.nav_about);
     }
 
+    //Toggles navigation bar
     @Override
     public void onBackPressed() {
 
@@ -58,6 +58,7 @@ public class AboutActivity
         }
     }
 
+    //Starts activity based on button clicked in navigation bar
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch(menuItem.getItemId()) {
@@ -123,6 +124,7 @@ public class AboutActivity
         return true;
     }
 
+    //Retrieves user data from current intent and add the data to specified intent
     public void passUserObject(Intent myIntent) {
         Intent currentIntent = getIntent();
         User user = (User) currentIntent.getParcelableExtra("user");

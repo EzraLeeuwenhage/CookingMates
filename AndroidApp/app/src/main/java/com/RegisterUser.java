@@ -51,12 +51,14 @@ public class RegisterUser extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_user);
 
+        //Create api object to make calls to server
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://134.209.92.24:3000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         api = retrofit.create(ServerCallsApi.class);
 
+        //Find input fields
         editTextUsername = findViewById(R.id.editTextUsername);
         editTextFullName = findViewById(R.id.editTextFullName);
         editTextAge = findViewById(R.id.editTextAge);

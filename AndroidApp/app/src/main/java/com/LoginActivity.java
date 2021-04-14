@@ -39,6 +39,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        //Define spinner (dropdown)
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(LoginActivity.this,
                 android.R.layout.simple_list_item_1,
                 getResources().getStringArray(R.array.account_types));
@@ -47,6 +48,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         spinner = findViewById(R.id.spinner);
         spinner.setAdapter(adapter);
 
+        //Create api object to make calls to server
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://134.209.92.24:3000/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -61,9 +63,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         register = (TextView) findViewById(R.id.textView4);
         register.setOnClickListener(this);
 
+        //Define reset button
         reset = (TextView) findViewById(R.id.textView5);
         reset.setOnClickListener(this);
 
+        //Define username and password fields
         username = findViewById(R.id.editTextTextPersonName);
         password = findViewById(R.id.editTextTextPassword);
     }

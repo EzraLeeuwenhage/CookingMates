@@ -32,69 +32,30 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class RecipeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class RecipeActivity
+        extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     private Recipe recipe;
     private ServerCallsApi api;
-
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
-    Toolbar toolbar;
-    int localRating = 0; // Rating of star that has been pressed before submitting
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private Toolbar toolbar;
+    private int localRating = 0; // Rating of star that has been pressed before submitting
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
 
+        //Create api object to make calls to server
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://134.209.92.24:3000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         api = retrofit.create(ServerCallsApi.class);
 
-        Intent intent = getIntent();
-        this.recipe = (Recipe)intent.getParcelableExtra("recipe");
-        if(recipe != null) {
-            TextView text = findViewById(R.id.recipeTitle);
-            text.setText(recipe.getName());
-
-            updateRatingText();
-
-            ImageView image = findViewById(R.id.recipeImage);
-            getImage(image, recipe);
-
-            TextView tags = findViewById(R.id.recipeTag);
-            String tagString = android.text.TextUtils.join(",", recipe.getTags());
-            if(tagString.equals("")) {
-                tags.setText("-");
-            } else {
-                tags.setText(tagString);
-            }
-
-            TextView nrPeople = findViewById(R.id.editNrPeople);
-            nrPeople.setText(" " + recipe.getNumberpeople());
-
-            if(recipe.getIngredients() != null && recipe.getQuantities() != null) {
-                LinearLayout ll = (LinearLayout) findViewById(R.id.ingredientsLayout);
-                for (int i = 0; i < recipe.getIngredients().size(); i++) {
-                    String ingredient = recipe.getQuantities().get(i) + " " + recipe.getIngredients().get(i);
-                    TextView tv = new TextView(this);
-                    tv.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-                    tv.setText(ingredient);
-                    if(ll != null) {
-                        ll.addView(tv);
-                    }
-                }
-            }
-
-            TextView description = findViewById(R.id.recipeDescription);
-            description.setText(recipe.getDescription());
-
-            updateReviewLayout();
-        }
-
-        // Hooks
+        //Define navigation bar
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbarRecipe);
@@ -110,8 +71,69 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
+
+        displayRecipe();
     }
 
+    //Show recipe data in activity
+    public void displayRecipe(){
+        Intent intent = getIntent();
+        this.recipe = (Recipe)intent.getParcelableExtra("recipe");
+        if(recipe != null) {
+            //Recipe name
+            TextView text = findViewById(R.id.recipeTitle);
+            text.setText(recipe.getName());
+
+            //Rating
+            updateRatingText();
+
+            //Image
+            ImageView image = findViewById(R.id.recipeImage);
+            getImage(image, recipe);
+
+            //Tags
+            TextView tags = findViewById(R.id.recipeTag);
+            String tagString = android.text.TextUtils.join(",", recipe.getTags());
+            if(tagString.equals("")) {
+                tags.setText("-");
+            } else {
+                tags.setText(tagString);
+            }
+
+            //Number of people
+            TextView nrPeople = findViewById(R.id.editNrPeople);
+            nrPeople.setText(" " + recipe.getNumberpeople());
+
+            //Ingredients with their respective quantities
+            if(recipe.getIngredients() != null && recipe.getQuantities() != null) {
+                LinearLayout ll = (LinearLayout) findViewById(R.id.ingredientsLayout);
+
+                for (int i = 0; i < recipe.getIngredients().size(); i++) {
+                    String ingredient = recipe.getQuantities().get(i) + " "
+                            + recipe.getIngredients().get(i);
+                    TextView tv = new TextView(this);
+                    tv.setLayoutParams(new LayoutParams(
+                            LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+                    tv.setText(ingredient);
+
+                    if(ll != null) {
+                        ll.addView(tv);
+                    }
+                }
+            }
+
+            //Description
+            TextView description = findViewById(R.id.recipeDescription);
+            description.setText(recipe.getDescription());
+
+            //Reviews
+            updateReviewLayout();
+        }
+    }
+
+    //Adds rating to recipe and updates record in database
+    //First 5 buttons are 1-5 stars to select a rating
+    //Last button adds rating to recipe and makes server call if a rating is selected
     public void sendRating(View view){
         switch (view.getId()){
             case R.id.rating1:
@@ -133,21 +155,20 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
                 if(localRating != 0){
                     recipe.addRating(localRating);
 
-                    Call<Void> call = api.addRatingToRecipe(this.recipe.getRecipeId(), this.recipe);
+                    Call<Void> call = api.addRatingToRecipe(recipe.getRecipeId(), recipe);
                     call.enqueue(new Callback<Void>() {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {
-                            if(!response.isSuccessful()){
-                                Toast.makeText(getApplicationContext(), "Code: " + response.code(), Toast.LENGTH_SHORT).show();
-                                return;
+                            if(response.isSuccessful()){
+                                Toast.makeText(getApplicationContext(),
+                                        "Rating added!", Toast.LENGTH_SHORT).show();
+                                updateRatingText();
                             }
-                            Toast.makeText(getApplicationContext(),"Rating added!", Toast.LENGTH_SHORT).show();
-                            updateRatingText();
                         }
 
                         @Override
                         public void onFailure(Call<Void> call, Throwable t) {
-                            Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                            t.printStackTrace();
                         }
                     });
                 }
@@ -155,6 +176,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
         }
     }
 
+    //Updates rating textView to show recipe's current rating
     public void updateRatingText(){
         TextView rating = findViewById(R.id.recipeRating);
         if(recipe.hasRating()) {
@@ -164,39 +186,40 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
         }
     }
 
+    //Adds review to recipe and updates record in database
     public void sendReview(View view){
         EditText editReview = findViewById(R.id.editReview);
         String review = editReview.getText().toString();
         recipe.addReview(review);
 
-        Log.i("Id", recipe.getRecipeId() + "");
-
-        Call<Void> call = api.addReviewToRecipe(this.recipe.getRecipeId(), this.recipe);
+        Call<Void> call = api.addReviewToRecipe(recipe.getRecipeId(), recipe);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                if(!response.isSuccessful()){
-                    Toast.makeText(getApplicationContext(), "Code: " + response.code(), Toast.LENGTH_SHORT).show();
-                    return;
+                if(response.isSuccessful()){
+                    Toast.makeText(getApplicationContext(),
+                            "Review added!", Toast.LENGTH_SHORT).show();
+                    updateReviewLayout();
                 }
-                Toast.makeText(getApplicationContext(),"Review added!", Toast.LENGTH_SHORT).show();
-                updateReviewLayout();
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                t.printStackTrace();
             }
         });
     }
 
+    //Updates list of reviews to show added review without restarting the activity
     public void updateReviewLayout(){
         if(recipe.getReviews() != null){
             LinearLayout ll = findViewById(R.id.reviewLayout);
+            ll.removeAllViews();
             for (int i = 0; i < recipe.getReviews().size(); i++) {
                 String review = recipe.getReviews().get(i);
                 TextView tv = new TextView(this);
-                tv.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+                tv.setLayoutParams(new LayoutParams(
+                        LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
                 tv.setText(review);
                 if(ll != null) {
                     ll.addView(tv);
@@ -205,6 +228,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
         }
     }
 
+    //Retrieves image of specified recipe from server and puts it in specified ImageView
     public void getImage(ImageView v, Recipe recipe){
         String path = "http://134.209.92.24:3000/uploads/" + recipe.getFilename();
         Picasso.get().load(path).into(new Target() {
@@ -223,6 +247,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
         });
     }
 
+    //Toggles navigation bar
     @Override
     public void onBackPressed() {
 
@@ -233,6 +258,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
         }
     }
 
+    //Starts activity based on button clicked in navigation bar
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch(menuItem.getItemId()) {
@@ -295,6 +321,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
         return true;
     }
 
+    //Retrieves user data from current intent and add the data to specified intent
     public void passUserObject(Intent myIntent) {
         Intent currentIntent = getIntent();
         User user = (User) currentIntent.getParcelableExtra("user");

@@ -29,7 +29,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.InputType;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -55,15 +54,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CreateRecipeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class CreateRecipeActivity
+        extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
-    private final int REQUEST_READ_STORAGE = 1;
-    private final int REQUEST_SELECT_IMAGE = 2;
-
-    public static final int CAMERA_PERM_CODE = 101;              // VLAD
+    public static final int REQUEST_READ_STORAGE = 1;
+    public static final int REQUEST_SELECT_IMAGE = 2;
     public static final int CAMERA_REQUEST_CODE = 102;
-    ImageView selectedImage;
-    Button cameraBtn, galleryBtn;                               // VLAD
 
     private int creatorId = 0;
     private Recipe recipe;
@@ -73,10 +70,10 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
     private String filename = "";
     private List<Spinner> spinners = new ArrayList<>();
 
-    LinearLayout ingredientsLayout;
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
-    Toolbar toolbar;
+    private LinearLayout ingredientsLayout;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,18 +87,19 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
 
         image = findViewById(R.id.imageRecipe);
 
+        //Define spinner (dropdown)
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(CreateRecipeActivity.this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.units));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
+        //Create api object to make calls to server
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://134.209.92.24:3000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         api = retrofit.create(ServerCallsApi.class);
 
-        // Navigation
-        // Hooks
+        //Define navigation bar
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbarCreate);
@@ -119,26 +117,32 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_upload_recipe);
 
+        //Create ingredient fields
+        int nrOfIngredients = 2;
         ingredientsLayout = findViewById(R.id.ingredientsLayout);
-        for(int i = 0; i < 2; i++){
+        for(int i = 0; i < nrOfIngredients; i++){
             LinearLayout line = new LinearLayout(this);
-            line.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+            line.setLayoutParams(new LayoutParams(
+                    LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
             line.setPadding(16, 16, 0, 0);
             line.setOrientation(LinearLayout.HORIZONTAL);
 
             EditText ingredient = new EditText(this);
-            ingredient.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+            ingredient.setLayoutParams(new LayoutParams(
+                    LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
             ingredient.setHint(R.string.edit_ingredient);
             line.addView(ingredient);
 
             EditText quantity = new EditText(this);
-            quantity.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+            quantity.setLayoutParams(new LayoutParams(
+                    LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
             quantity.setInputType(InputType.TYPE_CLASS_NUMBER);
             quantity.setHint("0");
             line.addView(quantity);
 
             Spinner spinner = new Spinner(this);
-            spinner.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+            spinner.setLayoutParams(new LayoutParams(
+                    LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
             spinner.setAdapter(adapter);
             line.addView(spinner);
             spinners.add(spinner);
@@ -151,20 +155,24 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
     //characters
     public boolean isValidRecipe(Recipe recipe){
         if(recipe.getName() == null){
-            Toast.makeText(getApplicationContext(), "No title present", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),
+                    "No title present", Toast.LENGTH_SHORT).show();
             return false;
         }else if(recipe.getName().equals("")){
-            Toast.makeText(getApplicationContext(), "No title present", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),
+                    "No title present", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if(recipe.getDescription().length() < 20) {
-            Toast.makeText(getApplicationContext(), "Description too short", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),
+                    "Description too short", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if(recipe.getIngredients().size() == 0){
-            Toast.makeText(getApplicationContext(), "No ingredients present", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),
+                    "No ingredients present", Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -184,22 +192,26 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
         });
     }
 
-    //Start methods for importing images
+    //Asks for permission to open gallery, when already granted calls openGallery()
     public void importImage(View view){
         if(ContextCompat.checkSelfPermission(getApplicationContext(),
                 Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(CreateRecipeActivity.this,
                     new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_READ_STORAGE);
         } else {
-            selectImage();
+            openGallery();
         }
     }
 
-    public void selectImage(){
-        Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+    //Opens gallery
+    public void openGallery(){
+        Intent gallery = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(gallery, REQUEST_SELECT_IMAGE);
     }
 
+    //Result of camera or gallery import, depending on the requestCode
+    //Puts imported image in bitmapImage and shows it in the activity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -225,19 +237,23 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
         }
     }
 
+    //Result in case permission was asked to open gallery, if granted opens gallery
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(requestCode == REQUEST_READ_STORAGE && grantResults.length > 0){
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                selectImage();
+                openGallery();
             }else{
                 Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
             }
         }
     }
-//End methods for importing images
 
+    //Retrieves input for new recipe from fields and combines the data into a Recipe object
+    //When no image is imported, applies default image and calls postRecipe()
+    //When an image is imported, calls uploadImage()
     public void createRecipe(View view){
 
         //Title
@@ -268,12 +284,11 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
                 }
 
                 if (!ingredientString.equals("") && !quantityString.equals("")) {
-//                    Log.i("ingredient", ingredientString + " - " + quantityString + spinners.get(i).getSelectedItem().toString());
                     ingredients.add(ingredientString);
                     ingredientString = "";
-                    quantities.add(quantityString + " " + spinners.get(i).getSelectedItem().toString());
+                    quantities.add(quantityString + " " +
+                            spinners.get(i).getSelectedItem().toString());
                     quantityString = "";
-//                    Log.i("ingredient", ingredients.size() + " - " + quantities.size());
                 }
             }
         }
@@ -294,7 +309,8 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
         Switch sw = findViewById(R.id.switch1);
         boolean adult = sw.isChecked();
 
-        this.recipe = new Recipe(creatorId, name, description, ingredients, quantities, numberOfPeople, adult, tags);
+        this.recipe = new Recipe(creatorId, name, description, ingredients,
+                quantities, numberOfPeople, adult, tags);
         if (isValidRecipe(this.recipe)) {
             if(bitmapImage == null){
                 this.recipe.setFilename("logo.png");
@@ -305,6 +321,8 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
         }
     }
 
+    //Tries to upload image stored in bitmapImage to server with filename as response
+    //If successfull, sets recipe filename to response and calls postRecipe()
     public void uploadImage(){
         try {
             //Create new file
@@ -324,7 +342,8 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
 
             //Create retrofit objects to send the file
             RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
-            MultipartBody.Part body = MultipartBody.Part.createFormData("upload", file.getName(), reqFile);
+            MultipartBody.Part body = MultipartBody.Part.createFormData(
+                    "upload", file.getName(), reqFile);
             RequestBody name = RequestBody.create(MediaType.parse("text/plain"), "upload");
 
             //Send call to post image
@@ -336,18 +355,19 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
                         try {
                             filename = response.body().string();
                             recipe.setFilename(filename);
-                            Toast.makeText(getApplicationContext(), "Uploaded Successfully!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(),
+                                    "Uploaded Successfully!", Toast.LENGTH_SHORT).show();
                             postRecipe();
                         }catch (IOException e){
                             e.printStackTrace();
                         }
                     }
-                    Toast.makeText(getApplicationContext(), response.code() + " ", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    Toast.makeText(getApplicationContext(), "Upload failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),
+                            "Upload failed", Toast.LENGTH_SHORT).show();
                     t.printStackTrace();
                 }
             });
@@ -359,26 +379,27 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
         }
     }
 
+    //Uploads recipe to server database
     public void postRecipe(){
         Call<Recipe> call = api.createRecipe(this.recipe);
         call.enqueue(new Callback<Recipe>() {
             @Override
             public void onResponse(Call<Recipe> call, Response<Recipe> response) {
-                if(!response.isSuccessful()){
-                    Toast.makeText(getApplicationContext(), "Code: " + response.code(), Toast.LENGTH_SHORT).show();
-                    return;
+                if(response.isSuccessful()){
+                    Recipe recipe = response.body();
+                    Toast.makeText(getApplicationContext(),
+                            recipe.getName() + " created!", Toast.LENGTH_SHORT).show();
                 }
-                Recipe recipe = response.body();
-                Toast.makeText(getApplicationContext(), recipe.getName() + " created!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(Call<Recipe> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                t.printStackTrace();
             }
         });
     }
 
+    //Toggles navigation bar
     @Override
     public void onBackPressed() {
 
@@ -389,6 +410,7 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
         }
     }
 
+    //Starts activity based on button clicked in navigation bar
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         // TODO add "Are you sure?" message on quit
@@ -455,6 +477,7 @@ public class CreateRecipeActivity extends AppCompatActivity implements Navigatio
         return true;
     }
 
+    //Retrieves user data from current intent and add the data to specified intent
     public void passUserObject(Intent myIntent) {
         Intent currentIntent = getIntent();
         User user = (User) currentIntent.getParcelableExtra("user");

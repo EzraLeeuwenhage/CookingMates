@@ -32,7 +32,6 @@ public class ProfileActivity
 
     private ServerCallsApi api;
     private User user;
-
     private Button delete;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -43,13 +42,14 @@ public class ProfileActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        //Create api object to make calls to server
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://134.209.92.24:3000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         api = retrofit.create(ServerCallsApi.class);
 
-        // Hooks
+        //Define navigation bar
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbarProfile);
@@ -67,12 +67,14 @@ public class ProfileActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_profile);
 
+        //Define delete button
         delete = (Button) findViewById(R.id.delete_acc_btn);
         delete.setOnClickListener(this);
 
         setProfileInfo();
     }
 
+    //Makes a deleteUser call when the delete account button is pressed
     @Override
     public void onClick (View v){
         switch (v.getId()) {
@@ -106,6 +108,7 @@ public class ProfileActivity
         }
     }
 
+    //Toggles navigation bar
     @Override
     public void onBackPressed() {
 
@@ -116,6 +119,7 @@ public class ProfileActivity
         }
     }
 
+    //Starts activity based on button clicked in navigation bar
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
@@ -181,6 +185,7 @@ public class ProfileActivity
         return true;
     }
 
+    //Retrieves user data from current intent and add the data to specified intent
     public void passUserObject(Intent myIntent) {
         Intent currentIntent = getIntent();
         User user = (User) currentIntent.getParcelableExtra("user");
@@ -210,7 +215,7 @@ public class ProfileActivity
         TextView cook = findViewById(R.id.textView16);
         String cookString = getIntent().getStringExtra("cook");
         cook.setText(cookString);
-
+        //Adult or child
         TextView account = findViewById(R.id.textView19);
         if (user.isAdult()) {
             account.setText("Adult");
