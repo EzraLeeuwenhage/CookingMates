@@ -153,12 +153,12 @@ public class CreateRecipeActivity
 
     //Recipes are invalid if there is no title, no ingredient or the description is smaller than 20
     //characters
-    public boolean isValidRecipe(Recipe recipe){
-        if(recipe.getName() == null){
+    public boolean isValidRecipe(Recipe recipe) {
+        if(recipe.getName() == null) {
             Toast.makeText(getApplicationContext(),
                     "No title present", Toast.LENGTH_SHORT).show();
             return false;
-        }else if(recipe.getName().equals("")){
+        }else if(recipe.getName().equals("")) {
             Toast.makeText(getApplicationContext(),
                     "No title present", Toast.LENGTH_SHORT).show();
             return false;
@@ -170,7 +170,7 @@ public class CreateRecipeActivity
             return false;
         }
 
-        if(recipe.getIngredients().size() == 0){
+        if(recipe.getIngredients().size() == 0) {
             Toast.makeText(getApplicationContext(),
                     "No ingredients present", Toast.LENGTH_SHORT).show();
             return false;
@@ -215,6 +215,7 @@ public class CreateRecipeActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        //If the request is to select image from gallery:
         if(requestCode == REQUEST_SELECT_IMAGE && resultCode == RESULT_OK) {
             if (data != null) {
                 Uri imageUri = data.getData();
@@ -230,6 +231,7 @@ public class CreateRecipeActivity
                 }
             }
         }
+        //If the request is to open camera
         if(requestCode == CAMERA_REQUEST_CODE)
         {
             bitmapImage = (Bitmap) data.getExtras().get("data");
@@ -283,6 +285,8 @@ public class CreateRecipeActivity
                         break;
                 }
 
+                //Check that something was actually entered in the name / quantity of an
+                //ingredient.
                 if (!ingredientString.equals("") && !quantityString.equals("")) {
                     ingredients.add(ingredientString);
                     ingredientString = "";
@@ -415,51 +419,51 @@ public class CreateRecipeActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         // TODO add "Are you sure?" message on quit
         switch(menuItem.getItemId()) {
-            case R.id.nav_home:
+            case R.id.nav_home: // Enter in home screen
                 Intent home_intent = new Intent(CreateRecipeActivity.this, HomeActivity.class);
                 home_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 passUserObject(home_intent);
                 startActivity(home_intent);
                 break;
-            case R.id.nav_profile:
+            case R.id.nav_profile: // Enter in profile
                 Intent profile_intent = new Intent(CreateRecipeActivity.this, ProfileActivity.class);
                 profile_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 passUserObject(profile_intent);
                 startActivity(profile_intent);
                 break;
-            case R.id.nav_settings:
+            case R.id.nav_settings: // Enter in settings
                 Intent settings_intent = new Intent(CreateRecipeActivity.this, SettingsActivity.class);
                 settings_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 passUserObject(settings_intent);
                 startActivity(settings_intent);
                 break;
-            case R.id.nav_about:
+            case R.id.nav_about: // Enter in about section
                 Intent about_intent = new Intent(CreateRecipeActivity.this, AboutActivity.class);
                 about_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 passUserObject(about_intent);
                 startActivity(about_intent);
                 break;
-            case R.id.nav_help:
+            case R.id.nav_help: // Enter in help section
                 Intent help_intent = new Intent(CreateRecipeActivity.this, HelpActivity.class);
                 help_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 passUserObject(help_intent);
                 startActivity(help_intent);
                 break;
-            case R.id.nav_logout:
+            case R.id.nav_logout: // Enter in logout section
                 Intent logout_intent = new Intent(CreateRecipeActivity.this, LoginActivity.class);
                 logout_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(logout_intent);
                 break;
-            case R.id.nav_upload_recipe:
+            case R.id.nav_upload_recipe: // If you try to enter upload_recipe
                 // Just break - same screen
                 break;
-            case R.id.nav_search_recipe:
+            case R.id.nav_search_recipe: // Enter in search recipe
                 Intent search_recipe_intent = new Intent(CreateRecipeActivity.this, SearchRecipe.class);
                 search_recipe_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 passUserObject(search_recipe_intent);
                 startActivity(search_recipe_intent);
                 break;
-            case R.id.nav_findcookingmates:
+            case R.id.nav_findcookingmates: // Enter in FindCookingMates
                 Intent findcookingmates_intent = new Intent(CreateRecipeActivity.this, FindCookingMatesActivity.class);
                 findcookingmates_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 passUserObject(findcookingmates_intent);

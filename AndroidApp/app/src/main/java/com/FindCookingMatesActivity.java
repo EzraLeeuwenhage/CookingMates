@@ -29,6 +29,8 @@ public class FindCookingMatesActivity
         //Set content of activity based on isAdult of the intent's user
         Intent currentIntent = getIntent();
         User user = (User) currentIntent.getParcelableExtra("user");
+
+        //If the user is adult
         if(user.isAdult()){
             setContentView(R.layout.activity_find_cooking_mates);
         }

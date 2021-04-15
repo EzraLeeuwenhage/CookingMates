@@ -127,12 +127,13 @@ public class User implements Parcelable {
         return (charCount >= 2 && numCount >= 2);
     }//end is_Valid_Password
 
+    //Checks if a character is a upper case letter
     public static boolean is_Letter(char ch) {
         ch = Character.toUpperCase(ch);
         return (ch >= 'A' && ch <= 'Z');
     }
 
-
+    //Checks if a character is a digit
     public static boolean is_Numeric(char ch) {
 
         return (ch >= '0' && ch <= '9');

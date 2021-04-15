@@ -58,12 +58,14 @@ public class CookingParty {
         return location;
     }
 
+    //Get location function
     public void getLocationFromString(String locationString){
         String[] numbers = locationString.split(",");
         this.location[0] = Double.parseDouble(numbers[0]);
         this.location[1] = Double.parseDouble(numbers[1]);
     }
 
+    //Set location function
     public void setLocation(float longitude, float latitude){
         this.location[0] = longitude;
         this.location[1] = latitude;
