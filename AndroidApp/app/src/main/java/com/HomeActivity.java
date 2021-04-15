@@ -17,6 +17,7 @@ import com.example.cookingmatesapp.R;
 import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+import com.util.SearchHelper;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -35,58 +36,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity
-        extends AppCompatActivity
+        extends ActivityWithNavigation
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private ServerCallsApi api;
+    private SearchHelper searchHelper;
     private List<Recipe> recommendedRecipes;
-    private DrawerLayout drawerLayout;
-    private NavigationView navigationView;
-    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        //Create api object to make calls to server
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://134.209.92.24:3000/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        api = retrofit.create(ServerCallsApi.class);
-
-        //Define navigation bar
+        //Define and set up navigation bar
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbarHome);
-
-        navigationView.bringToFront();
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this,
-                drawerLayout,
-                toolbar,
-                R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-
-        navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_home);
+        initNavigationBar();
+
+        //Create ServerCallsApi object
+        api = createApi();
+
+        //Define search helper
+        searchHelper = new SearchHelper(getIntent(), this);
 
         //Show all recipes
         getRecipes();
-    }
-
-    //Toggles navigation bar
-    @Override
-    public void onBackPressed() {
-
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
     }
 
     //Starts activity based on button clicked in navigation bar
@@ -95,103 +71,24 @@ public class HomeActivity
         switch(menuItem.getItemId()) {
             case R.id.nav_home:
                 // Just break - same screen
+                drawerLayout.closeDrawer(GravityCompat.START);
                 break;
-            case R.id.nav_profile:
-                Intent profile_intent = new Intent(HomeActivity.this, ProfileActivity.class);
-                profile_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                passUserObject(profile_intent);
-                startActivity(profile_intent);
-                break;
-            case R.id.nav_settings:
-                Intent settings_intent = new Intent(HomeActivity.this, SettingsActivity.class);
-                settings_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                passUserObject(settings_intent);
-                startActivity(settings_intent);
-                break;
-            case R.id.nav_about:
-                Intent about_intent = new Intent(HomeActivity.this, AboutActivity.class);
-                about_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                passUserObject(about_intent);
-                startActivity(about_intent);
-                break;
-            case R.id.nav_help:
-                Intent help_intent = new Intent(HomeActivity.this, HelpActivity.class);
-                help_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                passUserObject(help_intent);
-                startActivity(help_intent);
-                break;
-            case R.id.nav_logout:
-                Intent logout_intent = new Intent(HomeActivity.this, LoginActivity.class);
-                logout_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(logout_intent);
-                break;
-            case R.id.nav_upload_recipe:
-                Intent upload_recipe_intent = new Intent(HomeActivity.this, CreateRecipeActivity.class);
-                upload_recipe_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                passUserObject(upload_recipe_intent);
-                startActivity(upload_recipe_intent);
-                break;
-            case R.id.nav_search_recipe:
-                Intent search_recipe_intent = new Intent(HomeActivity.this, SearchRecipe.class);
-                search_recipe_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                passUserObject(search_recipe_intent);
-                startActivity(search_recipe_intent);
-                break;
-            case R.id.nav_findcookingmates:
-                Intent findcookingmates_intent = new Intent(HomeActivity.this, FindCookingMatesActivity.class);
-                findcookingmates_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                passUserObject(findcookingmates_intent);
-                startActivity(findcookingmates_intent);
-                break;
-            case R.id.nav_contact:
-                break;
-            case R.id.nav_instagram:
-                break;
-            case R.id.nav_facebook:
-                break;
+            default:
+                super.onNavigationItemSelected(menuItem);
         }
-
-        drawerLayout.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    //Retrieves user data from current intent and add the data to specified intent
-    public void passUserObject(Intent myIntent) {
-        Intent currentIntent = getIntent();
-        User user = (User) currentIntent.getParcelableExtra("user");
-        String cook = currentIntent.getStringExtra("cook");
-        myIntent.putExtra("user", user);
-        myIntent.putExtra("cook", cook);
     }
 
     //Starts search recipe activity when button is pressed
     public void openSearchRecipeActivity(View view){
-        Intent search_intent = new Intent(HomeActivity.this, SearchRecipe.class);
-        search_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        passUserObject(search_intent);
-        startActivity(search_intent);
+        startIntent(SearchRecipe.class);
     }
     
     //Gets all recipes from database, then calls filterRecipes() and createButtons() on success
     private void getRecipes(){
+        LinearLayout layout = findViewById(R.id.recipeLayout);
         Call<List<Recipe>> call = api.getRecipes();
-        call.enqueue(new Callback<List<Recipe>>() {
-            @Override
-            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-                if(response.isSuccessful()){
-                    recommendedRecipes = response.body();
-
-                    filterRecipes(recommendedRecipes);
-
-                    createButtons(recommendedRecipes, findViewById(R.id.recipeLayout));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Recipe>> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
+        searchHelper.makeCall(call, layout, recommendedRecipes);
     }
 
     //Gets all recipes from database, where the string in the search bar editText is a substring
@@ -199,77 +96,8 @@ public class HomeActivity
     //Is called when the search button is pressed
     public void getRecipesByName(View view){
         EditText name = findViewById(R.id.textInputEditText);
+        LinearLayout layout = findViewById(R.id.recipeLayout);
         Call<List<Recipe>> call = api.getRecipeByTitle(name.getText().toString());
-        call.enqueue(new Callback<List<Recipe>>() {
-            @Override
-            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-                if(response.isSuccessful()) {
-                    recommendedRecipes = response.body();
-
-                    filterRecipes(recommendedRecipes);
-
-                    createButtons(recommendedRecipes, findViewById(R.id.recipeLayout));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Recipe>> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
-    }
-
-    //Retrieves image of specified recipe from server and puts it in specified ImageButton
-    public void getImageInButton(ImageButton btn, Recipe recipe){
-        String path = "http://134.209.92.24:3000/uploads/" + recipe.getFilename();
-        Picasso.get().load(path).into(btn);
-        btn.setScaleType(ImageView.ScaleType.CENTER_CROP);
-    }
-
-    //Filters out adult recipes if intent's user is child
-    public List<Recipe> filterRecipes(List<Recipe> recipeList){
-        List<Recipe> recipes = new ArrayList<>();
-
-        User user = getIntent().getParcelableExtra("user");
-        if (!user.isAdult()) {
-            for (Recipe recipe: recipeList) {
-                if (!recipe.isForAdult()) {
-                    recipes.add(recipe);
-                }
-            }
-            recipeList = recipes;
-        }
-
-        return recipeList;
-    }
-
-    //Creates an ImageButton for every recipe in the specified list, sets the image of the button
-    // to the recipe's image and links the button to RecipeActivity
-    public void createButtons(List<Recipe> list, LinearLayout layout){
-        layout.removeAllViews();
-
-        if(list != null) {
-            for (int i = 0; i < list.size() && i < 10; i++) {
-                ImageButton btn = new ImageButton(this);
-                btn.setId(i);
-                if (list.get(i).getFilename() == null) {
-                    btn.setImageResource(R.drawable.logo);
-                } else {
-                    getImageInButton(btn, list.get(i));
-                }
-                btn.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, 400));
-                btn.setPadding(0, 32, 0,0);
-                layout.addView(btn);
-                btn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(HomeActivity.this, RecipeActivity.class);
-                        intent.putExtra("recipe", recommendedRecipes.get(v.getId()));
-                        passUserObject(intent);
-                        startActivity(intent);
-                    }
-                });
-            }
-        }
+        searchHelper.makeCall(call, layout, recommendedRecipes);
     }
 }

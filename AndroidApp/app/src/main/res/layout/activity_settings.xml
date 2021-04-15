@@ -94,6 +94,7 @@
             android:id="@+id/delete_acc_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="deleteAccount"
             android:text="@string/delete"
             app:layout_constraintBottom_toTopOf="@+id/view10"
             app:layout_constraintEnd_toEndOf="parent"

@@ -55,7 +55,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CreateRecipeActivity
-        extends AppCompatActivity
+        extends ActivityWithNavigation
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final int REQUEST_READ_STORAGE = 1;
@@ -69,11 +69,7 @@ public class CreateRecipeActivity
     private ImageView image;
     private String filename = "";
     private List<Spinner> spinners = new ArrayList<>();
-
     private LinearLayout ingredientsLayout;
-    private DrawerLayout drawerLayout;
-    private NavigationView navigationView;
-    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,30 +88,15 @@ public class CreateRecipeActivity
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.units));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        //Create api object to make calls to server
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://134.209.92.24:3000/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        api = retrofit.create(ServerCallsApi.class);
-
-        //Define navigation bar
+        //Define and set up navigation bar
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbarCreate);
-
-        navigationView.bringToFront();
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this,
-                drawerLayout,
-                toolbar,
-                R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-
-        navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_upload_recipe);
+        initNavigationBar();
+
+        //Create ServerCallsApi object
+        api = createApi();
 
         //Create ingredient fields
         int nrOfIngredients = 2;
@@ -326,7 +307,7 @@ public class CreateRecipeActivity
     }
 
     //Tries to upload image stored in bitmapImage to server with filename as response
-    //If successfull, sets recipe filename to response and calls postRecipe()
+    //If successful, sets recipe filename to response and calls postRecipe()
     public void uploadImage(){
         try {
             //Create new file
@@ -403,90 +384,17 @@ public class CreateRecipeActivity
         });
     }
 
-    //Toggles navigation bar
-    @Override
-    public void onBackPressed() {
-
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
     //Starts activity based on button clicked in navigation bar
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        // TODO add "Are you sure?" message on quit
         switch(menuItem.getItemId()) {
-            case R.id.nav_home: // Enter in home screen
-                Intent home_intent = new Intent(CreateRecipeActivity.this, HomeActivity.class);
-                home_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                passUserObject(home_intent);
-                startActivity(home_intent);
-                break;
-            case R.id.nav_profile: // Enter in profile
-                Intent profile_intent = new Intent(CreateRecipeActivity.this, ProfileActivity.class);
-                profile_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                passUserObject(profile_intent);
-                startActivity(profile_intent);
-                break;
-            case R.id.nav_settings: // Enter in settings
-                Intent settings_intent = new Intent(CreateRecipeActivity.this, SettingsActivity.class);
-                settings_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                passUserObject(settings_intent);
-                startActivity(settings_intent);
-                break;
-            case R.id.nav_about: // Enter in about section
-                Intent about_intent = new Intent(CreateRecipeActivity.this, AboutActivity.class);
-                about_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                passUserObject(about_intent);
-                startActivity(about_intent);
-                break;
-            case R.id.nav_help: // Enter in help section
-                Intent help_intent = new Intent(CreateRecipeActivity.this, HelpActivity.class);
-                help_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                passUserObject(help_intent);
-                startActivity(help_intent);
-                break;
-            case R.id.nav_logout: // Enter in logout section
-                Intent logout_intent = new Intent(CreateRecipeActivity.this, LoginActivity.class);
-                logout_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(logout_intent);
-                break;
             case R.id.nav_upload_recipe: // If you try to enter upload_recipe
                 // Just break - same screen
+                drawerLayout.closeDrawer(GravityCompat.START);
                 break;
-            case R.id.nav_search_recipe: // Enter in search recipe
-                Intent search_recipe_intent = new Intent(CreateRecipeActivity.this, SearchRecipe.class);
-                search_recipe_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                passUserObject(search_recipe_intent);
-                startActivity(search_recipe_intent);
-                break;
-            case R.id.nav_findcookingmates: // Enter in FindCookingMates
-                Intent findcookingmates_intent = new Intent(CreateRecipeActivity.this, FindCookingMatesActivity.class);
-                findcookingmates_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                passUserObject(findcookingmates_intent);
-                startActivity(findcookingmates_intent);
-                break;
-            case R.id.nav_contact:
-                break;
-            case R.id.nav_instagram:
-                break;
-            case R.id.nav_facebook:
-                break;
+            default:
+                super.onNavigationItemSelected(menuItem);
         }
-
-        drawerLayout.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    //Retrieves user data from current intent and add the data to specified intent
-    public void passUserObject(Intent myIntent) {
-        Intent currentIntent = getIntent();
-        User user = (User) currentIntent.getParcelableExtra("user");
-        String cook = currentIntent.getStringExtra("cook");
-        myIntent.putExtra("user", user);
-        myIntent.putExtra("cook", cook);
     }
 }

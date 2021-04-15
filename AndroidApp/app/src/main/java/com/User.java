@@ -1,8 +1,10 @@
 package com;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.widget.Toast;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -10,6 +12,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class User implements Parcelable {
     @SerializedName("userid")

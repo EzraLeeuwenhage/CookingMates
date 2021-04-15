@@ -32,15 +32,14 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Locale;
+
 public class RecipeActivity
-        extends AppCompatActivity
+        extends ActivityWithNavigation
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private Recipe recipe;
     private ServerCallsApi api;
-    private DrawerLayout drawerLayout;
-    private NavigationView navigationView;
-    private Toolbar toolbar;
     private int localRating = 0; // Rating of star that has been pressed before submitting
 
     @Override
@@ -48,29 +47,15 @@ public class RecipeActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
 
-        //Create api object to make calls to server
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://134.209.92.24:3000/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        api = retrofit.create(ServerCallsApi.class);
-
-        //Define navigation bar
+        //Define and set up navigation bar
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbarRecipe);
-
-        navigationView.bringToFront();
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this,
-                drawerLayout,
-                toolbar,
-                R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-
         navigationView.setNavigationItemSelectedListener(this);
+        initNavigationBar();
+
+        //Create ServerCallsApi object
+        api = createApi();
 
         displayRecipe();
     }
@@ -180,7 +165,7 @@ public class RecipeActivity
     public void updateRatingText(){
         TextView rating = findViewById(R.id.recipeRating);
         if(recipe.hasRating()) {
-            rating.setText("" + recipe.getRating());
+            rating.setText(String.format(Locale.getDefault(), "%.2f", recipe.getRating()));
         }else{
             rating.setText("-");
         }
@@ -245,88 +230,5 @@ public class RecipeActivity
             @Override
             public void onBitmapFailed(Exception e, Drawable arg0) { }
         });
-    }
-
-    //Toggles navigation bar
-    @Override
-    public void onBackPressed() {
-
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    //Starts activity based on button clicked in navigation bar
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        switch(menuItem.getItemId()) {
-            case R.id.nav_home:
-                Intent home_intent = new Intent(RecipeActivity.this, HomeActivity.class);
-                home_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                passUserObject(home_intent);
-                startActivity(home_intent);
-                break;
-            case R.id.nav_profile:
-                Intent profile_intent = new Intent(RecipeActivity.this, ProfileActivity.class);
-                profile_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                passUserObject(profile_intent);
-                startActivity(profile_intent);
-                break;
-            case R.id.nav_settings:
-                Intent settings_intent = new Intent(RecipeActivity.this, SettingsActivity.class);
-                settings_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                passUserObject(settings_intent);
-                startActivity(settings_intent);
-                break;
-            case R.id.nav_about:
-                Intent about_intent = new Intent(RecipeActivity.this, AboutActivity.class);
-                about_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                passUserObject(about_intent);
-                startActivity(about_intent);
-                break;
-            case R.id.nav_help:
-                Intent help_intent = new Intent(RecipeActivity.this, HelpActivity.class);
-                help_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                passUserObject(help_intent);
-                startActivity(help_intent);
-                break;
-            case R.id.nav_logout:
-                Intent logout_intent = new Intent(RecipeActivity.this, LoginActivity.class);
-                logout_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(logout_intent);
-                break;
-            case R.id.nav_upload_recipe:
-                Intent create_recipe_intent = new Intent(RecipeActivity.this, CreateRecipeActivity.class);
-                create_recipe_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                passUserObject(create_recipe_intent);
-                startActivity(create_recipe_intent);
-                break;
-            case R.id.nav_findcookingmates:
-                Intent findcookingmates_intent = new Intent(RecipeActivity.this, FindCookingMatesActivity.class);
-                findcookingmates_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                passUserObject(findcookingmates_intent);
-                startActivity(findcookingmates_intent);
-                break;
-            case R.id.nav_contact:
-                break;
-            case R.id.nav_instagram:
-                break;
-            case R.id.nav_facebook:
-                break;
-        }
-
-        drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    //Retrieves user data from current intent and add the data to specified intent
-    public void passUserObject(Intent myIntent) {
-        Intent currentIntent = getIntent();
-        User user = (User) currentIntent.getParcelableExtra("user");
-        String cook = currentIntent.getStringExtra("cook");
-        myIntent.putExtra("user", user);
-        myIntent.putExtra("cook", cook);
     }
 }
