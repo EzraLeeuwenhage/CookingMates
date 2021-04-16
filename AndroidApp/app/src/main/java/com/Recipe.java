@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Recipe implements Parcelable {
     @SerializedName("recipeid")
-    private int recipeId;
+    public int recipeId;
     @SerializedName("creatorid")
     private int creatorId;
     private String name;
@@ -20,7 +20,7 @@ public class Recipe implements Parcelable {
     @SerializedName("quantity")
     private List<String> quantities = new ArrayList<>();
     private int numberpeople;
-    private boolean adult;
+    public boolean adult;
     @SerializedName("media")
     private String filename;
     private List<Integer> ratings = new ArrayList<>();
@@ -53,11 +53,6 @@ public class Recipe implements Parcelable {
         }
     };
 
-    // Retrieves the recipe's id
-    public int getRecipeId() {
-        return recipeId;
-    }
-
     // Retrieves the recipe's name
     public String getName() {
         return name;
@@ -81,11 +76,6 @@ public class Recipe implements Parcelable {
     // Retrieves the number of people for which the recipe is meant
     public int getNumberpeople() {
         return numberpeople;
-    }
-
-    // Retrieves whether the recipe is meant for adults only
-    public boolean isForAdult() {
-        return adult;
     }
 
     // Retrieves the filename of the image related to the recipe

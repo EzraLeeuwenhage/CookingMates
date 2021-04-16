@@ -45,7 +45,7 @@ public class SearchHelper {
         User user = activity.getIntent().getParcelableExtra("user");
         if (!user.isAdult()) {
             for (Recipe recipe: recipeList) {
-                if (!recipe.isForAdult()) {
+                if (!recipe.adult) {
                     recipes.add(recipe);
                 }
             }

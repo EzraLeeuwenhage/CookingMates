@@ -140,7 +140,7 @@ public class RecipeActivity
                 if(localRating != 0){
                     recipe.addRating(localRating);
 
-                    Call<Void> call = api.addRatingToRecipe(recipe.getRecipeId(), recipe);
+                    Call<Void> call = api.addRatingToRecipe(recipe.recipeId, recipe);
                     call.enqueue(new Callback<Void>() {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {
@@ -181,7 +181,7 @@ public class RecipeActivity
         recipe.addReview(review);
 
         //Make call to update the recipe in the database
-        Call<Void> call = api.addReviewToRecipe(recipe.getRecipeId(), recipe);
+        Call<Void> call = api.addReviewToRecipe(recipe.recipeId, recipe);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
