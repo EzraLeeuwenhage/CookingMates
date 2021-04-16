@@ -22,12 +22,12 @@ import retrofit2.Response;
 
 public class SearchHelper {
 
-    private Intent intent;
+    //Activity used to get context and start other activities
     private ActivityWithNavigation activity;
     private List<Recipe> recipes = new ArrayList<>();
 
-    public SearchHelper(Intent intent, ActivityWithNavigation activity){
-        this.intent = intent;
+    //Constructor with activity, as it is needed for other methods
+    public SearchHelper(ActivityWithNavigation activity){
         this.activity = activity;
     }
 
@@ -42,7 +42,7 @@ public class SearchHelper {
     public List<Recipe> filterRecipes(List<Recipe> recipeList){
         List<Recipe> recipes = new ArrayList<>();
 
-        User user = intent.getParcelableExtra("user");
+        User user = activity.getIntent().getParcelableExtra("user");
         if (!user.isAdult()) {
             for (Recipe recipe: recipeList) {
                 if (!recipe.isForAdult()) {
@@ -62,16 +62,23 @@ public class SearchHelper {
 
         if(list != null) {
             for (int i = 0; i < list.size() && i < 10; i++) {
+                //Create ImageButton and give id
                 ImageButton btn = new ImageButton(activity);
                 btn.setId(i);
+
+                //Set image of button
                 if (list.get(i).getFilename() == null) {
                     btn.setImageResource(R.drawable.logo);
                 } else {
                     getImageInButton(btn, list.get(i));
                 }
+
+                //Set width, height and padding of button
                 btn.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 400));
                 btn.setPadding(0, 32, 0,0);
                 layout.addView(btn);
+
+                //Set onClickListener
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -86,9 +93,7 @@ public class SearchHelper {
     }
 
     //Actually makes the call for the get methods
-    public void makeCall(Call<List<Recipe>> call, LinearLayout layout, List<Recipe> recipeList){
-        this.recipes = recipeList;
-
+    public void makeCall(Call<List<Recipe>> call, LinearLayout layout){
         call.enqueue(new Callback<List<Recipe>>() {
             @Override
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
@@ -101,7 +106,8 @@ public class SearchHelper {
             }
 
             @Override
-            public void onFailure(Call<List<Recipe>> call, Throwable t) {
+            public void onFailure(Call<List<Recipe>> call, Throwable t)  {
+                //If call failed, print stack trace
                 t.printStackTrace();
             }
         });

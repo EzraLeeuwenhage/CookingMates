@@ -19,8 +19,10 @@ import retrofit2.Response;
 
 public class DeleteAccountHelper {
 
+    //Activity used to get context and start other activities
     private AppCompatActivity activity;
 
+    //Constructor with activity, as it is needed for other methods
     public DeleteAccountHelper(AppCompatActivity activity){
         this.activity = activity;
     }
@@ -32,12 +34,13 @@ public class DeleteAccountHelper {
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                //When user is successfully deleted from database,
-                //show popup and go to LoginActivity
+                //Check if user is successfully deleted from database
                 if(response.isSuccessful()) {
+                    //Show popup
                     Toast.makeText(activity.getApplicationContext(),
                             "Successfully deleted user", Toast.LENGTH_SHORT).show();
 
+                    //Start LoginActivity
                     Intent myIntent = new Intent(activity.getApplicationContext(),
                             LoginActivity.class);
                     activity.startActivity(myIntent);
@@ -46,6 +49,7 @@ public class DeleteAccountHelper {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t)  {
+                //If call failed, print stack trace
                 t.printStackTrace();
             }
         });

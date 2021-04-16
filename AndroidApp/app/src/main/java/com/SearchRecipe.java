@@ -58,18 +58,20 @@ public class SearchRecipe
         editSearchBar = findViewById(R.id.editSearchBar);
 
         //Define search helper
-        searchHelper = new SearchHelper(getIntent(), this);
+        searchHelper = new SearchHelper(this);
     }//end of OnCreate
 
     //Starts activity based on button clicked in navigation bar
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        //Check if menu button clicked links to this activity
         switch(menuItem.getItemId()) {
             case R.id.nav_search_recipe:
                 // Just break - same screen
                 drawerLayout.closeDrawer(GravityCompat.START);
                 break;
             default:
+                //Use default implementation of method in ActivityWithNavigation
                 super.onNavigationItemSelected(menuItem);
         }
         return true;

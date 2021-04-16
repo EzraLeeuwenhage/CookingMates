@@ -58,6 +58,7 @@ public class CreateRecipeActivity
         extends ActivityWithNavigation
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    //Codes for opening camera and gallery
     public static final int REQUEST_READ_STORAGE = 1;
     public static final int REQUEST_SELECT_IMAGE = 2;
     public static final int CAMERA_REQUEST_CODE = 102;
@@ -102,18 +103,21 @@ public class CreateRecipeActivity
         int nrOfIngredients = 2;
         ingredientsLayout = findViewById(R.id.ingredientsLayout);
         for(int i = 0; i < nrOfIngredients; i++){
+            //Create layout for one ingredient
             LinearLayout line = new LinearLayout(this);
             line.setLayoutParams(new LayoutParams(
                     LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
             line.setPadding(16, 16, 0, 0);
             line.setOrientation(LinearLayout.HORIZONTAL);
 
+            //Ingredient input field
             EditText ingredient = new EditText(this);
             ingredient.setLayoutParams(new LayoutParams(
                     LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
             ingredient.setHint(R.string.edit_ingredient);
             line.addView(ingredient);
 
+            //Quantity input field
             EditText quantity = new EditText(this);
             quantity.setLayoutParams(new LayoutParams(
                     LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
@@ -121,6 +125,7 @@ public class CreateRecipeActivity
             quantity.setHint("0");
             line.addView(quantity);
 
+            //Quantity Spinner
             Spinner spinner = new Spinner(this);
             spinner.setLayoutParams(new LayoutParams(
                     LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
@@ -135,22 +140,26 @@ public class CreateRecipeActivity
     //Recipes are invalid if there is no title, no ingredient or the description is smaller than 20
     //characters
     public boolean isValidRecipe(Recipe recipe) {
+        //Recipe has no name
         if(recipe.getName() == null) {
             Toast.makeText(getApplicationContext(),
                     "No title present", Toast.LENGTH_SHORT).show();
             return false;
+        //Recipe name is empty string
         }else if(recipe.getName().equals("")) {
             Toast.makeText(getApplicationContext(),
                     "No title present", Toast.LENGTH_SHORT).show();
             return false;
         }
 
+        //Description is shorter than 20 characters
         if(recipe.getDescription().length() < 20) {
             Toast.makeText(getApplicationContext(),
                     "Description too short", Toast.LENGTH_SHORT).show();
             return false;
         }
 
+        //Recipe has no ingredients
         if(recipe.getIngredients().size() == 0) {
             Toast.makeText(getApplicationContext(),
                     "No ingredients present", Toast.LENGTH_SHORT).show();
@@ -387,12 +396,14 @@ public class CreateRecipeActivity
     //Starts activity based on button clicked in navigation bar
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        //Check if menu button clicked links to this activity
         switch(menuItem.getItemId()) {
             case R.id.nav_upload_recipe: // If you try to enter upload_recipe
                 // Just break - same screen
                 drawerLayout.closeDrawer(GravityCompat.START);
                 break;
             default:
+                //Use default implementation of method in ActivityWithNavigation
                 super.onNavigationItemSelected(menuItem);
         }
         return true;

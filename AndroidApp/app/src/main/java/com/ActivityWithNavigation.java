@@ -68,37 +68,49 @@ public class ActivityWithNavigation
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch(menuItem.getItemId()) {
+            //Home Activity
             case R.id.nav_home:
                 startIntent(HomeActivity.class);
                 break;
+            //Profile Activity
             case R.id.nav_profile:
                 startIntent(ProfileActivity.class);
                 break;
+            //Settings Activity
             case R.id.nav_settings:
                 startIntent(SettingsActivity.class);
                 break;
+            //About Activity
             case R.id.nav_about:
                 startIntent(AboutActivity.class);
                 break;
+            //Help Activity
             case R.id.nav_help:
                 startIntent(HelpActivity.class);
                 break;
+            //Logout
             case R.id.nav_logout:
                 startIntent(LoginActivity.class);
                 break;
+            //CreateRecipe Activity
             case R.id.nav_upload_recipe:
                 startIntent(CreateRecipeActivity.class);
                 break;
+            //SearchRecipe Activity
             case R.id.nav_search_recipe:
                 startIntent(SearchRecipe.class);
                 break;
+            //FindCookingMates Activity
             case R.id.nav_findcookingmates:
                 startIntent(FindCookingMatesActivity.class);
                 break;
+            //Contact Activity
             case R.id.nav_contact:
                 break;
+            //Link to instagram page
             case R.id.nav_instagram:
                 break;
+            //Link to facebook page
             case R.id.nav_facebook:
                 break;
         }

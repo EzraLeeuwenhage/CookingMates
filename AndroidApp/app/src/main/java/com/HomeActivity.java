@@ -41,7 +41,6 @@ public class HomeActivity
 
     private ServerCallsApi api;
     private SearchHelper searchHelper;
-    private List<Recipe> recommendedRecipes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +58,7 @@ public class HomeActivity
         api = createApi();
 
         //Define search helper
-        searchHelper = new SearchHelper(getIntent(), this);
+        searchHelper = new SearchHelper(this);
 
         //Show all recipes
         getRecipes();
@@ -68,12 +67,14 @@ public class HomeActivity
     //Starts activity based on button clicked in navigation bar
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        //Check if menu button clicked links to this activity
         switch(menuItem.getItemId()) {
             case R.id.nav_home:
                 // Just break - same screen
                 drawerLayout.closeDrawer(GravityCompat.START);
                 break;
             default:
+                //Use default implementation of method in ActivityWithNavigation
                 super.onNavigationItemSelected(menuItem);
         }
         return true;
@@ -88,7 +89,7 @@ public class HomeActivity
     private void getRecipes(){
         LinearLayout layout = findViewById(R.id.recipeLayout);
         Call<List<Recipe>> call = api.getRecipes();
-        searchHelper.makeCall(call, layout, recommendedRecipes);
+        searchHelper.makeCall(call, layout);
     }
 
     //Gets all recipes from database, where the string in the search bar editText is a substring
@@ -98,6 +99,6 @@ public class HomeActivity
         EditText name = findViewById(R.id.textInputEditText);
         LinearLayout layout = findViewById(R.id.recipeLayout);
         Call<List<Recipe>> call = api.getRecipeByTitle(name.getText().toString());
-        searchHelper.makeCall(call, layout, recommendedRecipes);
+        searchHelper.makeCall(call, layout);
     }
 }

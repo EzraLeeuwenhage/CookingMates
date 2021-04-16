@@ -11,6 +11,7 @@ public class ResetPassword extends AppCompatActivity {
     //TODO create password reset page
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //Create activity and set content
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_password);
     }

@@ -1,10 +1,7 @@
 package com;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.widget.Toast;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -12,10 +9,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class User implements Parcelable {
     @SerializedName("userid")
@@ -26,19 +19,20 @@ public class User implements Parcelable {
     private String password;
     @SerializedName("dateofbirth")
     private Date dateOfBirth;
-    private String personal_image;
+    @SerializedName("profilepicture")
+    private String profilePicture;
     private boolean adult;
     public transient List<Recipe> recipes;
-    private transient int PASSWORD_LENGTH =8;
 
-    public User(String name, String fullname, String email, String password, Date date, String image) {
-        set_user_name(name);
+    public User(String name, String fullname, String email,
+                String password, Date date, String image) {
+        this.username = name;
         this.fullname = fullname;
         this.email = email;
-        set_password(password);
-        set_personal_image(image);
-        set_b_date(date);
-        recipes = new ArrayList<Recipe>();
+        this.password = password;
+        setProfilePicture(image);
+        setBirthDate(date);
+        recipes = new ArrayList<>();
     }//end of User function
 
     protected User(Parcel in) {
@@ -48,10 +42,11 @@ public class User implements Parcelable {
         email = in.readString();
         password = in.readString();
         dateOfBirth = new Date(in.readLong());
-        personal_image = in.readString();
+        profilePicture = in.readString();
         adult = in.readByte() != 0;
     }
 
+    //Creator used to transfer Recipe object to and from Parcel
     public static final Creator<User> CREATOR = new Creator<User>() {
         @Override
         public User createFromParcel(Parcel in) {
@@ -64,33 +59,14 @@ public class User implements Parcelable {
         }
     };
 
-    //maybe check the other names to be sure that name is unique
-    private void set_user_name(String name){
-        this.username = name;
-    }
-
-    //set the password and check it
-    private void set_password(String password) throws IllegalArgumentException{
-        //not a good password
-        if(!is_Valid_Password(password))
-        {
-            new IllegalArgumentException("This Password is not valid, please try again");
-        }
-        this.password = password;
-    }//end set_password
-
-    private void set_b_date( Date b_date) throws NullPointerException, IllegalArgumentException{
-        if(b_date == null){
-            new NullPointerException("No date added, please enter a date");
-        }// end if
-        if(b_date.getYear() < 1900){
-            new IllegalArgumentException("the inserted date is not accurate");
-        }//end if
+    //Sets dateOfBirth and defines adult
+    private void setBirthDate(Date b_date) {
         this.dateOfBirth = b_date;
+
         Calendar cal = Calendar.getInstance();
         cal.setTime(b_date);
-        //check whether the user is adult or child
-        if ( (Calendar.getInstance().get(Calendar.YEAR) - cal.get(Calendar.YEAR)) > 17 ) {
+        //check whether the user is 18+
+        if ((Calendar.getInstance().get(Calendar.YEAR) - cal.get(Calendar.YEAR)) > 17) {
             adult = true;
         }//end if
         else{
@@ -98,80 +74,35 @@ public class User implements Parcelable {
         }//end else
     }//end set_b_date
 
-    private void set_personal_image (String image) throws NullPointerException, IllegalArgumentException {
-        if (image == null) {
-            new NullPointerException("no image was uploaded to choose");
-        }//end if
-        /* Do images need to be jpg?
-        if (!image.sort.equals("jpg")) {
-            new IllegalArgumentException("The uploaded image is not jpg");
-        }//end if
+    //Sets profilePicture
+    public void setProfilePicture(String image) {
+        this.profilePicture = image;
+    }//end setProfilePicture
 
-         */
-
-        this.personal_image = image;
-    }//end set_personal_image
-
-    //check whether the password is valid
-    public boolean is_Valid_Password(String password) {
-
-        if (password.length() < PASSWORD_LENGTH)
-            return false;
-
-        int charCount = 0;
-        int numCount = 0;
-        for (int i = 0; i < password.length(); i++) {
-
-            char ch = password.charAt(i);
-
-            if (is_Numeric(ch)) numCount++;
-            else if (is_Letter(ch)) charCount++;
-            else return false;
-        }
-
-
-        return (charCount >= 2 && numCount >= 2);
-    }//end is_Valid_Password
-
-    //Checks if a character is a upper case letter
-    public static boolean is_Letter(char ch) {
-        ch = Character.toUpperCase(ch);
-        return (ch >= 'A' && ch <= 'Z');
-    }
-
-    //Checks if a character is a digit
-    public static boolean is_Numeric(char ch) {
-
-        return (ch >= '0' && ch <= '9');
-    }
-
+    //Gets username
     public String getName() {
         return username;
     }
 
+    //Gets email
     public String getEmail() { return email; }
 
+    //Gets password
     public String getPassword() { return password; }
 
+    //Gets dateOfBirth
     public Date getDateOfBirth() { return dateOfBirth; }
 
     //Returns whether this user is adult or not
     public boolean isAdult(){
-        if(dateOfBirth == null){
-            new NullPointerException("No date added, please enter a date");
-        }
-
         Calendar cal = Calendar.getInstance();
         cal.setTime(dateOfBirth);
-
-        if(cal.get(Calendar.YEAR) < 1900){
-            new IllegalArgumentException("the inserted date is not accurate");
-        }
 
         //check whether the user is adult or child
         return Calendar.getInstance().get(Calendar.YEAR) - cal.get(Calendar.YEAR) > 17;
     }
 
+    //Gets userId
     public int getUserId() { return userId; }
 
     @Override
@@ -187,7 +118,7 @@ public class User implements Parcelable {
         dest.writeString(this.email);
         dest.writeString(this.password);
         dest.writeLong(this.dateOfBirth.getTime());
-        dest.writeString(this.personal_image);
+        dest.writeString(this.profilePicture);
         dest.writeByte((byte) (this.adult ? 1 : 0));
     }
 }//end of class

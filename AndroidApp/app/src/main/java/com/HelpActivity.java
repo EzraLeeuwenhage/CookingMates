@@ -20,6 +20,7 @@ public class HelpActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //Create activity and set content
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
 
@@ -34,12 +35,14 @@ public class HelpActivity
     //Starts activity based on button clicked in navigation bar
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        //Check if menu button clicked links to this activity
         switch(menuItem.getItemId()) {
             case R.id.nav_help:
                 // Just break - same screen
                 drawerLayout.closeDrawer(GravityCompat.START);
                 break;
             default:
+                //Use default implementation of method in ActivityWithNavigation
                 super.onNavigationItemSelected(menuItem);
         }
         return true;

@@ -26,11 +26,11 @@ public class FindCookingMatesActivity
         Intent currentIntent = getIntent();
         User user = (User) currentIntent.getParcelableExtra("user");
 
-        //If the user is adult
-        if(user.isAdult()){
+        //If the user is adult, use default content
+        //If the user is child, use child content
+        if(user.isAdult()) {
             setContentView(R.layout.activity_find_cooking_mates);
-        }
-        else{
+        } else {
             setContentView(R.layout.activity_find_cooking_mates_children);
         }
 
@@ -46,12 +46,14 @@ public class FindCookingMatesActivity
     //Starts activity based on button clicked in navigation bar
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        //Check if menu button clicked links to this activity
         switch(menuItem.getItemId()) {
             case R.id.nav_findcookingmates:
                 // Just break - same screen
                 drawerLayout.closeDrawer(GravityCompat.START);
                 break;
             default:
+                //Use default implementation of method in ActivityWithNavigation
                 super.onNavigationItemSelected(menuItem);
         }
         return true;
