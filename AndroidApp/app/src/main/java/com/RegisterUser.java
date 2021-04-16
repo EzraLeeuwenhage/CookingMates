@@ -101,11 +101,13 @@ public class RegisterUser extends AppCompatActivity {
         }
 
         try {
+            //Get date from input field
             String dateAsString = editTextAge.getText().toString();
             SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
             format.setLenient(false);
             Date date = format.parse(dateAsString);
 
+            //Get minimum date to compare input to
             String oldDate = "01-01-1900";
             Date old = format.parse(oldDate);
 
@@ -116,18 +118,22 @@ public class RegisterUser extends AppCompatActivity {
                 return;
             }
 
+            //Create new user object with input and make call to post user
             User user = new User(username, name, email, password, date, "new String()");
             Call<Void> call = api.createUser(user);
             call.enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
+                    //When response.code() == 200, the username was unique and the user is created
                     if (response.code() == 200) {
                         responseView.setText(username + " created!");
 
+                        //Start HomeActivity as the new user
                         Intent myIntent = new Intent(RegisterUser.this, HomeActivity.class);
                         myIntent.putExtra("user", user);
                         myIntent.putExtra("cook", "Cook");
                         startActivity(myIntent);
+                    //When response.code() == 404, the username was already in the database
                     } else if (response.code() == 404) {
                         responseView.setText(username + " already exists as username!");
                     }
@@ -157,8 +163,7 @@ public class RegisterUser extends AppCompatActivity {
     }
 
     //method for validating email
-    public static boolean isValidEmail(String email)
-    {
+    public static boolean isValidEmail(String email) {
         // stores correct format for email
         String regex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@" +  //part before @
                 "(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";

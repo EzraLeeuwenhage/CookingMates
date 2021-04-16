@@ -74,23 +74,27 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
+        //Check which button has been clicked
         switch (v.getId()) {
             case R.id.signInBtn:
 
                 // create window to show response
                 TextView responseView = findViewById(R.id.textViewResult);
 
+                //Check if password is a valid password
                 if(!isValidPassword(password.getText().toString())){
                     responseView.setText("Invalid password");
                     return;
                 }
 
+                //Make call to check if the user is in the database
                 Call<User> call = api.getUserByUsername(
                         username.getText().toString(), password.getText().toString());
 
                 call.enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
+                        //When response.code() == 200, the user was found and returned in the body
                         if (response.code() == 200) {
                             User user = response.body();
 
@@ -100,6 +104,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             startActivity(myIntent);
                             //optional
                             finish();
+                        //When response.code() == 404, no user with the entered name and password
+                        // exist
                         } else if (response.code() == 404) {
                             responseView.setText("Wrong username or password entered!");
                         }
@@ -107,14 +113,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                     @Override
                     public void onFailure(Call<User> call, Throwable t)  {
-                        responseView.setText(t.getMessage());
+                        t.printStackTrace();
                     }
                 });
                 break;
+            //Register user
             case R.id.textView4:
                 startActivity(new Intent(this, RegisterUser.class));
                 break;
-            case R.id.recipeIngredientsHeader:
+            //Reset password
+            case R.id.textView5:
                 startActivity(new Intent(this, ResetPassword.class));
                 break;
         }

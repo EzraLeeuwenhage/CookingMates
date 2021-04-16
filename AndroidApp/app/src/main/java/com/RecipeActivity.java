@@ -165,18 +165,22 @@ public class RecipeActivity
     public void updateRatingText(){
         TextView rating = findViewById(R.id.recipeRating);
         if(recipe.hasRating()) {
+            //Show rating rounded on two decimals
             rating.setText(String.format(Locale.getDefault(), "%.2f", recipe.getRating()));
         }else{
+            //Show - to tell there is no rating yet
             rating.setText("-");
         }
     }
 
     //Adds review to recipe and updates record in database
     public void sendReview(View view){
+        //Get review from input field and add it to recipe
         EditText editReview = findViewById(R.id.editReview);
         String review = editReview.getText().toString();
         recipe.addReview(review);
 
+        //Make call to update the recipe in the database
         Call<Void> call = api.addReviewToRecipe(recipe.getRecipeId(), recipe);
         call.enqueue(new Callback<Void>() {
             @Override
@@ -184,6 +188,7 @@ public class RecipeActivity
                 if(response.isSuccessful()){
                     Toast.makeText(getApplicationContext(),
                             "Review added!", Toast.LENGTH_SHORT).show();
+                    //Update the reviews, so the new review is shown without reloading
                     updateReviewLayout();
                 }
             }
@@ -198,8 +203,11 @@ public class RecipeActivity
     //Updates list of reviews to show added review without restarting the activity
     public void updateReviewLayout(){
         if(recipe.getReviews() != null){
+            //Get review layout and empty it
             LinearLayout ll = findViewById(R.id.reviewLayout);
             ll.removeAllViews();
+
+            //Add all reviews from the recipe to the layout
             for (int i = 0; i < recipe.getReviews().size(); i++) {
                 String review = recipe.getReviews().get(i);
                 TextView tv = new TextView(this);
@@ -216,19 +224,6 @@ public class RecipeActivity
     //Retrieves image of specified recipe from server and puts it in specified ImageView
     public void getImage(ImageView v, Recipe recipe){
         String path = "http://134.209.92.24:3000/uploads/" + recipe.getFilename();
-        Picasso.get().load(path).into(new Target() {
-
-            @Override
-            public void onPrepareLoad(Drawable arg0) { }
-
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom arg1) {
-                Bitmap bitmapImage = bitmap;
-                v.setImageBitmap(bitmapImage);
-            }
-
-            @Override
-            public void onBitmapFailed(Exception e, Drawable arg0) { }
-        });
+        Picasso.get().load(path).into(v);
     }
 }

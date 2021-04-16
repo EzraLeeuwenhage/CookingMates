@@ -83,7 +83,7 @@ public class SearchRecipe
         String title = editSearchBar.getText().toString();
         LinearLayout layout = findViewById(R.id.resultLayout);
         Call<List<Recipe>> call = api.getRecipeByTitle(title);
-        searchHelper.makeCall(call, layout, foundRecipes);
+        searchHelper.makeCall(call, layout);
     }
 
     //Gets all recipes from database where the string in the search bar is a substring of
@@ -92,7 +92,7 @@ public class SearchRecipe
         String ingredient = editSearchBar.getText().toString();
         LinearLayout layout = findViewById(R.id.resultLayout);
         Call<List<Recipe>> call = api.getRecipeByIngredient(ingredient);
-        searchHelper.makeCall(call, layout, foundRecipes);
+        searchHelper.makeCall(call, layout);
     }
 
     //Gets all recipes from database where the string in the search bar is a substring of
@@ -101,6 +101,6 @@ public class SearchRecipe
         String tag = editSearchBar.getText().toString();
         LinearLayout layout = findViewById(R.id.resultLayout);
         Call<List<Recipe>> call = api.getRecipeByTag(tag);
-        searchHelper.makeCall(call, layout, foundRecipes);
+        searchHelper.makeCall(call, layout);
     }
 }
